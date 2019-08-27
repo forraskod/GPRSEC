@@ -1,0 +1,328 @@
+History:
+~~~~~~~~~
+
+3.0.1	
+	- 911 (what a number) supported phones
+	- 372 supported providers
+	- Swedish translate
+	- all phone icons are in one Perl-DBM file
+	- new default theme: H2O-gtk2-Saphire
+	- docs moved to /usr/share/doc/
+3.0.0:
+	-GTK2 :-D - lot of work
+	 Almost all code must to be rewritten.
+	-Absolute widgets to relative widgets (Andrea rulez)
+	-BSD support left
+	-Fixed kill bug for (X versus Kernel trouble)
+	-Some new elements in the connection watcher subrutine
+	 (Sometimes the program didn't apprehend the connection.)
+	-New data transmittion calculator.
+	-New interactive communication parts.
+	-No more compact mode.
+	-Bugfix by donate window
+	-Rewrited interactive stuffs
+	-Ineligible skins, fonts, font colors
+	-New web site (Pint3r wizardz) with new domain
+		www.gprsec.hu
+		Special thanx to DZM Bt. & linuxforum.hu
+	-New database engine
+	-Some non-popular features left
+	-Running all tasks in backround
+	-Own ip-up code. (Using dynamic DNS is available
+	 under all distribs.)
+	-Rewritten DNS selection algorhythm.
+	-utf8 texts for compatibility all languages
+	-Some changes in the widgets
+	-More than 700 supported phones
+	-New providers, upgraded data of providers
+	
+	Seems not too much, maybe that is, but we're feeling it fatiguing.
+
+v2.5.3 
+	- New phones
+	- New provider
+	- Patches (a lot of)
+
+v2.5.2  - Lot of new phones
+	- Edited kill processes (grr...)
+	- Edited/new providers
+	- logging by (some) minutes
+	- Polish translatation
+	- Edited the successful connection watching algoryth for the
+	  2.5.x> kernels.
+	- getting informations of tested phones from the server
+	- Automatic "Wake up" option for the IrDa and the Bluetooth
+	- New install program
+	- Disable some features as offline
+	- Fixed Fedora's PerlTk switch-handle bug.
+	- New bash installer to Fedora Core 2 users
+	  (for the Fedora's gtk bug!)
+	- Automatic reconnect's bug fixed.
+	- Translocation of the "expert port scan" button.
+	- Croatian translate, but unfortunetly lost.
+	  (Translator please write us!)
+	- Some changes in the windows.
+	- Edited/revisited provider's data.
+	- Compact mode
+	- TODO:	
+		translate the Knowledge at last
+
+
+v2.5.0  - A lot of rewrited algorythms in all executabe
+	  files for FreeBSD!
+	  (Beware, the FreeBSD support is only in test mode!)
+	- New phones.
+	- Rewrited browser scan algorythm.
+	- New options in the Setup. (For the BSD users.)
+	- Rewrited killing algorythms (again).
+	- Repaired browser starting algorythm.
+	- Changed the place of the program update's access.
+	- Donate information window.
+	- New providers.
+	- New installer.
+
+	- Számos változtatás a futtatható állományokban.
+	- FreeBSD kompatibilitás.
+	- Új készülékek
+	- Újraírt böngészõkeresõ algoritmus.
+	- Új ociók a Beállítás menüben.
+	- Újraírt megszakító algoritmusok.
+	- Javított böngészõindító programrész.
+	- A programfrissítés elérésének áthejezése a fõablakba
+	- Támogatás ablak.
+	- Új szolgáltatók.
+	- Új telepítõ program.
+
+v2.0.2	- Updated chat scripts
+	- Bugfixes by settings
+	- Offline "view option" to datatranmissions
+	- Checking algorythm for the previous selected port
+	  (Sometimes the USB, Bluetooth & IrDa ports have gone...)
+	- New supported phones
+	- New supported providers
+	- Lot of changes in the install program
+	- Chance to send a message to the developers if the
+	  user could successfully connect with a non-tested phone.
+	- If there're some non-translated texts, the program'll show the english
+	  sentences.
+	- Fixed the bug by the install of the non-graphical version (SG)!
+	- Bugfix by the window-manipulating.
+	- All port-scan algorythms are rewrited by Andrea Bravetti!
+	- Changes in the Main and the Setup windows.
+	- Rewrited pppd kill algorythm.
+
+	- Frissített chat scriptek
+	- Hibajavítások a beállításoknál
+	- Adatforgalom megjelenítése offline módban.
+	- A korábban már kiválasztott kapcsolódási felületek ellenõrzése
+	  (Néha az USB, Bluetooth & IrDa portok eltûnnek...)
+	- Újonnan támogatott telefonok
+	- Újonnan támogatott szolgáltatók
+	- Egy csomó változás az install programban.
+	- Lehetõség üzenetküldés a fejlesztõknek, ha egy még nem
+	  tesztelt készülékkel jön létre a kapcsolat.
+	- Ha akad még le nem fordított szöveg, akkor az angol mondat kerül megjelenítésre.
+	- A konzolos felületû verzió (SG) hibásan történõ telepítésének javítása.
+	- Hibajavítás az ablakkezelésnél.
+	- Újraírt összes port-keresõ algoritmus Andrea Bravetti révén!
+	- Változások a fõ- és a Beállítások ablakban.
+	- Újraírt lekapcsolódás algorythm.
+
+v2.0.1	- Lost! (But I don't care)
+	- Elveszett!
+
+v2.0.0  - Revisited, repaired port-scan algorythms.
+	- Some change by the algorythm of monthly limits.
+	- Changed the "error pipe" for sh-shell.
+	- Changed the default value of the time interval of watching the connection to 200 ms.
+	- Chance for the automatic upgrade of GPRS Easy Connect.
+	- Some new supported phones.
+	- Some new supported providers.
+	- Scan algorythm for the workable browsers by user.
+	- Set - if that's translated yet - of the user's deafault language.
+	- Close button in the diagram window.
+	- Disable option for watching of data transmissions.
+	- Option for conneting speed seletion.
+	- Graphical Installer program (if that's possible)
+	- Completly rewrited "setup window"... Now it fits in lower resulution screens too. :-p
+	- Lot of changes in the Script Generator program
+
+	- Bevizsgált, javított portmegállapító algoritmusok.
+	- A heti limitfigyelésnél egy kis változtatás.
+	- A szabványos hibacsatorna használata az sh-shell-hez igazítva.
+	- A csatlakozás-figyelési intervallumának alapértéke 200 ms-re változtatva
+	- Lehetõség a frisebb verzió on-line letöltésére
+	- Néhány új szolgáltató
+	- Néhány új telefon
+	- A user által használható böngészõk megkeresése
+	- Az alapértelmezett nyelv beállítása
+	- Bezáró gomb a diagram ablakhoz
+	- Tiltási opció az adatforgalom figyeléséhez.
+	- Grafikus telepítõ program. (Ha már a PerlTk telepített!)
+	- Teljesen átírt "Beállítás" ablak... Most már elfér a kisebb felbontású képernyõkön is! :-p
+	- Egy csomó változtatás a Szkript Generátor programban
+
+
+v1.3.1  - CDMA system phones' support - hasn't tested yet!
+	- Changed shown speed on panel
+	- Rewrited algorytm for authorize of pppd
+	- Chance to change the APN in the program.
+	- The personal chat and pppd scripts moved into ~/.gprsec.
+	- The workable COM, USB, IrDa, Blootooth ports' scan.
+	- Disconnect for closing of "Connect window"
+	- The shown of the average speed of the active connection is
+	  changed to the avarage speed of down- and uploading together.
+	- Bugfixxxx by the f*cking "kill" processssss!
+	- Italian translate
+	- Supports for: SonyEricsson P800, Motorola C350, Motorola C336, Motorola Talkabout 192,
+	  Panasonic GD67, Panasonic GD87, Sagem myX-6, Sagem MY 3052, Samsung SGH-A800,
+	  Samsung SGH-S100, Samsung SGH-S300, Samsung SGH-V200, Siemens M55
+	- The Script Generators will automaticly install to the computers...
+	"- Is there any chance to upgrade 2.0.0 ?????"
+
+	- CDMA rendszerû készülékek támogatása.
+	- Megváltoztatott forgalmisebesség-jelzés a panelon.
+	- Újraírt jogosultság-figyelés a pppd-hez.
+	- Az APN egyedi beállításának lehetõsége.
+	- A személyes chat és pppd szkirtek áthelyezése a ~/.gprsec-be.
+	- Mûködõ COM, USB, IrDa, Blootooth portok megállapítása.
+	- A kapcsolat megszakítása a kapcsolódási ablak bezárásara.
+	- Az aktív kapcsolat adatforgalmi átlagesebességének kijelzése
+	  megváltoztatva a fel- és letöltések átlagának együttesére.
+	- Hibajavításssss annál a kib*szott "kill" processsssssznél.
+	- Olasz fordítás
+	- SonyEricsson P800, Motorola C350, Motorola C336, Motorola Talkabout 192,
+	  Panasonic GD67, Panasonic GD87, Sagem myX-6, Sagem MY 3052, Samsung SGH-A800,
+	  Samsung SGH-S100, Samsung SGH-S300, Samsung SGH-V200, Siemens M55 támogatások
+	- A Szkript Generátor automatikusan telepítésre kerül.
+	"- Mikor lesz már 2.0.0 belõle ????"
+
+v1.3.0 - Totally French translate
+	 The pppd script rewrtited for making logs in ~/.gprsec
+	 Rewrited paths for working the generally directories.
+	 Fixed disconnect bug.
+	 Rewrited install program.
+
+
+	 Teljes francia fordítás
+	 A pppd szkript újraírva, hogy a logfájlok ~/.gprsec-ben legyenek.
+	 Átírt útvonalak az általánosan használatos könyvtárakba
+	 A kapcsolatmegszakítási hiba javítva.
+	 Újraírt telepítõ program.
+
+v1.2.3 - Fixed "crossline" bug by the diagram statics.
+	 Rewrited port-reading algorythm.
+	 Error echo to the conneting progress' idle.
+	 "Disable option" for self-authentication.
+	 Debug mode option.
+	 Enable option for BSD Compress.
+
+	 Javítva a "keresztvonal" hiba a diagramos statisztikánál.
+	 Újraírt port-olvasó algoritmus.
+	 A kapcsolódási folyamat tétlenségéhez hibavisszajelzés.
+	 Tiltás opció az önhitelesítéshez.
+	 Hibakeresö opció.
+	 BSD tömörítés engedélyezése.
+
+
+v1.2.2 - Watching of weekly and mounthly limit.
+	 Some windows position's set.
+	 Rewrited watching algorythm for disconnect.
+	 Changed posibilitys for erase of data
+	 Spanish translate
+
+	 Havi és heti limitek beállításának lehetõsége.
+	 Limitfigyelés.
+	 Néhány ablakpozícionálás.
+	 Kapcsolatmegszakadás vizsgálatásnak újraírása.
+	 Adattörlések egyedivé tétele.
+	 Spanyol fordítás
+
+
+v1.2.1 - Balloon hints
+	 Setup mode for individual phone numbers
+	 Disable option for CGQ commands
+	 Turkish language translate
+	 Ericsson T200 phone support
+	 Full Czech translate
+	 Repaired T260, T280, T720 scripts
+
+	 Teljesen lefordított cseh nyelv.
+	 Hintek.
+	 Egyedi telefonszám lehetõsége.
+	 CGQ parancsok tiltásának lehetõsége.
+	 Török nyelvi fordítás.
+	 T200-as telefon támogatása.
+	 Teljes cseh fordítás
+	 Javított Motorola T260, T280, T720 szkriptek.
+
+
+v1.2.0 - A rendszer-eröforrás nagymértékü felhasználásának kiküszöbölése.
+	 Újrakapcsolódás lehetösége a háttérben.
+	 Hangjelzés nélküli mód.
+v1.1.2 - Telepítö program elkészítése.
+	 Az automatikus csatlakozás kapcsolója a setup oldalra került.
+	 A föablakon látszik a szolgáltató neve.
+	 12 új telefon hozzáadása.
+	 Néhány szolgáltató paramétereinek javítása.
+v1.1.1 - A konfigurációs ablak ismételt fejlesztése (menürendszer beépítése).
+	 CID beállítás engedélyezése.
+	 DNS beállítás lehetösége root felhasználóként.
+	 Hibajavítás a felhasználó név és a jelszó kiértékelésénél.
+v1.1.0 - "A pppd jogosultság" hibás visszajelzésének javítása.
+	 Siemens M50, Motorola Accompli 008 telefonok szkriptjei.
+	 110 új APN.
+	 A konfigurációs ablak teljes átlakítása.
+	 "Finomhangolás" opció a pppd visszajelzéseinek érzékelési idöintervallumához.
+v1.0.5 - A konfigurációs beállítások hibáinak javítása.
+	 Az újrakapcsolódási lehet?ség hibájának javítása.
+	 Böngeszõ indításának áthelyezése a GPRSEC.pl programba, a böngész? duplikálás
+	 lehetõségének tiltása.
+	 És sok más apróság...
+v1.0.4 - Újabb 14 szolgáltató APN-je.
+	 Cseh nyelvi fordítás.
+	 Szkriptek frissítése.
+	 PannonGSM "nem elöfizetéses" felhasználói APN hozzáadása.
+	 Nokia szkriptek ismételt javítása.
+	 "Újrakapcsolódás"-i lehetöség beépítése.
+v1.0.3 - Finn nyelvi fordítás. A "usepeerdns" parancs beépítése. Bugfix a "configurációs
+	 hibavisszajelzésnél".
+v1.0.2 - USB(ttyACM0) támogatása. A pppd jogosultság ellenörzése.
+v1.0.1 - A nokia kapcsolódási probléma megoldása. Bluetooth kapcsolódási lehetöség.
+v1.0.0 - A korábbi két fö alkotóelem teljes összefésülése:
+	 Indul a GPRS Easy Connect!!
+	 A világ valamennyi GPRS szolgáltató hálózatán müködik a program, ahol a 
+	 szabványos betárcsázási protokoll a használatos!
+
+A GPRS Easy Connect-et megelõzö "EasyConn" prodzsekt:
+v2.0.0 - Mindhárom magyar GPRS szolgáltató hálózatán müködik a program!
+v1.1.3 - Az EasyConn ikonizálás hibájának javítása.
+v1.1.2 - DNS számok visszajelzésének javítása. EasyConn ikonizálásának lehetösége. Több
+	 EasyConn futásának tiltása. További javítás a hibavisszajelzéseken.
+v1.1.1 - Ablakduplikálások lehetöségének megszüntetése. Javítás a hibavisszajelzéseken.
+	 Csatlakozási bug javítása. BrowseEntry, LabFrame modulok felhasználása a
+	 megjelenítésben.
+v1.1.0 - Többnyelves használat kialakítása.
+v1.0.6 - A még hiányzó fájlmüveleti ellenörzés elhelyezése. Automatikus csatlakozás.
+v1.0.5 - A 9999999 byte-ot meghaladó letöltésnél jelentkezö számlálási hiba
+	 fixálása.
+	 Speciális statisztikai ablak (1).
+v1.0.4 - Böngészöindítási lehetöség a konfigurációs beállításoknál.
+v1.0.3 - A statisztika ablak beolvasztása a kapcsolódás ablakába. Újabb konfig
+	 lehetöségek.
+v1.0.2 - A kapcsolódási szkripteket és a telefonok neveit mindig a ConnectMe
+	 csomag könyvtárából értelmezi a program.
+v1.0.1 - Statisztika ablak.
+v1.0.0 - Végre, úgy tünik, itt az 1.0!
+	 Bugfix a 'kill'-eknél. A 'konfiguráció' javítása.
+v0.3.3 - A konfigurációs beállítások programon belüli megoldásának kialakítása.
+	 (Folyamatban.)
+v0.3.2 - Az indító felület "canvas" környezeti kialakítása. Ismét szívás a 'kill'
+	 processzek miatt...
+v0.3.1 - A pppd és a chat visszajelzésnek grafikus felületü megjelenítése.
+v0.3.0 - A pppd és a chat visszajelzéseinek feldolgozása.
+v0.2.2 - Help nyomógomb, forrás átláthatóvá tétele.
+v0.2.1 - Kapcsolatmegaszkító gomb, kilépés elött a kapcsolat megszakítása.
+v0.2.0 - Készülékek ListBox-rendszerü felsorolása (így már készülékek elférnek
+	 az alacsonyabb felbontású képernyökön is.)
+v0.1.0 - Készülékek egyszerü rádiógombos felsorolása, kapcsolódás lehetösége. 

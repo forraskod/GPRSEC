@@ -1,0 +1,68 @@
+GPRS Easy Connect program made by:
+
+Péter Simon (simon.peter@gprsec.hu)
+
+    * Main program
+    * Connection scripts
+    * A part of documentation
+    * English, Hungarian translate
+
+
+Gábor Pintér (pinter.gabor@gprsec.hu)
+
+    * SG program
+    * Installer program
+    * Homepage
+    * Connection scripts
+    * A part of documentation
+    * Ideas
+
+
+Andrea Bravetti (brand77@gmail.com)
+
+    * Gtk widgets
+    * Lot of patches
+    * Alghorythms
+    * Ideas
+    * Italian translate
+
+
+-----------------------
+
+Translators:
+
+Honza Mach
+Pasi Kuokkanen & Ronja Kuokkanen
+David Lacravate
+Jakub Kasprzycki
+Andreas Krause
+Jonathan Stevano
+Tomás Mateo
+Altan Demirkilic
+David Szedely
+Jose Carlos Medeiros
+Daniel Nylander
+Nikita Bukhvostov
+
+-----------------------
+
+Webspace: Christian Hamar
+Domain: Miklós Honti
+Splash image: Zoltán Csáki
+Logo: Karoly Barcza
+
+-----------------------
+
+Special thanks to:
+
+Gyula Major        - IRDA adapter
+Lajos Kósa         - HDD
+Eszter Scheili     - 1st logo
+Mikko Rapeli       - first finnish translate
+Francesco Di Mare  - first italian translate
+"Zviratko"         - first czech translate
+Tibor Soos         - USB cabel for test
+Hefko              - main "bugreporter" :-)
+Sandor Sule        - main "bugreporter" :-)
+Mustafa Ogun       - mini-howto for IrDa under Slack
+Oregon             - webspace in 1st 2 years
