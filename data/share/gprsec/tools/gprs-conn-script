@@ -1,0 +1,60 @@
+#
+#
+# PPPD SETUP FOR GPRS
+# This file is part of GPRS Easy Connect.
+#
+# 2003.11.06.
+#
+
+# Enables connection debugging facilities.
+debug
+
+# Speed
+115200
+
+# Use hardware flow control (i.e. RTS/CTS) to control the flow
+# of data on the serial port.
+crtscts
+
+# Use the modem control lines.
+modem
+
+# Specifies that pppd should create a UUCP-style lock file for
+# the serial device to ensure exclusive access to the device.
+lock
+
+# Disable protocol field compression negotiation in both the
+# receive and the transmit direction.
+#nopcomp
+
+# Disable Address/Control compression in both directions (send
+# and receive).
+#noaccomp
+
+# Disable magic number negotiation. With this option, pppd
+# cannot detect a looped-back line.
+#nomagic
+
+# Disable Compression Control Protocol (CCP) negotiation.
+#noccp
+
+# Disable Van Jacobson style TCP/IP header compression in both
+# the transmit and the receive direction.
+novj
+
+# Disable the connection-ID compression option in Van Jacobson
+# style TCP/IP header compression.
+#novjccomp
+
+# Don't detach from the controlling terminal.
+nodetach
+
+# Disables the default behaviour when no local IP address is
+# specified, which is to determine (if possible) the local IP
+# address from the hostname.
+noipdefault
+
+# This option causes pppd to create such a default route when
+# IPCP comes up, and delete it when the link is terminated.
+defaultroute
+

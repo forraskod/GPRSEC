@@ -1,0 +1,34 @@
+#
+# PPPD SETUP FOR CDMA
+# This file is part of GPRS Easy Connect.
+#
+# 2003.11.06.
+#
+
+# Enables connection debugging facilities.
+debug
+
+# Speed
+115200
+
+# Use hardware flow control (i.e. RTS/CTS) to control the flow
+# of data on the serial port.
+crtscts
+
+# Specifies that pppd should create a UUCP-style lock file for
+# the serial device to ensure exclusive access to the device.
+lock
+
+# This option causes pppd to create such a default route when
+# IPCP comes up, and delete it when the link is terminated.
+defaultroute
+
+# Ask the peer for up to 2 DNS server addresses.
+usepeerdns
+
+# When logging the contents of PAP packets, this option causes
+# pppd to show the password string in the log message.
+show-password
+
+# Disconnect Script.
+disconnect '/usr/sbin/chat -e -f /usr/share/gprsec/tools/disconnect -v'

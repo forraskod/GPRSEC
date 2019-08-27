@@ -1,0 +1,11 @@
+#
+# CHAT DISCONNECT SCRIPT
+# This file is part of GPRS Easy Connect.
+#
+# 2003.05.27.
+#
+
+SAY "\nDisconnecting...\n"
+"" "\K"
+"" "+++ATH"
+SAY "\nDisconnected.\n"

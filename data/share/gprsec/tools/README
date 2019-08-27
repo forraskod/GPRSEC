@@ -1,0 +1,4 @@
+The GPRS Easy Connect program copies APN or GPRS-CHAT_SCRIPT file into the user's
+./gprsec/upgrade directory automaticly and the program will use this file for the 
+connections or copy the file manualy into the /usr/share/gprsec/tools directory as
+root and this file will be accessable for all users.

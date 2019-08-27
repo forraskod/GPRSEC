@@ -1,0 +1,16 @@
+#
+# CDMA CHAT CONNECTION SCRIPTS
+# This file is part of GPRS Easy Connect.
+#
+# 2003.05.27.
+#
+
+[Ac555 1x type]
+'' AT
+OK ATD#777
+CONNECT ''
+
+[Ac555 GNC type]
+'' AT
+OK ATD#762
+CONNECT ''
