@@ -12,8 +12,8 @@
 #
 # Before you use it, read COPYING file sure enough!
 #
-# Peter Simon <simonpeter@gsimonpeter.hu>
-# Gabor Pinter <donnow>  -> donator had back
+# Peter Simon <simon.peter01@gmail.com>
+# Gabor Pinter <pint3r@linuxuser.hu>
 # Andrea Bravetti <brand77@gmail.com>
 #
 # http://gprsec.hu -> donator had back
@@ -1249,7 +1249,7 @@ David Lacravate
 Jakub Kasprzycki
 Andreas Krause
 Jonathan Stevano
-Tom�s Mateo
+Tomás Mateo
 Altan Demirkilic
 David Szedely
 Jose Carlos Medeiros
@@ -1361,7 +1361,7 @@ David Lacravate
 Jakub Kasprzycki
 Andreas Krause
 Jonathan Stevano
-Tom�s Mateo
+Tomás Mateo
 Altan Demirkilic
 David Szedely
 Jose Carlos Medeiros
@@ -3706,12 +3706,12 @@ sub watch_conn_build {
 	}
 	if ($connlog=~ /Connect script failed/) {
 		disconnect();
-		error_window(text_linker($cl[41])); #Konfigur�i� hiba miatt a kapcsol��\nfolymata megszakadt.\nEllen�izd a be�l��aidat!
+		error_window(text_linker($cl[41])); #Konfigurï¿½iï¿½ hiba miatt a kapcsolï¿½ï¿½\nfolymata megszakadt.\nEllenï¿½izd a beï¿½lï¿½ï¿½aidat!
 		return 0;
 	}
 	if ($connlog=~ /Connection terminated./ && $connlog=~ !/LCP terminated by peer/) {
 		disconnect();
-		error_window(text_linker($cl[42])); #Felhaszn�� megszak��.\nEsetleg a telefon lemerlt.\nVagy kicsszott az adatk�el.
+		error_window(text_linker($cl[42])); #Felhasznï¿½ï¿½ megszakï¿½ï¿½.\nEsetleg a telefon lemerlt.\nVagy kicsszott az adatkï¿½el.
 		return 0;
 	}
 	if (/Failed to open/ && /Permission denied/) {
