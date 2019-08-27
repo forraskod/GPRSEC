@@ -1,6 +1,3 @@
-# GPRSEC
-
-
 #    GPRS Easy Connect V3.0.1 
 
 
