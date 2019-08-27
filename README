@@ -1,0 +1,38 @@
+GPRS Easy Connect Version 3.0.0 (Linux)
+-----------------------------------------------
+
+Thank you for downloading GPRS Easy Connect.
+
+Execute INSTALL script to Install this program.
+
+For Uninstall use -u or --uninstall option.
+For console install use the -c or --console option.
+
+For information of depedencies read ./documentation.html!
+
+		GPRS Easy Connect Team
+		http://gprsec.hu
+
+
+GPRS Easy Connect Verzio 3.0.0 (Linux)
+-----------------------------------------------
+
+Koszonjuk, hogy letoltotted a GPRS Easy Connect
+programot.
+
+A program telepitesehez az INSTALL programot kell
+futtatni.
+
+Az eltavolitashoz az INSTALL programot a -u vagy
+--uninstall parameterrel kell inditani.
+
+Ha a grafikus telepito valamilyen oknal fogva nem
+futna (pl.: nincs GTK telepitve), akkor a -c vagy
+--console paramterrel kell inditani a telepitot
+konzolbol vagy grafikus felulet alol, terminal
+ablakbol.
+
+A fuggosegi viszonyok miatt olvasd el a ./documentation.html-t!
+
+		GPRS Easy Connect Team
+		http://gprsec.hu

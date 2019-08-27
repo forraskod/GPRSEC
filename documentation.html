@@ -1,0 +1,952 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+
+	
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=iso-8859-2">
+
+	
+	
+  <title>gprsec_dok</title>
+  <meta name="GENERATOR" content="OpenOffice.org 2.0  (Linux)">
+
+	
+  <meta name="CREATED" content="20051113;7385700">
+
+	
+  <meta name="CHANGED" content="20060319;11480100">
+
+	
+  <style>
+	<!--
+		TD P { color: #000000; font-family: "Albany"; font-size: 10pt }
+		P { color: #000000; font-family: "Albany"; font-size: 10pt }
+		A:link { color: #0000ee }
+		A:visited { color: #551a8b }
+	-->
+	</style>
+</head>
+
+
+<body bgcolor="#ffffff" dir="ltr" lang="hu-HU" link="#0000ee" text="#000000" vlink="#551a8b">
+
+<center>
+	
+<table style="page-break-before: always;" border="0" cellpadding="2" cellspacing="0" width="977">
+
+		<col width="973">
+		<tbody>
+    <tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p><font face="Luxi Sans"><font size="4"><b>Documentation of GPRS
+				Easy Connect (version 3.0.0 or higher)<br>
+      </b><i>This
+				documentation is written by P&eacute;ter Simon (simon d0t peter {}
+				gprsec d0t hu)</i></font></font></p>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <ol>
+
+					<li>
+          <p><a href="#1"><font size="4"><font face="Luxi Sans">What is
+					GPRS Easy Connect?</font></font></a></p>
+
+					</li>
+        <li>
+          <p><a href="#2"><font size="4"><font face="Luxi Sans">What is
+					SG program?</font></font></a></p>
+
+					</li>
+        <li>
+          <p><a href="#3"><font size="4"><font face="Luxi Sans">Downloading,
+					installing of GPRS Easy Connect</font></font></a></p>
+
+					
+          <ol>
+
+						<li>
+              <p><a href="#31"><font size="4"><font face="Luxi Sans">Depedencies</font></font></a></p>
+
+						
+              <ol>
+
+							<li>
+                  <p><a href="#311"><font size="4"><font face="Luxi Sans">Perl
+							modules</font></font></a></p>
+
+							
+                  <ol>
+
+								<li>
+                      <p><a href="#3111"><font size="4"><font face="Luxi Sans">Installing
+								needed Perl modules</font></font></a></p>
+
+								
+                      <ol>
+
+									<li>
+                          <p><a href="#31111"><font size="4"><font face="Luxi Sans">Offline
+									installing</font></font></a></p>
+
+									</li>
+                        <li>
+                          <p><a href="#31112"><font size="4"><font face="Luxi Sans">Online
+									installing</font></font></a></p>
+
+								</li>
+                      </ol>
+
+								</li>
+                    <li>
+                      <p><a href="#3112"><font size="4"><font face="Luxi Sans">Installing
+								needed Perl modules for Mandriva/Mandrake.</font></font></a></p>
+
+							</li>
+                  </ol>
+
+							</li>
+                <li>
+                  <p><a href="#312"><font size="4"><font face="Luxi Sans">Other
+							programs</font></font></a></p>
+
+						</li>
+              </ol>
+
+						</li>
+            <li>
+              <p><a href="#32"><font size="4"><font face="Luxi Sans">Installing
+						GPRS Easy Connect with own Installer program</font></font></a></p>
+
+						</li>
+            <li>
+              <p><a href="#33"><font size="4"><font face="Luxi Sans">Installing
+						GPRS Easy Connect from outer source</font></font></a></p>
+
+					</li>
+          </ol>
+
+					</li>
+        <li>
+          <p><a href="#4"><font size="4"><font face="Luxi Sans">First
+					steps before try getting connection</font></font></a></p>
+
+					</li>
+        <li>
+          <p><a href="#5"><font size="4"><font face="Luxi Sans">Using
+					IRDA</font></font></a></p>
+
+					</li>
+        <li>
+          <p><a href="#6"><font size="4"><font face="Luxi Sans">Using
+					Bluetooth</font></font></a></p>
+
+					</li>
+        <li>
+          <p><a href="#7"><font size="4"><font face="Luxi Sans">Supported
+					phones (2005.10.21.)</font></font></a></p>
+
+					</li>
+        <li>
+          <p><a href="#8"><font size="4"><font face="Luxi Sans">Supported
+					providers (2005.10.21.)</font></font></a></p>
+
+					</li>
+        <li>
+          <p><a href="#9"><font size="4"><font face="Luxi Sans">GPRS
+					Easy Connect made by</font></font></a></p>
+
+					</li>
+        <li>
+          <p><a href="#10"><font size="4"><font face="Luxi Sans">Special
+					thanks to</font></font></a></p>
+
+					</li>
+        <li>
+          <p><a href="#11"><font size="4"><font face="Luxi Sans">Troubleshooter</font></font></a></p>
+
+					
+          <ol>
+
+						<li>
+              <p><a href="#11.1"><font size="4"><font face="Luxi Sans">Connection
+						built, got IP(s), DNS(s), seem like all OK, but there's no data
+						transmittion</font></font></a></p>
+
+						</li>
+            <li>
+              <p><a href="#11.2"><font size="4"><font face="Luxi Sans">Connection
+						drops after 2 minutes</font></font></a></p>
+
+						</li>
+            <li>
+              <p><a href="#11.3"><font size="4"><font face="Luxi Sans">I
+						tried everthing but couldn't connect, what can I do?</font></font></a></p>
+            </li>
+          </ol>
+        </li>
+        <li><font size="4"><font face="Luxi Sans"><a href="#12">How to start the program after installation?</a><br>
+          </font></font></li>
+      </ol>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973"></td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p style="margin-bottom: 0cm;"><a name="1"></a><font size="4"><font size="4"><font face="Luxi Sans"><b><u>1.
+				What is GPRS Easy Connect?<br>
+      </u></b><br>
+GPRS Easy Connect is a
+				free (</font></font><a href="http://en.wikipedia.org/wiki/GNU_GPL"><font size="4"><font face="Luxi Sans">GNU
+				GPL</font></font></a><font size="4"><font face="Luxi Sans">)
+				Perl-</font></font><a href="http://en.wikipedia.org/wiki/GTK2"><font size="4"><font face="Luxi Sans">Gtk2</font></font></a>
+				<font size="4"><font face="Luxi Sans">based GUI program for Linux
+				(version &lt; 3.0.0 supports FreeBSD too) what can configurate
+				and manage Internet connection for <b>mobile phones</b>. GPRSEC
+				supports COM, </font></font><a href="http://en.wikipedia.org/wiki/Usb"><font size="4"><font face="Luxi Sans">USB</font></font></a><font size="4"><font face="Luxi Sans">,
+				</font></font><a href="http://en.wikipedia.org/wiki/Infrared_Data_Association"><font size="4"><font face="Luxi Sans">IrDA</font></font></a><font size="4"><font face="Luxi Sans">,
+				</font></font><a href="http://en.wikipedia.org/wiki/BlueTooth"><font size="4"><font face="Luxi Sans">Bluetooth</font></font></a>
+				<font size="4"><font face="Luxi Sans">connections on </font></font><a href="http://en.wikipedia.org/wiki/GPRS"><font size="4"><font face="Luxi Sans">GPRS</font></font></a><font size="4"><font face="Luxi Sans">,
+				</font></font><a href="http://en.wikipedia.org/wiki/Enhanced_Data_Rates_for_GSM_Evolution"><font size="4"><font face="Luxi Sans">EDGE</font></font></a>
+				<font size="4"><font face="Luxi Sans">and </font></font><a href="http://en.wikipedia.org/wiki/UMTS"><font size="4"><font face="Luxi Sans">UMTS</font></font></a>
+				<font size="4"><font face="Luxi Sans">technologies.</font></font></font></p>
+
+				
+      <hr>
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p><a name="2"></a><font face="Luxi Sans"><font size="4"><b><u>2.
+				What is SG program?<br>
+      <br>
+      </u></b>SG is the console version of
+				GPRS Easy Connect. This program can build needed Internet
+				connection scripts for pppd and chat programs.</font></font></p>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p><a name="3"></a><font size="4"><font size="4"><font face="Luxi Sans"><b><u>3.
+				Downloading and installing of GPRS Easy Connect<br>
+      </u></b><br>
+GPRS
+				Easy Connect is available from our
+				site:<br>
+      </font></font><a href="http://www.gprsec.hu/modules/downloads/list.php?category=1"><font size="4"><font face="Luxi Sans">http://www.gprsec.hu/modules/downloads/list.php?category=1<br>
+      </font></font></a><font size="4"><font face="Luxi Sans"><br>
+It
+				contains GPRSEC and SG program too.</font></font></font></p>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p><a name="31"></a><a name="311"></a><a name="3111"></a><a name="31111"></a><a name="31112"></a><a name="3112"></a><a name="312"></a><a name="32"></a><a name="33"></a>
+				<font size="4"><font size="4"><font face="Luxi Sans"><b><u>3.1.
+				Depedencies:</u></b><br>
+      <br>
+      <b><u>3.1.1. </u></b></font></font><b><u><a href="http://en.wikipedia.org/wiki/Perl"><font size="4"><font face="Luxi Sans">Perl</font></font></a>
+				<font size="4"><font face="Luxi Sans">modules:<br>
+      </font></font></u></b><font size="4"><font face="Luxi Sans"><br>
+Usually
+				you can find all needed modules for all Linux Distributions on
+				their Package CDs or online package database. Your best choose
+				would be using of those with your Package Handler program.<br>
+If
+				you don't find some Perl modules on your source you can download
+				those from Internet.<br>
+If you are Mandriva/Mandrake user </font></font><a href="#3112"><font size="4"><font face="Luxi Sans">click
+				here</font></font></a><font size="4"><font face="Luxi Sans">.<br>
+      <br>
+      <u>You
+				need following modules if you want to install one or more needed
+				Perl modules for program from
+				source:</u><br>
+      <br>
+Compress-Zlib-1.34<br>
+      </font></font><a href="http://search.cpan.org/%7Epmqs/Compress-Zlib-1.34/"><font size="4"><font face="Luxi Sans">http://search.cpan.org/~pmqs/Compress-Zlib-1.34/</font></font></a><font size="4"><font face="Luxi Sans"><br>
+      <br>
+ExtUtils-Depends-0.205<br>
+      </font></font><a href="http://search.cpan.org/%7Ermcfarla/ExtUtils-Depends-0.205/"><font size="4"><font face="Luxi Sans">http://search.cpan.org/~rmcfarla/ExtUtils-Depends-0.205/</font></font></a><font size="4"><font face="Luxi Sans"><br>
+      <br>
+ExtUtils-PkgConfig-1.07<br>
+      </font></font><a href="http://search.cpan.org/%7Ermcfarla/ExtUtils-PkgConfig-1.07/"><font size="4"><font face="Luxi Sans">http://search.cpan.org/~rmcfarla/ExtUtils-PkgConfig-1.07/</font></font></a><font size="4"><font face="Luxi Sans"><br>
+      <br>
+      <u>Needed
+				modules for GPRSEC:</u><br>
+      <br>
+Glib-1.081 (minimal:
+				1.05)<br>
+      </font></font><a href="http://search.cpan.org/%7Etsch/Glib-1.081/"><font size="4"><font face="Luxi Sans">http://search.cpan.org/~tsch/Glib-1.081/</font></font></a><font size="4"><font face="Luxi Sans"><br>
+      <br>
+Gtk2-1.081
+				(minimal: 1.05)<br>
+      </font></font><a href="http://search.cpan.org/%7Etsch/Gtk2-1.081/"><font size="4"><font face="Luxi Sans">http://search.cpan.org/~tsch/Gtk2-1.081/</font></font></a><font size="4"><font face="Luxi Sans"><br>
+      <br>
+      <i>Note:
+				Version number of Glib and Gtk2 must to be
+				same!</i><br>
+      <br>
+Gtk2-TrayIcon-0.03<br>
+      </font></font><a href="http://search.cpan.org/%7Emlehmann/Gtk2-TrayIcon-0.03/"><font size="4"><font face="Luxi Sans">http://search.cpan.org/~mlehmann/Gtk2-TrayIcon-0.03/</font></font></a><font size="4"><font face="Luxi Sans"><br>
+      <br>
+Gnome2-VFS-1.021<br>
+      </font></font><a href="http://search.cpan.org/%7Etsch/Gnome2-VFS-1.021/"><font size="4"><font face="Luxi Sans">http://search.cpan.org/~tsch/Gnome2-VFS-1.021/</font></font></a><font size="4"><font face="Luxi Sans"><br>
+      <br>
+Gnome2-Canvas-1.002<br>
+      </font></font><a href="http://search.cpan.org/%7Etsch/Gnome2-Canvas-1.002/"><font size="4"><font face="Luxi Sans">http://search.cpan.org/~tsch/Gnome2-Canvas-1.002/</font></font></a><font size="4"><font face="Luxi Sans"><br>
+      <br>
+Gnome2-1.021<br>
+      </font></font><a href="http://search.cpan.org/%7Etsch/Gnome2-1.021/"><font size="4"><font face="Luxi Sans">http://search.cpan.org/~tsch/Gnome2-1.021/</font></font></a><font size="4"><font face="Luxi Sans"><br>
+      <br>
+Encode-2.10<br>
+      </font></font><a href="http://search.cpan.org/%7Edankogai/Encode-2.10/"><font size="4"><font face="Luxi Sans">http://search.cpan.org/~dankogai/Encode-2.10/<br>
+      </font></font></a><font size="4"><font face="Luxi Sans"><br>
+Getopt-Long-2.34<br>
+      </font></font><a href="http://search.cpan.org/%7Ejv/Getopt-Long-2.34/"><font size="4"><font face="Luxi Sans">http://search.cpan.org/~jv/Getopt-Long-2.34/<br>
+      </font></font></a><font size="4"><font face="Luxi Sans"><br>
+      <b><u>3.1.1.1
+				Installing needed Perl modules.<br>
+      </u></b><br>
+      <u>Order of
+				depedencies:</u><br>
+Compress-Zlib-1.34--&gt;ExtUtils-Depends-0.205--&gt;ExtUtils-PkgConfig-1.07--&gt;<br>
+Glib-1.081--&gt;Gtk2-1.081--&gt;Gtk2-TrayIcon-0.03--&gt;<br>
+Gnome2-VFS-1.021--&gt;Gnome2-Canvas-1.002--&gt;Gnome2-1.021--&gt;<br>
+Encode-2.10--&gt;Getopt-Long-2.34<br>
+      <br>
+      <b><u>3.1.1.1.1
+				Offline installing</u></b><br>
+      <br>
+After downloading, you need to
+				unpack the moduls. Open a console as root, go where you
+				downloaded that, eg.:<br>
+      <br>
+      <font face="Courier, monospace">cp
+				~/downloads/</font><br>
+      <br>
+unpack package, eg.:<br>
+      <br>
+      <font face="Courier, monospace">tar
+				-xzf Compress-Zlib-1.34.tar.gz<br>
+cp ./PACKAGE_NAME</font><br>
+      <br>
+Compile
+				Perl module:<br>
+      <br>
+      <font face="Courier, monospace">perl
+				Makefile.PL<br>
+make<br>
+make test<br>
+make install</font><br>
+      <br>
+Repeat
+				unpack and compile steps in order what you red above while don't
+				you finish last one module.<br>
+      <br>
+      <b><u>3.1.1.1.2 Online
+				installing<br>
+      </u></b><br>
+You can install Perl modules by
+				automaticly download, compile and install from </font></font><a href="http://en.wikipedia.org/wiki/Perl#CPAN"><font size="4"><font face="Luxi Sans">CPAN</font></font></a><font size="4"><font face="Luxi Sans">.<br>
+Open
+				a console as root and type or copy the following lines step by
+				step:<br>
+      <br>
+      <font face="Courier, monospace">perl -MCPAN -e
+				'install Compress-Zlib-1.34'<br>
+perl -MCPAN -e 'install
+				ExtUtils-Depends-0.205'<br>
+perl -MCPAN -e 'install
+				ExtUtils-PkgConfig-1.07'<br>
+perl -MCPAN -e 'install
+				Glib-1.081'<br>
+perl -MCPAN -e 'install Gtk2-1.081'<br>
+perl -MCPAN
+				-e 'install Gtk2-TrayIcon-0.03'<br>
+perl -MCPAN -e 'install
+				Gnome2-VFS-1.021'<br>
+perl -MCPAN -e 'install
+				Gnome2-Canvas-1.002'<br>
+perl -MCPAN -e 'install
+				Gnome2-1.021'<br>
+perl -MCPAN -e 'install Encode-2.10'<br>
+perl
+				-MCPAN -e 'install Getopt-Long-2.34'</font><br>
+      <br>
+      <b><u>3.1.1.2
+				Installing needed Perl modules for Mandriva/Mandrake</u></b><br>
+      <br>
+Never
+				use </font></font><a href="http://en.wikipedia.org/wiki/Perl#CPAN"><font size="4"><font face="Luxi Sans">CPAN</font></font></a>
+				<font size="4"><font face="Luxi Sans">for Gtk2 and Gnome2 modules,
+				because Mandriva had patched Gtk2 and uses for Mandriva's helper
+				applications (eg.: Mandriva Contorll Center, etc.). The </font></font><a href="http://en.wikipedia.org/wiki/Perl#CPAN"><font size="4"><font face="Luxi Sans">CPAN</font></font></a>
+				<font size="4"><font face="Luxi Sans">modules are NOT patched and
+				Mandriva's helper applications won't work anymore. If you don't
+				find needed modules' packages on your Installation disks, then
+				you can use </font></font><a href="http://easyurpmi.zarb.org/"><font size="4"><font face="Luxi Sans">easyurpmi.zarb.org</font></font></a>
+				<font size="4"><font face="Luxi Sans">to find an online rpm source
+				base for your Mandriva/Mandrake distribution, where you can find
+				your needed modules in rpm format. Also you can download needed
+				modules from the mirror sites of Mandriva.<br>
+      <br>
+      <i>a) Gtk2
+				modules:</i><br>
+Note: Usually the needed perl-Gtk2 modules can be
+				found on intallation CDs.<br>
+      <br>
+Or you can download directly
+				needed Gtk2 modules eg. from
+				here:<br>
+ftp://ftp.u-strasbg.fr/pub/linux/distributions/NAME_OF_DISTR/devel/YOUR_DISTRIBUTION/i586/media/main/<br>
+      <br>
+Where
+				<br>
+NAME_OF_DISTR can be: mandrake or mandriva<br>
+YOUR_DISTRIBUTION
+				can be: 10.0, 10.1, 10.2, 2005, 2006.0, etc<br>
+      <br>
+You need to
+				download and install the following rpm
+				files:<br>
+      <br>
+perl-Gtk2<br>
+perl-Glib<br>
+perl-Gtk2-TrayIcon<br>
+      <br>
+      <i>b)
+				Gnome2 modules:</i><br>
+Note: Usually the needed perl-Gnome2
+				modules can be found on intallation CDs.<br>
+Or you can download
+				directly needed Gnome2 modules eg. from
+				here:<br>
+      <br>
+ftp://ftp.u-strasbg.fr/pub/linux/distributions/NAME_OF_DISTR/devel/YOUR_DISTRIBUTION/i586/media/contrib/<br>
+      <br>
+Where
+				<br>
+NAME_OF_DISTR can be: mandrake or mandriva<br>
+YOUR_DISTRIBUTION
+				can be: 10.0, 10.1, 10.2, 2005, 2006.0, etc<br>
+      <br>
+You need to
+				download and install the following rpm
+				files:<br>
+      <br>
+perl-Gnome2-Canvas<br>
+perl-Gnome2-VFS<br>
+perl-Gnome2<br>
+      <br>
+      <br>
+      <i>c)
+				Installing downloded modules:</i><br>
+      <br>
+You can install the
+				downloaded rpm files as root like this:<br>
+Open a console as root
+				and go where is your downloaded rpm file eg.:<br>
+      <br>
+      <font face="Courier, monospace">cp
+				~/downloads/</font><br>
+      <br>
+Install rpm file eg.:<br>
+      <br>
+      <font face="Courier, monospace">urpmi
+				perl-Gnome2-Canvas-1.002-3mdk.i586.rpm</font><br>
+      <br>
+etc...<br>
+      <br>
+      <b><u>3.1.2
+				Other
+				programs</u></b><br>
+      <br>
+wget-1.9.1<br>
+      </font></font><a href="http://ftp.gnu.org/gnu/wget/"><font size="4"><font face="Luxi Sans">http://ftp.gnu.org/gnu/wget/</font></font></a><font size="4"><font face="Luxi Sans"><br>
+      <br>
+ppp-2.4.x<br>
+      </font></font><a href="http://ppp.samba.org/"><font size="4"><font face="Luxi Sans">http://ppp.samba.org/</font></font></a><font size="4"><font face="Luxi Sans"><br>
+      <br>
+These
+				two programs are very elemental program, so you will found these
+				on your installation CDs and you can install them easily with
+				your package handler program. <br>
+      <br>
+      <b><u>3.2. Installing GPRS
+				Easy Connect with own Installer program</u></b><br>
+      <br>
+After you
+				downloaded GPRS Easy Connect and are sure all depedencies are
+				installed, you can begin install the program as root. Open a
+				console and go where you downloaded it, eg.:<br>
+      <br>
+      <font face="Courier, monospace">cp
+				~/downloads/</font><br>
+      <br>
+Unpack GPRSEC, eg.:<br>
+      <br>
+      <font face="Courier, monospace">tar
+				-xjf ./GPRS_Easy_Connect_300_Install.tar.bz2<br>
+cp
+				./GPRSEC_VERSION_NUMBER</font><br>
+      <br>
+Where VERSION_NUMBER can be
+				different, but it is same the package version. In this sample
+				this is 300.<br>
+      <br>
+Type:<br>
+      <br>
+      <font face="Courier, monospace">./INSTALL</font><br>
+      <br>
+All
+				instruction will be showed what you have to do. Installer report
+				you errors and the successful installing.<br>
+      <br>
+      <b><u>3.3
+				Installing GPRS Easy Connect from outer source</u></b></font></font></font></p>
+
+				
+      <p align="justify"><font face="Luxi Sans"><font size="4">There would
+				be many different packages of GPRS Easy Connect for different
+				Linux Distributions. In every case you must to you must to use
+				your distribution's own package handler program. Usually this
+				handler program will be install all depedencies too. If not, you
+				should install missing programs manually. (See above.)</font></font></p>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p><a name="4"></a><font face="Luxi Sans"><font size="4"><b><u>4.
+				First steps<br>
+      </u></b><br>
+You need to set minimal informations
+				up in the program:<br>
+Phone type, provider - check username and
+				password -, connection port. Save parameters and click on Connect
+				button.</font></font></p>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td>
+				
+      <p><a name="5"></a><font size="4"><font size="4"><font face="Luxi Sans"><b><u>5.
+				Using IrDA<br>
+      <br>
+      </u></b>You need to preparation your computer
+				for using Irda.<br>
+You can find a good documentation about waking
+				up IrDA under Linux
+				here:&nbsp;<a href="http://www.hpl.hp.com/personal/Jean_Tourrilhes/IrDA/IrDA.html">http://www.hpl.hp.com/personal/Jean_Tourrilhes/IrDA/IrDA.html</a></font></font></font></p>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td>
+				
+      <p><a name="6"></a><font size="4"><font size="4"><font face="Luxi Sans"><b><u>6.
+				Using Blootooth<br>
+      <br>
+      </u></b>You need to preparation your
+				computer for using Bluetooth.<br>
+You can find a good
+				documentation about waking up Bluetooth under Linux
+				here:&nbsp;<a href="http://medien.informatik.uni-ulm.de/%7Efrank/bluetooth/bluetooth-howto.html"><u>http://medien.informatik.uni-ulm.de/~frank/bluetooth/bluetooth-howto.html</u></a></font></font></font></p>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p><a name="7"></a><font size="4"><font size="4"><font face="Luxi Sans"><b><u>7.
+				Supported phones</u></b><br>
+      <br>
+You can find list of currently
+				supported phones on </font></font><a href="http://www.gprsec.hu/modules/phones/list.php"><font size="4"><font face="Luxi Sans">http://www.gprsec.hu/modules/phones/list.php</font></font></a><font size="4"><font face="Luxi Sans">.</font></font></font></p>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p><a name="8"></a><font size="4"><font size="4"><font face="Luxi Sans"><b><u>8.
+				Supported providers<br>
+      </u></b><br>
+You can find list of currently
+				supported providers on
+				</font></font><a href="http://www.gprsec.hu/modules/providers/index.php"><font size="4"><font face="Luxi Sans">http://www.gprsec.hu/modules/providers/index.php</font></font></a><font size="4"><font face="Luxi Sans">.</font></font></font></p>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p><a name="9"></a><font face="Luxi Sans"><font size="4"><b><u>9.
+				GPRS Easy Connect made by<br>
+      <br>
+      </u>P&eacute;ter Simon</b> (simon d0t
+				peter {} gprsec d0t hu)</font></font></p>
+
+				
+      <ul>
+
+					<li>
+          <p style="margin-bottom: 0cm;"><font face="Luxi Sans"><font size="4">Main
+					program </font></font>
+					</p>
+
+					</li>
+        <li>
+          <p style="margin-bottom: 0cm;"><font face="Luxi Sans"><font size="4">Gtk
+					widgets </font></font>
+					</p>
+
+					</li>
+        <li>
+          <p style="margin-bottom: 0cm;"><font face="Luxi Sans"><font size="4">Connection
+					scripts </font></font>
+					</p>
+
+					</li>
+        <li>
+          <p style="margin-bottom: 0cm;"><font face="Luxi Sans"><font size="4">A
+					part of documentation </font></font>
+					</p>
+
+					</li>
+        <li>
+          <p><font face="Luxi Sans"><font size="4">English, Hungarian
+					translate </font></font>
+					</p>
+
+				</li>
+      </ul>
+
+				
+      <p><font face="Luxi Sans"><font size="4"><br>
+      <b>G&aacute;bor Pint&eacute;r</b>
+				(pinter d0t gabor {} gprsec d0t hu)</font></font></p>
+
+				
+      <ul>
+
+					<li>
+          <p style="margin-bottom: 0cm;"><font face="Luxi Sans"><font size="4">SG
+					program </font></font>
+					</p>
+
+					</li>
+        <li>
+          <p style="margin-bottom: 0cm;"><font face="Luxi Sans"><font size="4">Installer
+					program </font></font>
+					</p>
+
+					</li>
+        <li>
+          <p style="margin-bottom: 0cm;"><font face="Luxi Sans"><font size="4">Homepage
+					</font></font>
+					</p>
+
+					</li>
+        <li>
+          <p style="margin-bottom: 0cm;"><font face="Luxi Sans"><font size="4">Connection
+					scripts </font></font>
+					</p>
+
+					</li>
+        <li>
+          <p><font face="Luxi Sans"><font size="4">A part of
+					documentation </font></font>
+					</p>
+
+				</li>
+      </ul>
+
+				
+      <p><font face="Luxi Sans"><font size="4"><br>
+      <b>Andrea Bravetti</b>
+				(brand77 {} gmail d0t com)</font></font></p>
+
+				
+      <ul>
+
+					<li>
+          <p style="margin-bottom: 0cm;"><font face="Luxi Sans"><font size="4">Gtk
+					widgets </font></font>
+					</p>
+
+					</li>
+        <li>
+          <p style="margin-bottom: 0cm;"><font face="Luxi Sans"><font size="4">Lot
+					of patches </font></font>
+					</p>
+
+					</li>
+        <li>
+          <p style="margin-bottom: 0cm;"><font face="Luxi Sans"><font size="4">Alghorythms
+					</font></font>
+					</p>
+
+					</li>
+        <li>
+          <p style="margin-bottom: 0cm;"><font face="Luxi Sans"><font size="4">Ideas
+					</font></font>
+					</p>
+
+					</li>
+        <li>
+          <p><font face="Luxi Sans"><font size="4">Italian translate </font></font>
+					</p>
+
+				</li>
+      </ul>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p><a name="10"></a><font face="Luxi Sans"><font size="4"><b><u>10.
+				Special thanks to</u></b><br>
+      <br>
+Webspace: Christian
+				Hamar<br>
+Domain: Mikl&oacute;s Honti<br>
+Splash image: Zolt&aacute;n
+				Cs&aacute;ki<br>
+Webspace for the 1st 2 years:
+				"Oregon"<br>
+      <br>
+Translators:<br>
+      <br>
+Honza Mach<br>
+Pasi
+				Kuokkanen &amp; Ronja Kuokkanen<br>
+David Lacravate<br>
+Jakub
+				Kasprzycki<br>
+Andreas Krause<br>
+Jonathan Stevano<br>
+Francesco Di
+				Mare<br>
+Tom&aacute;s Mateo<br>
+Altan Demirkilic<br>
+David Szedely<br>
+Nikita
+				Bukhvostov</font></font></p>
+
+				
+      <p><font size="4"><font face="Luxi Sans">Testers are available from
+				<a href="http://www.gprsec.hu/modules/about/">http://www.gprsec.hu/modules/about/</a></font></font></p>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p><br>
+
+				</p>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p style="background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial;"><a name="11"></a><a name="11.1"></a><a name="11.2"></a><a name="11.3"></a>
+				<font size="4"><font face="Luxi Sans"><b><u>11.
+				Troubleshooter<br>
+      </u></b><i>(Ordered just to came to
+				mind.)</i><br>
+      <b><u><br>
+      <br>
+11.1 Connection built, got IP(s),
+				DNS(s), seem like all OK, but there's no data
+				transmittion</u></b><br>
+      <br>
+      <u><i>Possibility reason #1:</i></u><br>
+Somehow
+				/etc/resolv.conf didn't come into existence. (There's no usable
+				DNS servers.)<br>
+      <br>
+      <i>Solution:</i><br>
+Check your /etc/ip-up
+				file. If you use dynamic DNS it must to contain a cp command from
+				/etc/ppp/resolv.conf to /etc/resolv.conf. If it doesn't, you
+				should re-install GPRSEC or copy from Installer of GPRSEC ip-up
+				file to /etc/ppp.<br>
+      <br>
+      <u><i>Possibility reason #2:</i></u><br>
+Your
+				shorewall doesn't enable ppp connection. Typicaly when you use
+				ethX for Internet defending it with shorewall firewall and you
+				change Internet connection to ppp with GPRSEC.<br>
+      <br>
+      <i>Solution:</i><br>
+Change
+				shorewall firewall to ppp connection or turn it off (not
+				recommended).<br>
+      <br>
+      <b><u>11.2 Connection drops after 2
+				minutes</u></b><br>
+      <br>
+      <u><i>Possibility reason #1:</i></u><br>
+There's
+				time limit in /etc/ppp/option file.<br>
+      <br>
+      <i>Solution:</i><br>
+Delete
+				or comment with a # mark the following lines in /etc/ppp/option
+				file eg.:<br>
+      <br>
+      <font face="Courier, monospace">#
+				lcp-echo-interval<br>
+# 30 lcp-echo-failure 4</font><br>
+      <br>
+      <b><u>11.3
+				I tried everthing but couldn't connect, what can I do?<br>
+      <br>
+      </u></b>Send
+				us Bugreport including a Console output. Please do this
+				steps:<br>
+      <br>
+Be sure before you do the next steps, you've set
+				everything in GPRSEC's setup and saved that!<br>
+Eg. with mc
+				program open for edit ~/.gprsec/run file. Comment line begining
+				<i>filename</i> like this:<br>
+      <br>
+      <font face="Courier, monospace">#
+				filename<i>(etc...)</i></font><br>
+      <br>
+Save file and, if you use
+				mc, press CTRL+O to show a clean console and
+				type:<br>
+      <br>
+      <font face="Courier, monospace">/usr/sbin/pppd file
+				./run</font><br>
+      <br>
+In this case the connection's getting build
+				and echoes all things into this console. Yes, we need this output
+				text. Please copy and attach to your Bugreport too.<br>
+Don't
+				forget to uncomment line <i>filename</i> after this. </font></font>
+				</p>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p><font size="4"><font face="Luxi Sans"><b><u><a name="12"></a>12. How to start the program after the installation?<br>
+      <br>
+      </u></b>You can make a desktop entry to program. Eg.: right click
+onto desctop-&gt;new application link-&gt;select
+/usr/bin/gprsec-&gt;select an icon from /usr/share/gprsec/images/icons.</font></font></p>
+      <p><font size="4"><font face="Luxi Sans">Or you can start the program using a console, just type: gprsec.</font></font>
+				</p>
+
+			</td>
+
+		</tr>
+
+		<tr>
+
+			<td bgcolor="#ffffff" width="973">
+				
+      <p><br>
+
+				</p>
+
+			</td>
+
+		</tr>
+
+	
+  </tbody>
+</table>
+
+</center>
+
+<p style="background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial;" align="justify"><font face="Helvetica"><font size="7"><b><br>
+</b></font></font><br>
+<br>
+
+</p>
+
+<p style="background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial;" align="justify"><font size="4"><br>
+<font size="6"><font face="Helvetica"><br>
+<font size="6"><br>
+</font></font><font face="Helvetica, Arial, sans-serif"><br>
+</font></font></font><br>
+<br>
+
+</p>
+
+</body>
+</html>
