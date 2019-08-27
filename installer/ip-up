@@ -1,0 +1,26 @@
+#!/bin/sh
+
+PATH=$PATH:/sbin:/usr/sbin:/bin:/usr/bin
+export PATH
+
+if [ -n "$USEPEERDNS" -a -f /etc/ppp/resolv.conf ]; then
+  rm -f /etc/ppp/resolv.prev
+  if [ -f /etc/resolv.conf ]; then
+    cp /etc/resolv.conf /etc/ppp/resolv.prev
+    grep domain /etc/ppp/resolv.prev > /etc/resolv.conf
+    grep search /etc/ppp/resolv.prev >> /etc/resolv.conf
+    cat /etc/ppp/resolv.conf >> /etc/resolv.conf
+  else
+    cp /etc/ppp/resolv.conf /etc
+  fi
+  chmod 0644 /etc/resolv.conf
+fi
+
+
+# these line change the default route the pppX
+INTERFACE=$1
+REMOTEIP=$5
+
+/sbin/route add default gw $REMOTEIP dev $INTERFACE
+
+

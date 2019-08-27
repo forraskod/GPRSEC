@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ ! -f /etc/ppp/ip-down ];
+  then
+    cp ./ip-down /etc/ppp/ip-down
+  else
+    mv /etc/ppp/ip-down /etc/ppp/ip-down.old
+    cp ./ip-down /etc/ppp/ip-down
+fi

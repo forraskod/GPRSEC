@@ -1,0 +1,110 @@
+#
+# GPRS Easy Connect Installer
+# Hungarian Language File
+#
+# Author: Gabor Pinter <pinter.gabor@gprsec.hu>
+#
+# 2005.10.29.
+#
+
+[LToC]
+GPRS Easy Connect Telepito
+Hiba: nem olvashato a ./stdout!
+Fuggosegek ellenorzese...
+ [OK]
+ [Hiba]
+Nem talalhato a perl fordito.
+A program telepitesehez szukseg van erre a programra!
+Bovebb informacio a http://www.gprsec.hu oldalon.
+Nem talalhato a pppd program.
+A program telepitesehez szukseg van erre a programra!
+Bovebb informacio a http://www.gprsec.hu oldalon.
+Nem talalhato a Glib modul.
+A program telepitesehez szukseg van a Glib modulra!
+Bovebb informacio a http://www.gprsec.hu oldalon.
+Nem talalhato a Gnome2 modul.
+A program telepitesehez szukseg van erre a csomagra!
+Bovebb informacio a http://www.gprsec.hu oldalon.
+Nem talalhato a Gnome2::Canvas modul.
+A program telepitesehez szukseg van erre a modulra!
+Bovebb informacio a http://www.gprsec.hu oldalon.
+Nem talalhato a Gnome2::VFS modul.
+A program telepitesehez szukseg van erre a modulra!
+Bovebb informacio a http://www.gprsec.hu oldalon.
+Nem talalhato a Gtk2 modul.
+A program telepitesehez szukseg van erre a modulra!
+Bovebb informacio a http://www.gprsec.hu oldalon.
+Nem talalhato a Gtk2::TrayIcon modul.
+A program telepitesehez szukseg van erre a modulra!
+Bovebb informacio a http://www.gprsec.hu oldalon.
+Nem talalhato a Encode modul.
+A program telepitesehez szukseg van erre a modulra!
+Bovebb informacio a http://www.gprsec.hu oldalon.
+Nem talalhato a wget program.
+A program telepitesehez szukseg van erre a programra!
+Bovebb informacio a http://easyconnect.linuxuser.hu oldalon.
+Úgy tunik fut a GPRS Easy Connect. A telepiteshez zard be.
+A program telepitesehez ROOT jogok szuksegesek!
+Korabbi verzio keresese...
+ [Nincs]
+Biztonsagi mentes keszitese...
+Fajlok masolasa...
+Korabbi verzio visszaallitasa...
+ Hiba!
+ Kesz!
+Biztonsagi mentes eltavolitasa...
+Tisztogatas...
+Eltavolitas...
+A hiba a kovetkezo parancs futtatasakor jelentkezett:
+A GPRS EC szabad szoftver; terjesztese es modositasa a GNU GPL felteteleinek megfeleloen tortenhet.
+Tovabbi informacio a COPYING fajlban vagy a http://www.gnu.org/ oldalon.
+Elfogadod a GNU GPL felteteleit? (Y/N)
+Ha engedelyezni akarod a felhasznalok szamara a pppd hasznalatat, akkor a telepito most beallitja a "set user ID on execution" (setuid) bitet a pppd programra. Akarod, hogy a telepito ezt most megtegye (ajanlott)? (Y/N)
+Nem sikerult a setuid bit beallitasa! :-(
+A setuid bit ballitasa megtortent.
+Azt, hogy felhasznaloi szinten a szolgaltatok DNS szervereit el lehessen erni, biztositani kell. Ha most engedelyezed a Telpitonek, hogy ha nem letezik, letrehozza a /etc/ppp/ip-up es ip-down fajlt, akkor a felhasznalok a szolgaltato dinamikus DNS-eit hasznalhatjak.
+Ellenkezo esetben manualisan kell a statikus DNS szerverek IP cimeit beallitani az /etc/resolv.conf fajlban.
+Akarod, hogy a telepito beallitsa a dinamikus DNS hasznalatat most (ajanlott)? (Y/N)
+A dinamikus DNS hasznalat beallitasa nem sikerult! :-(
+A dinamikus DNS hasznalat beallitasa megtortent.
+
+[LToG]
+GPRS Easy Connect Telepito
+Udvozol a GPRS Easy Connect Telepito!
+A telepito talalt egy futo GPRS EC peldanyt. A telepites folytatasa elott ezt mindenkepp zard be!
+Te nem lenni ROOT! Lepj ki a Telepitobol es inditsd el ROOT-kent.
+A telepites megkezdesehez kattints a Tovabb gombra, a befejezeshez a Kilepes gombra.
+Altalanos Kozreadasi Feltetelek
+A program telepitesehez el kell fogadnod az alabbiakban leirtakat.
+A leirtakat tudomasul vettem es elfogadom
+Fuggosegek ellenorzese
+A program telepitesehez szukseg van az alabbi programokra és perl modulokra.
+Telepites
+A program futtatasahoz szukseges fajlok masolasa.
+< Vissza
+Tovabb >
+Kilep
+Befejezes
+Ok
+Hiba.
+Rendben.
+Korabbi verzio keresese...
+Biztonsagi mentes keszitese...
+Fuggosegek
+Eredmeny
+Muvelet
+Eredmeny
+A program telepitesehez el kell fogadnod a Licensz szerzodest.
+Korabbi verzio visszaallitasa...
+Beallitasok
+A program telepitesehez szukseges beellitasok
+Ha engedelyezni akarod a felhasznalok szamara a pppd hasznalatat, akkor a telepito most beallitja a "set user ID on execution" (setuid) bitet a pppd programra. Akarod, hogy a telepito ezt most megtegye?
+Igen, szeretnem beallitani a pppd setuid bitjet
+Azt, hogy felhasznaloi szinten a szolgaltatok DNS szervereit el lehessen erni, biztositani kell. Ha most engedelyezed a Telpitonek, hogy letrehozza az /etc/ppp/ip-up es /etc/ppp/ip-down fajlt, akkor a felhasznalok ezeket a DNS-eket hasznalhatjak.
+Engedelyezem a fajlok letrehozasat
+pppd User ID on Execution bit beallitasa
+/etc/ppp/ip-up es ip-down fajlok letrehozasa
+
+#
+# END
+#

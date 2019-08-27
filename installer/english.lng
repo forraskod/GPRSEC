@@ -1,0 +1,109 @@
+#
+# GPRS Easy Connect Installer
+# English Language File
+#
+# Author: Péter Simon <simon.peter@linuxuser.hu>
+#
+# 2004.06.07.
+#
+
+[LToC]
+GPRS Easy Connect Installer
+Error: ./stdout is unreadable!
+Checking depedencies...
+ [OK]
+ [Error]
+Can't find the Perl compiler!
+The GPRS EC needs this program!
+For more informations see the http://www.gprsec.hu site.
+Can't find the pppd program.
+The GPRS EC needs this program!
+For more informations see the http://www.gprsec.hu site.
+Can't find the Perl Glib modul.
+The program needs this module!
+For more informations see the http://www.gprsec.hu site.
+Can't find the Perl Gnome2 modul.
+The program needs this module!
+For more informations see the http://www.gprsec.hu site.
+Can't find the Perl Gnome2::Canvas modul.
+The program needs this module!
+For more informations see the http://www.gprsec.hu site.
+Can't find the Perl Gnome2::VFS modul.
+The program needs this module!
+For more informations see the http://www.gprsec.hu site.
+Can't find the Perl Gtk2 modul.
+The program needs this module!
+For more informations see the http://www.gprsec.hu site.
+Can't find the Perl Gtk2::TrayIcon modul.
+The program needs this module!
+For more informations see the http://www.gprsec.hu site.
+Can't find the Perl Encode modul.
+The program needs this module!
+For more informations see the http://www.gprsec.hu site.
+Can't find the wget program.
+The GPRS EC needs this program!
+For more informations see the http://www.gprsec.hu site.
+It seems like there's running GPRSC Easy Connect! You must exit from that!
+You must be ROOT for the install!
+Searching earlier version...
+ [Can't find]
+Making backup files...
+Copiing the files...
+Restore the earlier files...
+ Error!
+ Done!
+Removing the backup files...
+Cleaning up...
+Removing...
+Found an error running this command:
+GPRS EC is free software; you can redistribute it and/or modify it under the terms of the GNU GPL.
+For more information please read the attached COPYING file or visit the http://www.gnu.org/ site.
+Do you accept the GNU GPL? (Y/N)
+If you want to enable users to use pppd, which need for GPRS Easy Connect you need to let this Installer to set user ID execution(stuid) bit of pppd program. Do you want to set it now [recommended]?
+Couldn't set setuid bit of pppd!
+Successfully set setuid bit of pppd!
+You need to be sure users of GPRS Easy Connect can reach the providers' DNS servers. If you enable Installer to modify/creat /etc/ppp/ip-up and /etc/ppp/ip-down file, then your users can use these DNSs.
+If you do not let it, you need to set /etc/resolv.conf manually by static DNS IPs.
+Do you enable this operation [recommended]?
+Couldn't set system for enabling dynamic DNSs.
+Setting of using dynamic DNSs done.
+
+[LToG]
+GPRS Easy Connect Installer
+Welcome to the GPRS Easy Connect's Installer!
+A running GPRS EC program found, before you continue the install, you must to exit.
+You're not ROOT! For the successful install you must to be authorized to write the /usr directory. Leave this installer and run it as ROOT.
+Press Next for the install or Exit to leave the installer.
+General Public Licence
+For the Install you must to accept the folowing:
+I have red, understood and accepted
+Checking depedencies
+The GPRS Easy Connect needs the following modules/programs.
+Installing
+Copying needed files.
+< Back
+Next >
+Exit
+Finish
+Ok
+Error.
+Ok.
+Searching earlier version...
+Creating backup files...
+Depedencies
+Results
+Operation
+Results
+You must to accept the Licence for the Install.
+Restoring erlier version
+Setup
+Some parameters what needed by GPRSEC
+If you want to enable users to use pppd, which need for GPRS Easy Connect you need to let this Installer to set user ID execution(stuid) bit of pppd program.
+Do you want to set it now [recommended]?
+You need to be sure users of GPRS Easy Connect can reach the providers' DNS servers. If you enable Installer to modify/creat /etc/ppp/ip-up and /etc/ppp/ip-down file, then your users can use these DNSs.
+Yes, Installer can create these files.
+set of pppd User ID on Execution bit
+Creating /etc/ppp/ip-up and ip-down files
+#
+# END
+#

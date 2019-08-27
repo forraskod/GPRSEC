@@ -1,0 +1,16 @@
+#!/bin/sh
+
+PATH=$PATH:/sbin:/usr/sbin:/bin:/usr/bin
+export PATH
+
+if [ -n "$USEPEERDNS" -a -f /etc/ppp/resolv.conf ]; then
+    if [ -f /etc/ppp/resolv.prev ]; then
+	rm -f /etc/resolv.conf
+	cp -f /etc/ppp/resolv.prev /etc/resolv.conf
+	chmod 0644 /etc/resolv.conf
+    else
+	rm -f /etc/resolv.conf
+    fi
+fi
+
+/sbin/route
