@@ -1,0 +1,10 @@
+#
+#   Makefile.fpc for Script Generator
+#
+
+[target]
+programs=src/SG
+
+[compiler]
+targetdir=bin
+options=-Og
