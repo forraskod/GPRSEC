@@ -1,0 +1,232 @@
+Anslut
+Koppla från
+[borttagen]
+Avsluta
+Välj din telefon\n(Konfigurationsmeny)
+[borttagen]
+Efter start av...
+Välj port
+[borttagen]
+Konfigurera GPRS Easy Connect***
+Fel (GPRS Easy Connect)
+Efter lyckad anslutning...
+Starta den här webbläsaren\nefter lyckad anslutning:
+[borttagen]
+[borttagen]
+[borttagen]
+Automatisk anslutning.
+Kan inte hitta konfigurationsfilen!\nKontrollera dina inställningar!
+Ta bort statistikdata
+[borttagen]
+Fel i anslutningen
+Anslutningen blockeras av***-\nprocessen som använder resursen.
+Anslutningen avbröts på grund av tidsgränsen\növerstegs för uppringning. Starta om din telefon.
+Har du verkligen slagit på din telefon?
+Lyckad anslutning!
+Lyckad anslutning.\nDin lokala IP-adress: ***\nDin fjärr-IP-adress: ***\nPrimär DNS-server: ***\nSekundär DNS-server: ***
+Anslutningen avbröts.\nInget nätverkssvar!
+Total data hämtad med "***"
+Total data skickad med "***"
+[borttagen]
+Byte hämtade
+Byte skickade
+[borttagen]
+[borttagen]
+Genomsnittshastighet för aktiv anslutning
+Längd på aktiv anslutning
+Längd för alla anslutningar
+Hastighet för aktuell hämtning
+Hastighet för aktuell sändning
+Anslutningen avbröts.\nGPRS-nätverket är överbelastat.
+Anslutningen avbröts på grund av\nett konfigurationsfel.\n(Antagligen är din valda port inte korrekt,\neller så saknas rättigheter!)
+Anslutningen avbröts av användaren.\nTomt batteri.\nDatakabelsfel.
+Anslutningen avbröts.
+[borttagen]
+[borttagen]
+[borttagen]
+[borttagen]
+[borttagen]
+[borttagen]
+[borttagen]
+Diagram
+[borttagen]
+[borttagen]
+Välj ditt språk!
+[borttagen]
+Återanslut
+[borttagen]
+[borttagen]
+Ikonifiera GPRS Easy Connect
+[borttagen]
+Välj din leverantör!
+[borttagen]
+Användare:
+Lösenord:
+Läs den viktiga informationen! (Under "Övrigt"-menyn.)
+Kunde inte hitta konfigurationsfilen!\nKontrollera dina inställningar!
+Du är inte behörig att använda pppd!\nStäll in setuid-biten på den som root eller gör den körbar för användare!
+Upphovsmän
+Saknar konfigurationsparametrar!
+Ingen telefon vald!
+Ingen port vald!
+Språket stöds inte!
+Ingen leverantör vald!
+Välj din telefontyp
+Obligatoriska parametrar
+Valfria parametrar
+Tidsintervall för övervakning av anslutningen (ms)
+Tillåts dynamisk DNS?
+Ovanliga parametrar
+[borttagen]
+Inställning för leverantörens egna CID
+Övrigt
+[borttagen]
+Datainsamlingen startades
+[borttagen]
+[borttagen]
+Fråga din leverantör!
+Historik
+Inaktivera terminalljud
+[borttagen]
+[borttagen]
+För många återanslutningar gjordes!\nDu bör starta om din telefon.
+[borttagen]
+Hur många försök tillåts för återanslutning?
+Inaktivera CGQ-kommandon.
+Sista konfigurationschansen om anslutningen misslyckas.\nVissa distributioner behöver det (t.ex: RedHat).
+Vissa leverantörer behöver den här specialparametern.\nDu bör fråga din leverantör!
+Vanligtvis måste du fylla i det.\nDet är din leverantörs egna parameter\nDu bör fråga din leverantör efter den!
+Det bör vara din leverantörs allmänna parameter eller din individuella kod.\nFråga din leverantör!
+Om du vill använda statisk DNS.
+[borttagen]
+I vissa fall kan det här innebära en mer stabil anslutning.
+Efter lyckad anslutning kommer den valda\nwebbläsaren att automatiskt startas.\nOm den inte finns på din dator\nkommer GPRS Easy Connect att stängas!
+[borttagen]
+[borttagen]
+Du kan ange ett annat nummer.
+Vissa leverantörer behöver sina egna nummer.\nFråga efter det hos din leverantör.
+Om du inte kan se din telefon i listan över telefoner som stöds, prova att välja en liknande telefon.\nAntagligen kommer det att fungera. Om så är fallet, informera oss!
+Överförd data
+Överförd data de senaste 7 dagarna
+Begränsa övervakning
+Datum för radering
+Max dataöverföring per månad (GB)
+Max dataöverföring per vecka (MB)
+Om det här alternativet är aktivt, kommer programmet att\nautomatiskt radera dataöverföringsräknaren på den valda dagen.\n(Om överförd data når upp till\n90% av gränsen kommer programmet att påminna dig!)
+Om den veckomässiga gränsen är definierad kommer\nprogrammet att påminna dig när överförd\ndata närmar sig den gränsen!
+Du har använt 90 % av din månatliga gräns!
+Du har använt 90 % av din veckomässiga gräns!
+[borttagen]
+Nollställ månatlig överförd data
+Nollställ veckomässigt överförd data
+[borttagen]
+Nollställ tidsräknaren
+[borttagen]
+[borttagen]
+[borttagen]
+Inaktivera självautentisering.
+[borttagen]
+Kräv inte att motparten autentiserar sig. Det här alternativet kräver root-behörighet.\n(Vanligtvis behövs det när Debian-system används.)
+Aktivera felsökning
+Filen ~./gprsec/conn.log kommer att skapas i felsökningsläget.\nOm din anslutning inte skapas, skicka oss den här filen i din felrapport!
+Aktivera BCD-komprimering
+Begär att motparten komprimerar paket som den skickar med BSD-Compress och godkänner att komprimera paket som skickas till motparten.\nDet är en funktion för realtidskomprimering för dataöverföring!\nVARNING! OM DU ANVÄNDER DET KOMMER DIN ANSLUTNING ALLTID ATT SKICKA OCH TA EMOT DATA FRÅN/TILL SERVERN\nÄVEN OM DET INTE ÄR NÅGON GILTIG DATAÖVERFÖRING.\n(Det är användbart om du vill skicka/ta emot större filer. Glöm inte dina definierade gränser, om du använder gränser tillsammans med den här funktionen!\nDu bör stänga av den här funktionen efter sändningen/mottagningen!\nObservera: Under tiden den här funktionen är aktiv kommer filen conn.log att växa hela tiden.)
+Leverantörens APN (Access Point Name)
+Om programmet känner till den valda leverantörens APN,\nkommer denna att visas i nästa fält, om inte måste användaren ange det här namnet.\nOm CDMA-systemnätverk används behöver man inte ange APN.
+Telefonen har ännu inte testats!
+Kunde inte hitta\nden valda porten!
+Sök efter en ny version!
+[borttagen]
+[borttagen]
+Söker...
+Kunde inte ansluta till servern!
+Det finns ingen nyare version på servern!
+Slår upp namnserver...
+Kunde inte hitta namnservern!
+Anslutning till easyconnect.linuxuser.hu lyckades.
+HTTP-fråga skickad, väntar på svar...
+Hämtning pågår...\nTotal storlek: *** KB
+Programmet har hämtats.\nNamnet på programmet är:\n***
+Hastighet för anslutningen
+Inaktivera övervakning av dataöverföring.
+Om det här alternativet är aktivt, kommer inte programmet att\növervaka dataöverföringarna!\n(Det är användbart om du har en mycket långsam Winchester!)
+Det verkar som om du lyckats ansluta med\nen "officiellt" otestad telefon!\nOm du vill kan du få bli vår officiella testare, fyll gärna i det här formuläret!:
+Ditt namn?
+Din e-postadress?
+Din distribution (inklusive versionsnumret)?
+Andra kommentarer?
+Tack, men stör mig inte med det här i framtiden!
+[borttagen]
+Du angav inte ditt namn!
+Du angav inte din e-postadress!
+Du angav inte namnet på din distribution!
+Expert portsökning
+[borttagen]
+[borttagen]
+[borttagen]
+[borttagen]
+[borttagen]
+Om det här alternativet är aktivt, kommer algoritmen för\npostsökningen att visa alla dina tänkbara anslutningsportar!\n(Annars kommer endast de första åtta portarna som hittats att visas.)
+[borttagen]
+[borttagen]
+[borttagen]
+[borttagen]
+[borttagen]
+[borttagen]
+Det finns en gammal pppd-process!\nKan jag försöka att döda den här processen nu?
+Donera till GPRS Easy Connect-teamet!
+Donera till oss om du tycker om det här programmet och vill hjälpa oss i vårt arbete.
+Vad vi önskar oss är:
+Våra sponsorer:
+Ja, jag kan erbjuda följande saker:
+[borttagen]
+Skicka donationserbjudande!
+Du angav inte all nödvändig data!
+Kunde inte skriva till serverns databas.\nFörsök igen.
+Om du har valt en eller flera objekt ovanför från listan.\noch fyllt i namnet och e-postadressen,\n\nså kommer vi att kontakta dig via e-post efter att du har skickat in informationen!\n\nTänk dig för innan du skickar informationen!
+Det finns ingen "/etc/ppp/options"!\nFråga din systemadministratör att skapa en. (Den ska vara tom.)
+[borttagen]
+[borttagen]
+[borttagen]
+[borttagen]
+Normal färg
+Förgrundsfärg
+Välj ett tema
+ Eller kontrollera din telefons inställda anslutningshastighet! Vissa telefoners standardhastigheter via datakabel är 9600 bitar/s, prova med den anslutningshastigheten.\n(Du kan hitta information om hur du ställer in hastigheten på din telefon på vår webbsida under menyn "Knowledge".)
+Anslutningsprocessen påträffade ett fel: "***"
+Varning! Kan inte ändra standardvägen, den är fortfarande "***"!
+Hämtar anslutning...
+Anslutningen skapas... *** %
+GPRS Easy Connect är frånkopplad nu
+Status
+Statistik
+Servern gav oss inte en användbar fjärr-IP-adress. Vanligtvis betyder det här att ett eller flera av APN, användarnamn eller lösenord är felaktiga. Du bör fråga kundtjänsten hos din leverantör om detta.
+Mycket viktigt!:\nOm du använder ett avancerat tema kommer GPRS Easy Connect att använda mer systemresurser! Vissa tillgängliga teman är inte perfekta, så du kan få felmeddelanden från GTK i konsollen (om du kör programmet därifrån), vilket inte betyder problem för att köra själva programmet.
+Användbara DNS IP-adress(er) hittades i filen /etc/resolv.conf:\n\n***\n***\n\nDu kan skriva över dessa DNS-adress(er) med DNS-adress(er) som är kända för GPRSEC, vilka är:\n\n***\n***\n\nFör att skriva över, klicka på "Ja", om du vill behålla aktuella DNS-adress(er) klicka på "Nej"!\n(Filen kommer att skrivas över direkt!)
+Kunde inte hitta användbara DNS-adress(er) i filen /etc/resolv.conf. Du kan endast använda dynamisk DNS.
+Information
+[rekommenderas]
+DNS-numren är inte ändringsbar för användaren, den potentiella statiska DNS:en är röd från /etc/resolv.conf. Den dynamiska DNS:en kommer att anges av leverantören efter att anslutningen lyckats och programmet kommer att använda den/de.
+\nOm APN-listan eller anslutningsskripten kommer att uppdateras, kommer den här filen att kopieras till användarens hemkatalog, från vilken GPRSEC kommer att läsa och arbeta med den.
+Det finns ingen känd DNS för den här leverantören och det finns heller ingen användbar DNS i filen /etc/resolv.conf.
+Du ställde in statisk DNS tidigare. Nu är den ändrad till dynamisk, därför att den tidigare inställda DNS:en inte är samma som leverantörens DNS. Om du vill använda den nya statiska DNS:en för din nyligen valda leverantör, behöver du välja statisk DNS igen!
+Ansluten med en icke-testad telefon!
+[borttagen]
+[borttagen]
+[borttagen]
+[borttagen]
+[borttagen]
+[borttagen]
+Välj ett typsnitt
+Välj en färg
+Månatlig överförd data tas bort
+Hämtar information från servern...
+\nGPRS Easy Connect är ett unikt\nprogram som hjälper dig att göra\nanslutningar till Internet via GPRS\npå ett enkelt sätt.\nDet här programmet har stöd för de flesta\ntelefoner och leverantörer i världen.\nDet här programmet är fritt och\nges ut under GNU GPL.\n\nHoppas programmet hjälper dig!\n\nPeter Simon (simon.peter@gprsec.hu)\n\nGabor Pinter (pinter.gabor@gprsec.hu\n\nAndrea Bravetti (brand77@gmail.com)\n\nwww.gprsec.hu
+Välj en annan webbläsare
+Filen är inte körbar av ***!
+Välj en annan port
+Vad du har valt är inte en enhet!
+Du har inte rättigheter att läsa den filen!
+Det här systemet saknar stöd för PPP i kärnan. Det här kan bero på att PPP-kärnmodulen inte är inläst, eller på grund av att PPP inte inkluderades i kärnkonfigurationen. Om PPP blev inkluderad som en modul, prova kör "/sbin/modprobe -v ppp".  Om det misslyckas, kontrollera att ppp.o finns i /lib/modules/`uname -r`/net. Se filen README.linux i ppp-distributionen för fler detaljer.
+Du kan välja en okänd, icke-funnen webbläsare manuellt. Var noggrann när du väljer en binärfil!
+Du kan välja en icke-funnen port manuellt. Var noggrann!

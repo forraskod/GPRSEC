@@ -1,0 +1,232 @@
+Csatlakozás
+Megszakítás
+[törölve]
+Kilépés
+Válaszd ki a mobilod típusát!\n(Beállítás menü.)
+[törölve]
+A program indítása után...
+Válaszd ki a csatlakozási portod!
+[törölve]
+GPRS Easy Connect v***beállításai
+Hiba (GPRS Easy Connect)
+A sikeres kapcsolódás után...:
+Kapcsolódás után a következő böngésző indítása:
+[törölve]
+[törölve]
+[törölve]
+automatikus csatlakozás
+Nem találom a kapcsolódási szkriptet!\nAdd meg a telefonod típusát!
+A statisztikai adatok törlése
+[törölve]
+Kapcsolódási hiba!
+A***folyamatot már használja,\nígy blokkolja a betárcsázási folyamatot!
+A kapcsolatépítés a várakozási idö túllépése\nmiatt befagyott. A telefon ki- és bekapcsolása\nmegoldást nyújthat!
+Úgy tűnik, a telefont nem kapcsoltad be!\n(Vagy mégis?)
+Kapcsolódás sikeres!
+Sikeres kapcsolódás!\nHelyi IP címed: ***\nTávoli IP címed: ***\nElsődleges DNS szerver: ***\nMásodlagos DNS szerver: ***
+A kapcsolódási folymat megszakadt.\nNincs válasz a hálózattól.
+A "***" által összesen letöltött adatok:
+A "***" összesen feltöltött adatok:
+[törölve]
+Bájtokban le:
+Bájtokban fel:
+[törölve]
+[törölve]
+Az aktív kapcsolat adatforgalmi átlagsebessége:
+A kapcsolat időtartama:
+Az összes kapcsolat időtartama:
+Pillanatnyi letöltési sebesség:
+Pillanatnyi feltöltési sebesség:
+A kapcsolódási folymat megszakadt.\nA GPRS hálózat terhelt!
+Konfigurációs hiba miatt a kapcsolódás\nfolymata megszakadt.\n(Esetleg nem megfelelő portot állítottal be,\nvagy nincs hozza jogosultsagod!)
+Felhasználói megszakítás.\nEsetleg a telefon lemerült.\nVagy kicsúszott az adatkábel.
+A kapcsolat megszakadt!
+[törölve]
+[törölve]
+[törölve]
+[törölve]
+[törölve]
+[törölve]
+[törölve]
+Diagram
+[törölve]
+[törölve]
+Válaszd ki a nyelvezetet!
+[törölve]
+Újrakapcsolódás
+[törölve]
+[törölve]
+A GPRS Easy Connect ikonizálása.
+[törölve]
+Válaszd ki a szolgáltatód!
+[törölve]
+Felhasználó név:
+Jelszó:
+[törölve]
+Nincs konfigurációs állomány!\nEllenőrizd a beállításaid!
+Nincs jogosultságod a pppd-hez!\nRendszergazdaként tedd futtathatóvá és/vagy setuid bitjét állítsd be.
+Készítők
+Hiányzó beállítási paraméter!
+Nincs kivásztott telefon!
+Nem adtad meg a kommunikációs portot!
+Nincs kiválasztott nyelv!
+Nem adtad meg a szolgáltatód!
+Add meg a készüléked típusát!
+Kötelező paraméterek
+Választható paraméterek
+Kapcsolatfelépítés figyelésének időrése (ms):
+Engedélyezett a dinamikus DNS?
+Ritkán használatos paraméterek
+[törölve]
+Egyedi CID érték beállítása:
+Egyéb
+[törölve]
+A mérés kezdete:
+[törölve]
+[törölve]
+Kérdezd a szolgáltatód!
+Történet
+Hangjelzések tiltása
+[törölve]
+[törölve]
+Túl sok újrakapcsolódás történt!\nÉrdemes a készüléket ki- és bekapcsolni!
+[törölve]
+Újrakapcsolódások száma (db)?
+CGQ parancsok tiltása
+Utolsó beállítási lehetőség, akkor ha mégsem csatlakozik a program.\n Néhány disztribúciónál ez kötelező. (pl.: RedHat)\nEgyes telefonok működését ez a funkció nem befolyásolja.
+Néhány szolgáltató ezt a speciális paramétert megköveteli.\nÉrdemes egyeztetni a szolgáltatóddal.
+A legtöbb szolgáltatónál ezt kötelező megadni.\nÉrdemes egyeztetni a szolgáltatóddal.
+A szolgáltatóknál ez lehet általános,\nvagy az előfizető-specifikus.\nÉrdemes egyeztetni a szolgáltatóddal.
+Ha statikus DNS-t akarsz beállítani\nakkor érdemes egyeztetni a számo(ka)t szolgáltatóddal.
+[törölve]
+Egyes esetekben a kapcsolatfelépítés\nritkább figyelése segít a stabilabb\nkapcsolat-felépítésben.
+A kapcsolódás után a kiválasztott böngésző\nautomatikusan elindul.\nFigyelem! Ha nincs fenn a gépen ez a program,\nakkor GPRS Easy Connect kilép!
+[törölve]
+[törölve]
+Egyedi telefonszám:
+Néhány szolgáltató eltér a szaványos, a telefonra jellemző betárcsázási számtól.\nErre vonatkozó információt a szolgáltatótól kell megérdeklődni.
+Gyakran előfordulhat, hogy az itt nem szereplő készülékek is\nhasználhatóak a már meglévő beállításokkal.\nHa ilyet tapasztalsz, légy szíves, informálj minket.
+Forgalmazott adatmennyiség:
+Az elmúlt hét nap forgalma:
+Limitfigyelés
+Törlés napja
+Havi max. adatforgalom (GB)
+Heti max. adatforgalom (MB)
+Ha ez az opció aktív, akkor a kiválasztott napon a\nprogram automatikusan törli az adatforgalmi számlálót.\n(A limitben meghatározott adataforgalom közeledtére\na program figyelmeztet!)
+Ha a heti limit meghatározott, akkor a program\nfigyelmeztet a limit elérése előtt!
+Kihasználtad a havi limited 90%-át!
+Kihasználtad a heti limited 90%-át!
+[törölve]
+Havi adatforgalom törlése
+Heti adatforgalom törlése
+[törölve]
+Időszámlálás nullázása
+[törölve]
+[törölve]
+[törölve]
+Önhitelesítés tiltása
+[törölve]
+Nem engedélyezi a kapcsolatnak, hogy önmagát hitelesítse.\nEz az opció a "root" felhasználó privilégiuma!\n(Gyakoribb eset Debian használatakor.)
+Hibakereső mód
+A ~./gprsec/conn.log állomány hibakereső módban jön létre.\nHa a csatlakozásod nem épül fel, akkor egy így létrehozott állományt küldd el nekünk a "Hibajelentés"-ben!
+BSD tömörítés engedélyezése
+A kapcsolat kérelmezi a valós időben tömörített csomagok küldését/fogadását a szervernek.\nFIGYELMEZTETÉS! HA EZ A FUNKCIÓ AKTÍV, AKKOR ABBAN AZ ESETBEN IS VAN ADATFORGALOM A SZERVERREL,\nHA NINCS VALÓSÁGOS ADATÁTVITEL!\n(Ez a funkció akkor hasznos, ha egy nagyobb méretű fájlt akarsz le(fel)tölteni, de ne feletkezz meg a kikapcsolásáról,\nha a le(fel)töltés befejeződöt az esetleges limited miatt.\nMegjegyzés: amíg ez a funkció aktív, addig a conn.log állományod folymatosan nő!)
+A szolgáltató APN-je (Elérési Pont Név)
+A program, amennyiben ismeri a kiválasztott szolgáltató APN-jét,\núgy azt megjeleníti, ellenkező esetben a felhasználónak magának kell megadnia ezt az értéket.\nCDMA rendszerű hálózatoknál nincs szükség az APN megadására.
+Még nem tesztelt készülék!
+Nem létezik a\nkiválasztott csatlakozási port!
+Frissebb verzió letöltése
+[törölve]
+[törölve]
+Keresés folyamatban!
+Nem tudtam kapcsolódni a szerverhez!
+Nincs frissebb verzió a szerveren!
+Névszerver feloldása...
+Nem találom a hostot!
+Kapcsolódás a gprsec.hu-hoz megtörtént.
+HTTP kérés elküldve, várom a választ...
+A letöltés folyamatban...\nTeljes méret: *** KB
+A program letöltve.\nA program neve:\n***
+A kapcsolódás sebessége
+Adatforgalmi figyelés tiltása
+Ha ezt az opciót bekapcsolod, akkor nem figyeli a program\na forgalmazott adatmennyiségedet!\n(Nagyon lassú vincsesztereknél ajánlott!)
+Úgy tűnik olyan készülékkel kapcsolódtál\nsikeresen, amelynek még "hivatalosan" nincs tesztere!\nHa kedved van hozzá, akkor, légy szíves töltsd ki az alábbi űrlapot:
+Neved?
+E-mail címed?
+Disztribúciód?
+Egyéb közlemény?
+Kösz, de ez az ablak ne jelenjen meg legközelebb!
+[törölve]
+Nem adtad meg a neved!
+Nem adtad meg az e-mail címed!
+Nem adtad meg a disztribúciód!
+Szakértő mód
+Felhasználónév hozzáadása/eltávolítása
+[törölve]
+[törölve]
+[törölve]
+[törölve]
+Ha ez az opció aktív, akkor a port kereső\nalgoritmus megmutatja az összes lehetséges kapcsolódási portot\n(Ellenkező esetben csak az első megtalált nyolcat.)
+[törölve]
+[törölve]
+[törölve]
+[törölve]
+[törölve]
+[törölve]
+A beragadt pppd folyamat akadályozza a program futását!\nMegpróbálhatom ezt most kilőni?
+Támogasd a GPRS Easy Connect csapatot!
+Ha tetszik a program, és a fejlsztők segítségére szeretnél lenni,\nkérünk támogass minket!
+Ezeket szeretnénk megkapni:
+Támogatóink:
+Igen, én felajánlom az alábbiakat:
+[törölve]
+A támogatási szándék elküldése.
+Nem adtat meg valamennyi szükséges adatot!
+[törölve]
+Ha egy vagy több tárgyat kiválasztasz a fenti listából\nés kitöltötted a név és e-mail mezőket, valamint elküldted az adatokat,\n\nakkor mi e-mailen keresztül felvesszük veled a kapcsolatot!\n\nKérünk, ezt csak komoly szándékkal tedd meg!
+Hiányzik az "/etc/ppp/options" fájl!\nKérd meg a rendszergazdát, hogy hozzon létre egyet!\n(Lehet üres is!)
+[törölve]
+[törölve]
+[törölve]
+Amíg a Kompakt mód aktív nem lehet megváltoztatni a beállításokat.\nA normál felülethez történő visszatéréshez, kattints ide.
+Normál szín
+Előtér szín
+Válassz ki egy témát
+Vagy ellenőrizd a telefon beállított kapcsolódási sebességét! Néhány készülék alapbeállítása adatkábelen keresztüli kapcsolódás esetén 9600 b/s, ezen s ebességen érdemes kipróbálni a kapcsolódást.(A honlapunkon találhatsz megoldást a sebesség emelésére vonatkozóan a Tudásbázis menüben.)
+A kapcsolódási folyamat hibát észlelt: "***"
+Figyelem! Nem sikerült az internetes adatforgalmat a GPRS-hez rendleni!\nA(z) *** az alapértelmezett továbbra is!
+Kapcsolódás megkezdése...
+A kapcsolat felépítés alatt... *** %.
+A GPRS Easy Connect nem kapcsolódott
+Állapot
+Statisztika
+A szerver nem adott vissza használható IP címet. Ez olyan esetekben fordulhat elő, ha az APN, a felhasználónév vagy a jelszó hibásan került megadásra. A szolgáltató ügyfélszolgálatával érdemes egyeztetni.
+Nagyon fontos!:\nA bonyolultabb témák nagyobb rendszererőforrást vesznek igénybe! Némely elérhető téma nem tökéletes, így ha konzolból indítottad a programot, akkor oda GTK hibákat jelezhet, amik nem befolyásolják a program működését.
+Az /etc/resolv.conf fájlban találtam érvényes DNS bejegyzéz(eke)t:\n\n***\n***\n\nA program által ismert, a kiválasztott szolgáltató DNS szervereivel felülírhatod a jelenlegi DNS szervereket.\nEhhez a szolgáltatóhoz tartozó, a program által ismert DNS szerver(ek):\n\n***\n***\n\nA felülíráshoz kattints az "Igen", a jelenlegi DNS bejegyzések megtartásához kattints a "Nem" gombra!\n(A felülírás azonnal megtörténik!)
+Nincs statikusan használható DNS az /etc/resolv.conf fájlban, ezért csak dinamikus DNS állítható be.
+Információ
+[ajánlott]
+A DNS szerver felhasználói joggal nem módosítható, az esetleges statikus értéket az /etc/resolv.conf fájlból olvassa ki a program, aminek a megváltoztatásához root jog szükséges. A dinamikus DNS-t a szolgáltató adja a sikeres kapcsolódás után, majd automatiksan kerül felhasználásra.
+\nAmennyiben szkript vagy APN lista frissítés történt, úgy a felhasználói könyvtárban kicsomagolásra került a frissített állomány, és a GPRSEC ezen állományokból fog dolgozni a következő újraindítás után!
+Ennek a szolgáltatónak nem ismert a DNS szervere, és használható DNS szerverről sincs információ az /etc/resolv.conf fájlban.
+Korábban statikus DNS-t állítottál be. Most dinamikusra állítódott át, mert nem biztos, hogy a korábban beállított DNS egyezik a most beállított szolgáltató DNS-ével. Hogy újra statikus DNS-t használhass, be kell állítanod ismét.
+Kapcsolódva egy nem tesztelt telefonnal!
+[törölve]
+[törölve]
+[törölve]
+[törölve]
+[törölve]
+[törölve]
+Betűtípus-kiválasztás
+Színkiválasztás
+A havi forgalmi adatok törlésre kerültek
+Adatok letöltése a szerverről...
+\nA GPRS Easy Connect egy különleges\nprogram, ami segít a GPRS Internet\nkapcsolat felépítésében a legegyszerübb\nmódon.\nEz a program támogatja a világon\nlegtöbb telefont és szolgáltatót.\nA program szabad termék\nés a GNU GPL alá esik.\n\nKellemes használatot!\n\nSimon Péter (simon.peter@gprsec.hu)\n\nPintér Gábor (pinter.gabor@gprsec.hu)\n\nAndrea Bravetti (brand77@gmail.com)\n\n      www.gprsec.hu\n
+Más böngésző kiválasztása
+A fájl nem futtatható *** által!
+Egyéb port kiválasztása
+Nem eszközmeghajtó került kiválsztásra!
+Nincs olvasási jogod a fájlhoz!
+A Kernelből hiányzik a PPP támogatása. Lehet, hogy a PPP modul nem töltődött be a Kernelbe, vagy a kernelkonfiguráció nem tartalmazta a PPP-t. Ha modulként van jelen a PPP, akkor érdemes megpróbálni a `/sbin/modprobe -v ppp' paranccsal betölteni. Ha ez nem működik, akkor ellenőrizni kell, hogy a ppp.o fájl létezik-e /lib/modules/`uname -r`/net könyvtárban. A ppp csomagjában a README.linux fájl tartalmaz bővebb információt erről.
+Kiválasztható ismeretlen vagy meg nem talált böngésző is. A bináris fájl kiválsztásánál körültekintőnek kell lenni!
+Kiválasztható meg nem talált port is. Körültekintőnek kell lenni!

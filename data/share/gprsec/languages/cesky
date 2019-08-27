@@ -1,0 +1,162 @@
+Připojit
+Odpojit
+Nainstalovat GPRS Easy Connect
+Ukončit
+Vyberte typ Vašeho telefonu (Menu Nastavení)
+Důležité
+Po spuštění...
+Vyberte port
+OK/Uložit data
+Nainstalovat GPRS Easy Connect***
+Chyba (GPRS Easy Connect)
+Po úspěšném připojení...
+Spusťte tento prohlížeč po úspěšném připojení:
+Zapnout tuto funkci.
+Minimalizovat okno na lištu.
+Důležité (GPRS Easy Connect)
+Automatické připojení.
+Nemohu najít konfigurační soubor! Zkontrolujte své nastavení!
+Vymazat statistická data
+Připojuji...
+Chyba připojení
+Připojení je blokováno*** procesem používajícím zdroj.
+Připojování je přerušeno kvůli vypršení limitu pro připojení. Prosím, resetujte telefon.
+Pravděpodobně jste nezapnul telefon,je zapnut?
+Úspěšné připojení!
+Připojen úspěšně. Vaše lokální IP adresa: *** IP adresa serveru: *** Primární DNS server: *** Sekundární DNS server: ***
+Spojení přerušeno. Žádná odezva sítě!
+Celkem dat  přijato s "***"
+Celkem dat odesláno s "***"
+Celkem dat přeneseno
+bajtů přijato
+bajtů odesláno
+paketů přijato
+paketů odesláno
+Průměrná rychlost aktivního připojení
+Délka trvání aktivního připojení
+Délka trvání všech připojení
+Rychlost příjmu dat
+Rychlost odesílání dat
+Spojení přerušeno. GPRS síť je přetížena.
+Spojení přerušeno kvůli chybě v konfiguraci. (Pravděpodobně Vámi vybraný port není správný nebo nemáte oprávnění!)
+Spojení přerušeno uživatelem. Baterie je vybita. Chyba datového kabelu.
+Spojení přerušeno.
+Speciální statistiky (GPRS Easy Connect)
+Bez dodání dat.
+S dodáním dat
+řádky
+Sloupce
+Průměrná rychlost připojení za posledních 5 minut. Průměrná celkem.
+Zobraz/uschovej statistické okno.
+Speciální statistiky.
+Chyba během připojování kvůli externí chybě. Restartujte telefon.
+hodina
+Vyberte Váš jazyk!
+Čas do opětovného připojení:
+Opětovné připojení
+Storno
+Nelze nalézt síťový protokol Žádná použitelná GPRS služba!
+Minimalizovat GPRS Easy Connect
+Lze spustit pouze jeden GPRS Easy Connect!
+Vyberte Vašeho operátora!
+Nalze nalézt soubor apn!
+Uživatel:
+Heslo:
+Přečtěte si důležité informace! (Menu Ostatní)
+Soubor setup nenalezen! Vyberte Vaše nastavení!
+Nemáte dostatek práv pro spuštění pppd! Přeštěte si FAQ a důležité informace!
+Vyrobil
+Chybí parametry nastavení!
+Nebyl vybrán telefon!
+Nebyl vybrán port!
+Neznámý jazyk!
+Nebyl vybrán operátor!
+Vyberte typ vašeho zařízení
+Povinné parametry
+Volitelné parametry
+Časový interval pro sledování připojení (ms)
+Je povoleno dynamické přidělování DNS?
+Zřídka používaný parametr použit
+Přednastavené
+Nastavení CID operátora
+Ostatní
+Zavři okno
+Začíná ukládání dat
+Chybějící parametr nastavení! Zkontrolujte nastavení!
+Pro statické DNS musíte restartovat!
+Zeptejte se Vašeho operátora!
+Historie
+Zrušit zvukové signály
+Připojit znova na pozadí
+Chyba
+Mnoho opakovaných připojení! Restartujte raději telefon.
+OK
+Kolik pokusů je dovoleno pro opětovní připojení?
+Zrušit CGQ příkaz.
+Poslední pokus o nastavení pokud selže připojení. Některé distribuce (např. RedHat) to vyžadují. 
+Někteří operátoři potřebují tento speciální parametr. Informaci získáte u Vašeho operátora!
+Většinou musíte toto vyplnit. Jedná se o parametr Vašeho operátora. Informaci získáte u Vašeho operátora!
+Jedná se o operátorův obecný parametr nebo Váš osobní kód. Zeptejte se operátora!
+Pokud chcete použít statickou adresu DNS serveru.
+
+V některých případech může zvýšit stabilitu připojení.
+Po úspěšném připojení bude vybraný prohlížeč automaticky spuštěn. Pokud není nainstalován na Vašem počítači, GPRS Easy Connect bude ukončen!
+Pokud je aktivní "Opětovné připojení", GPRS Easy Connect se automaticky připojí znova na pozadí. Během opětovného připojování uvidíte odpočítávání na Vašem panelu.
+
+Můžete zadat jiné vytáčené číslo.
+Někteří operátoři vyžadují jiné telefonní číslo. Informaci získáte u Vašeho operátora.
+Pokud nevidíte Váš telefon na seznamu podporovaných, zkuste vybrat podobný. Pravděpodobně bude fungovat. Pokud ano, prosím informujte nás!
+Přenesená data
+Data přenesená za posledních 7 dní
+Sledování limitů
+Datum smazání
+Max. měsíční datový přenos (GB)
+Max. týdenní datový přenos (MB)
+Pokud je tato volba aktivní, program automaticky smaže počítač dat ve vybraný den. '(Pokud množství přenesených dat dosáhne \90%, program Vás upozorní!)
+Pokud je definován týdenní limit pro přenos dat, program Vás upozorní při přiblížení se k tomuto limitu!
+Využil jste 90% Vašeho měsíčního limitu!
+Využil jste 90% Vašeho týdenního limitu!
+Volby smazání
+Vynulovat přenesená data za měsíc
+Vynulovat přenesená data za týden
+Vynulovat "5 minutová" data
+Vynulovat počítadlo času
+Během připojování nebyla zaslána žádná odpověď. Pro chybu existuje mnoho důvodů! (Zkuste restartovat telefon nebo změnit své nastavení!)
+Program zkusí ukončit zatuhlý proces. Moment, prosím ...
+Nastavení pro pokročilé
+Zrušit automatickou konfiguraci.
+Nastavení pro pppd skript
+Nevyžaduj od druhých authentifikování sama sebe. Tato volba vyžaduje práva roota. (Obvykle vyžadováno od Debianu.)
+Debug mode zapnut
+Soubor ~./gprsec/conn.log bude v debug módu. Pokud se spojení nesestaví, zašlete nám soubor ve svém "hlášení chyby"!
+Povolit BCD kompresi
+Vyžaduj od druhých kompresi paketů, které zasílají, za použití schématu BSD komprese a souhlas s kompresí tebou odesílaných paketů. Jedná se o real-time kompresní funkci pro přenos dat! POZOR! PřI POUŽITÍ KOMPRESE BUDE VAŠE SPOJENÍ ZASÍLAT A PřIJÍMAT DATA Z/NA SERVER I TEHDY, KDYŽ ZDE NEJSOU ŽÁDNÁ PLATNÁ DATA PRO PřENOS. (Je to užitečné tehdy, pokud chcete odeslat/přijmout větší soubor. Nezapomeňte na omezení při užití této funkce! Funkci byste měli vypnout po skončení přenosu souboru! Poznámka: při zapnutí této funkce se bude soubor conn.log plynule zvětšovat.)
+Přístupový bod (APN)
+Pokud program zná vybrané APN poskytovatele, bude zobrazeno v následujícím poli. Pokud ho nezná, musí být APN zadáno uživatelem. APN se nezadává u sítí CDMA.
+Telefon nebyl doposud testván!
+Nemohu nalézt zadaný port!
+Hledej novou verzi!
+Můžete zkusit, zda je na serveru nová verze GPRS Easy Connect! (Pokud takto obnovíte program, stará verze bude smazána!)
+Zrušit nahrávání!
+Hledám...
+Nemohu se připojit na server!
+Na serveru není novější verze!
+Kontaktuji nameserver...
+Nemohu najít nameserver (DNS)!
+Připojuji se na easyconnect. linuxuser je úspěšný.
+HTTP požadavek je zaslán, čekám na odpověď ...
+Probíhá nahrávání ... Celková velikost: *** KB
+Program je nahrán. Jméno programu je: ***
+Rychlost připojení
+Zrušit sledování datového přenosu.
+Pokud je tato volba aktivní, program nebude moct sledovat datový přenos! (Je to užitečné v případě, kdy máte velmi pomalý disk!)
+Vypadá to, že jste se úspěšně připojil "oficiálně" neotestovaným telefonem! Pokud chcete být oficiální hlavní tester, prosím, vypl?te formulář!
+Vaše jméno?
+Vaše e-mailová adresa?
+Vaše distribuce (s číslem verze)?
+Jiná poznámka?
+Děkuji, ale neobťěžujte mne s tím příště!
+Datový přenos je úspěšný!
+Nezadal jste Vaše jméno!
+Nezadal jste Váš e-mail!
+Nezadal jste název Vaší distribuce!

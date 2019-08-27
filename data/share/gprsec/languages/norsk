@@ -1,0 +1,188 @@
+koble til
+koble fra
+Satt opp GPRS Easy Connect
+Avslutt
+Utta din telefon type (satt opp meny)
+Vikting
+Etter de start...
+Utta de havn
+OK/Spare de data
+Satt opp GPRS Easy Connect***
+Feil (GPRS Easy Connect)
+Etter de fremgang forbindelse...
+Start denne browser etter de fremgang forbindelse:
+Omdreining denne funksjon on.
+Ikonfie denne forbindelse window.
+Viktig (GPRS Easy Connect)
+Automatisk forbindelse.
+Kan ikke fannt de konfigurasjon fil! Sjekk din satt!
+Fjerne av statistik dato
+Forbindelse i fremmarsj...
+Feil i forbindelse
+De forbindelse et lukke ved*** prosess anvendelse de ressurse.
+De forbindelse et avbryte årsak til tallskrived tid grense.Behage reset din telefon.
+Kanskje deg ikke bryterne på din telefon, deg huske?
+Fremgang forbindelse!
+Fremgang forbindelse. Din lokal IP adresse: *** Din avsides IP adresse: *** Først DNS tjeneste: *** Sekundær DNS tjeneste: ***
+Forbindelse avbryte. Ingen nettverk svar!
+Total data downloaded med "***"
+Total data uploaded med "***"
+Total data trsmitted
+Bytes uploaded
+Bytes downloaded
+Pakken downloaded
+Pakken uploaded
+De gjennomsnitt fart av de aktiv forbindelse
+Løpetid av aktiv forbindelse
+Løpetid av total forbindelse
+Fart av strøm download
+Fart av strøm upload
+Forbindelse avbryte De GPRS nettverk et overloaded.
+Forbindelse avbryte Kofigursjon feil. (Sannsynligvis din utta havn ikke rett, Eller permission is denied!)
+Forbindelse avbryte ved bruker. Flat batteri. Data kabel fiasko.
+Forbindelse avbryte.
+Spesiell statistic (GPRS Easy Connect)
+Uten supplement av data
+Med supplement av data
+Linjes
+Kolonnes
+Gjennomsnitt fart av aktive forbindelse for 5 minutt. Og gjennomsnitt av denne.
+Vise/Skjule de statistic window.
+Diagram
+Forbindelse prosess fiasko For utter feil. Deg skul reset din telefon. (Sannsynligvis din utta havn ikke rett.)
+Time
+Utta din språk!
+Tid til forlate inntil re-forbindelse:
+Re-forbindelse
+Annullere
+Kant fannt egnet net protokoll Ingen anvendelse GPRS tjeneste!
+Ikonify de GPRS Easy Connect
+Deg kant løpe at en of GPRS Easy Connect!
+Utvelge din familieforsørger!
+Ingen fil navn apn!
+Bruker:
+Passord:
+Lese de viktig informasjon (Nedenunder "Annen" meny.)
+Jeg ikke fannt de satt opp fil! Sjekk din settings!
+Deg ikke autorisasjonen for anvendelse de pppd! Lese de FAQ eller viktig informasjon!
+Gjør ved
+Savne satt opp parameters!
+Ingen utta telefon!
+Ingen utta havn!
+Ikke oppbakkingen språk!
+Ingen familieforsørger utvelgelse!
+Utta de type av din telefon
+Obligatory satt
+Valgfri satt
+Tid mellomrom av armbåndsur de forbindelse (ms)
+De dinamic DNS tillate?
+Sjelden satt in anvendelse
+Misligholdelse
+Satt opp av de familieforsørger egen CID
+Annen
+Lukke denne window
+Begynnen av de data spare
+Savne konfigurasjon satt! Sjekk din satt!
+For de statisk DNS Deg logg in root!
+Spurte din familieforsørger!
+Historien
+Udyktighet de klokke signals
+Re-forbindelse in de backgrunn
+Feil
+Too mange re-forbindelse hende! Deg skul reset din telefon.
+OK
+Hvordan mange forsøk tillate for re-forbindelse?
+Udyktighet de CGQ befaling.
+Sist satt op sjanse dersom forbindelse prosess mislykkes. Noe distribusjon behøve den (e.g: RedHat).
+Noe familieforsørger behøve denne spesiell satt. Deg skul spurte omkring den din familieforsørger!
+Fles deg til fylle den i. Denne din familieforsørger egen satt Deg spurte omkring den din familieforsørger!
+Den skul din familieforsørger allment satt eller din enkelte kode. Spurte din familieforsørger!
+Dersom deg lik til anvendelse statisk DNS.
+
+I noe sak denne kan tilby en fler stabil forbindelse.
+Etter de fremgang forbindelse de utta browser vilje automatisk starts. Dersom at ingen på din computer dengang de GPRS Easy Connect vilje lukke!
+Dersom de "re-forbindelse" valgmulighet aktive  dengang GPRS Easy Connect vilje re-forbindelse i de backgrunn
+
+Deg kan avgi annen benevne antall.
+Noe familieforsørger behøve de egen benevne antall. Spurte omkring it din familieforsørger.
+Dersom deg ikke sage din telefon i en oppbakking liste, forsøke  til utta lignende telefon. Sannsynligvis den vilje arbeide. I denne sak, behage, informere oss!
+Trasmitted data
+Trasmitted data i sist 7 dags
+Grense kontrollapparat
+Dato av utviske
+Max. måned data trasmission (GB)
+Max. uke data trasmission (MB) 
+Dersom disse valgmulighet is aktiv, dengang de program vilje automatisk utviske de data trasmission greve på de utta dag. (Dersom de trasmitted data kvantitet vilje oppnå med de 90% av grense, dengang de program vilje påminne deg!)
+Dersom de uke grense is definere dengang de program vilje påminne deg da din trasmitted data kvantitet nærme at!
+Deg har anvendes din måned grense 90% opp!
+Deg har anvendes din uke grense 90% opp!
+Valgmulighet av utviske
+Reset de måned trasmitted data
+Reset de uke trasmitted data
+Reset de "5 minutt" data
+Reset de tid greve
+Der is ingen echo fra forbindelse fremmarsj. Der en lot av sak av den! (Forsøke til reset din telefon eller re-satt din satt!)
+De program forsøke til drepe en frosset prosess. En øyeblikk behage...
+Satt opp for professjonell
+Udyktighet selv-autenticasjon
+Satt opp of de pppd script
+Ikke behov de likemann til autenticate seg. Denne valgmulighet behov en root kraft.
+Debug mode på
+De ~./gprsec/conn.log file vilje gjør i en debug mode. Dersom din forbindelse vilje ikke byggde opp dengang behage sende oss denne fil i din "Bugreport"!
+Byggde BCD komprimere
+Anmodning at de likemann kompress pakke at den sende.
+De familieforsørger APN (Access Point Name)
+Dersom de program har kjenne de utta familieforsørger APN, dengang disse vilje vise i de neste inntreden celle.
+Telefon ikke prøved ennå!
+Jeg ikke fannt de utta havn!
+Søken ny versjon!
+Deg kan sjekk, En ny versjon of GPRS Easy Connect is disponibel på vår site!
+Stoppe de download!
+Søken...
+Jeg ikke koble til server!
+Der is ingen ny versjon på de server!
+Besluttsomhet navnserver...
+Jeg ikke fannt de navnserver!
+Koble til de easyconnect.linuxuser.hu is fremgang.
+HTTP anmodning sende, anmodning for svar...
+De downloading is i fremmarsj... Total størrelse: *** KB
+De program is downloaded. De navn of de program is: ***
+Forbindelse fart
+Udyktighet armbåndsur of data-trasmission
+Dersom valgmulighet is aktive, dengang de program ikke armbåndsur de data-trasmission!   
+Den synes lik deg forbindelse fremgang an "officially" non-prøved telefon! Dersom deg lik til være vår hoved tester, behage fylle denne formularet opp!:
+Din navn?
+Din e-postadresse?
+Din distribusjon (med versjon antall)?
+Annen bemerke?
+Takke, men ikke forstyrre meg i fremtidig!
+Data trasmission is fremgang!
+Deg ikke skrivende deg navn!
+Deg ikke skrivende deg e-postadresse!
+Deg ikke skrivende de navn of deg distibusjon!
+Ekspert havn skandere
+Tilføye/Fjerne brukernavn
+Ny brukernavn?
+Ny passord?
+Utta en bruker-passord par!
+Fjerne de brukernavn!
+Denne valgmulighet vise all de havn of deg mulighet forbindelse! 
+Deg kan tilføye/fjern bruker(navn) tilgjengelig of GPRS Connection.
+Tilføye/Fjern brukernavn for GPRS EC
+Tilføye brukernavn
+Fjern brukernavn
+Denne DNS antall vilje ikke anvendes dersom deg ikke root!
+You Kan ikke satt de DNS idet dinamik nedenunder FreeBSD!
+Der is en frosset pppd prosess! Jeg kan forsøke til drepe denne prosess nå?
+Donasjon de GPRS Easy Connect lag!
+Desom deg lik denne program og deg like til hjelp vår arbeide, behage donasjon til oss.
+Hva vi lik til få:
+Vår sponsors:
+Ja, jeg tilby de nedenstående tings:
+Din IP adresse:
+Sende de hensikt of de donasjon!
+Deg kan ikke avgi oss all behøved data!
+Jeg kan not skrivende i de servers database. Behage forsøke den ingjen.
+Dersom deg har utta en eller fler gjenstanden til de liste of tings. og fylle de navn og de e-postadresse,  da vi vilje kontakt med deg via e-postadresse etter deg sende disse informasjon!
+Der is no ingen "/etc/ppp/options" fil! Spurte de root til gjør den.
+Der is no satt navnserver i /etc/resolv.conf fil! Spurte de root til gjør den

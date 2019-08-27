@@ -1,0 +1,54 @@
+#
+# Script Generator 0.7.1
+# English Language File
+#
+# 2003.07.19.
+#
+
+Script Generator
+Version 0.7.1
+This program is made for creating the chat and the pppd scripts for GPRS & CDMA Internet phones, which are supported by GPRS Easy Connect Program.
+(You can exit by press Q or q anywhere.)
+[1] = GPRS or [2] = CDMA system phones. What's your choice?
+In the next step this program will show the supported phones.
+Note your phone's number in the list below.
+(The marked phones by "*" are non official tested yet!)
+To show the supported phones' list, press any key.
+Type your phone's serial number in the list:
+Give your connection port (COM1 = /dev/ttyS0, COM2 = /dev/ttyS1, IrDA = /dev/ircomm0):
+Maximum speed of data transmission (by COM 115200, by IrDA 57600 is suggested):
+Your provider's APN:
+Username for connection (if needed):
+Your password:
+For starting the connection type: pppd file
+ or /usr/sbin/pppd file
+It seems like you didn't give every parameter!
+Unkown phone's serial number!
+Error: can't find the
+ file!
+Chat script for the
+ phone
+It's made with the Script Generator, which is made by Gábor Pintér <pinter.gabor@gprsec.hu> For the GPRS Easy Connect program.
+The Script Generator and the files made by it are came a GNU General Public License.
+Disconnecting...
+Disconnected.
+pppd option file for
+ phone
+Debug mode
+Device for your connetcion
+Speed
+With this option, pppd will accept all control characters from the peer, including those marked in the receive asyncmap
+Disable every compression in both directions
+Don't detach from the controlling terminal
+Ask the peer for up to 2 DNS server addresses
+Do not require the peer to authenticate itself (This option is privileged for root!)
+Your username and password for your connection
+Other options
+Connect script
+Disconnect script
+Supported phones:
+Press any key to continue the phones' list...
+
+#
+# END
+#

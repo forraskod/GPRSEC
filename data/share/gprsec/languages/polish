@@ -1,0 +1,222 @@
+Połącz
+Rozłącz
+Konfiguracja GPRS Easy Connect
+Wyjście
+Wybierz swój telefon\n(Menu Ustawień)
+Ważne
+Po uruchomieniu...
+Wybierz port
+OK/Zapisz Ustawienia
+Konfiguracja GPRS Easy Connect***
+Błąd (GPRS Easy Connect)
+Po udanym połączeniu...
+Uruchom tę przeglądarkę\npo udanym połączeniu:
+Włącz tę funkcję.
+Zminimalizuj okno połączenia.
+Ważne (GPRS Easy Connect)
+Automatyczne łączenie.
+Nie mogę znaleźć pliku konfiguracyjnego!\nSprawdź ustawienia!
+Usuń dane statystyk
+Trwa łączenie...
+Błąd połączenia
+Połączenie jest blokowane przez***\nproces używający tego zasobu.
+Połączenie zostało przerwane z powodu limitu\nczasu dzwonienia. Proszę zrestartować telefon.
+Prawdopodobnie nie włączyłeś telefonu,\nprawda?
+Połączenie udane!
+Połączenie udane.\nTwój lokalny numer IP: ***\nTwój zdalny adres IP: ***\nPodstawowy serwer DNS: ***\nDodatkowy serwer DNS: ***
+Połączenie przerwane.\nBrak odpowiedzi sieci!
+Łącznie ilość danych pobranych dla "***"
+Łącznie ilość danych wysłanych dla "***"
+Łącznie ilość danych transmitowanych
+Bajtów pobranych
+Bajtów wysłanych
+Pakietów pobranych
+Pakietów wysłanych
+Średnia prędkość bieżącego połączenia
+Czas trwania bieżącego połączenia
+Czas trwania wszystkich połączeń
+Prędkość bieżącego pobierania
+Prędkość bieżącego wysyłania
+Połączenie przerwane.\nSieć GPRS jest przeciążona.
+Połączenie przerwane z powodu\nbłędu konfiguracji.\n(Prawdopodobnie wybrałeś zły port,\nlub nie masz wystarczających praw dostępu do niego!)
+Połączenie przerwane przez użytkownika.\nWyczerpana bateria.\nBłąd kabla transmisji.
+Połączenie przerwane.
+Specjalne statystyki (GPRS Easy Connect)
+Bez dodatkowych danych
+Z dodatkowymi danymi
+Linie
+Kolumny
+Średnia prędkość bieżącego połączenia w ciągu 5 minut.\nI średnia z nich.
+Pokaż/ukryj okno statystyk.
+Wykres
+Połączenie nie powiodło się\nz innych przyczyn.\nPowinieneś zresetować telefon.\n(Prawdopodobnie wybrałeś zły port.)
+godzina
+Wybierz język!
+Czas do ponownego połączenia:
+Połącz ponownie
+Anuluj
+Nie mogę znaleźć odpowiednich protokołów sieciowych\nNie ma usługi GPRS!
+Zwiń GPRS Easy Connect do ikony
+Nie możesz uruchomić więcej niż raz\nGPRS Easy Connect!
+Wybierz dostawcę!
+Nie ma pliku o nazwie apn!
+Użytkownik:
+Hasło:
+Przeczytaj ważne informacje! (W menu "Inne".)
+Nie mogę znaleźć pliku ustawień!\nSprawdź ustawienia!
+Nie masz uprawnień do używania pppd!\nPrzeczytaj FAQ lub ważne informacje!
+Stworzony przez
+Brak ustawień!
+Nie wybrano telefonu!!
+Nie wybrano portu!
+Niewspierany język!
+Nie wybrano dostawcy!
+Wybierz swój telefon
+Parametry wymagane
+Parametry opcjonalne
+Interwał czasu dla obserwowania połączenia (ms)
+Czy dynamiczny DNS jest dozwolony?
+Rzadko używane ustawienia
+Domyślnie
+Ustawienie własnego CID dostawcy
+Inne
+Zamknij okno
+Początek zapisu danych
+Brak parametrów konfiguracyjnych!\nSprawdź ustawienia!
+Dla statyczeno DNS\nmusisz być root-em!
+Zapytaj dostawcę!
+Historia
+Wyłącz sygnały dźwiękowe
+Połącz ponownie w tle
+Błąd
+Zbyt wiele ponowień połączenia!\nPowinieneś zrestartować telefon.
+OK
+Jak wiele ponowień połączenia jest dozwolonych?
+Wyłącz komendy CGQ.
+Ostatnia szansa ustawień, jeśli nie można się połączyć.\nNiektóre dystrybucje potrzebują tego (n.p.: RedHat).
+Niektórzy dostawcy potrzebują tego specjalnego parametru.\nPowinieneś zapytać o niego swojego dostawcę!
+Najczęściej musisz to wypełnić.\nTo jest parametr własny dostawcy\nPowinieneś zapytać o niego swojego dostawcę!
+To powinien być główny parametr Twojego dostawcy lub Twój indywidualny kod.\nZapytaj swojego dostawcę!
+Jeśli chcesz używać statycznego DNS.
+
+W pewnych sytuacjach pozwala uzyskać bardziej stabilne połączenie.
+Po udanym połączeniu wybrana przeglądarka\nuruchomi się automatycznie.\nJeśli nie ma jej na Twoim komputerze\nto GPRS Easy Connect zamknie się!
+Jeśli włączona jest opcja "ponów połączenie"\n to GPRS Easy Connect będzie ponawiał w tle.\nPodczas ponawiania na panelu zobaczysz odliczanie.
+
+Możesz podać inny numer dzwonienia.
+Niektórzy dostawcy wymagają własnych numerów dzwonienia.\nZapytaj o to Twojego dostawcy.
+Jeśli nie widzisz Twojego telefonu na liście wspieranych modeli, spróbuj wybrać podobny.\nPrawdopodobnie to zadziała. W takim przypadku, prosimy, poinformuj nas!
+Dane transmitowane
+Dane transmitowane przez ostatnie 7 dni
+Limit monitorowania
+Data usunięcia
+Max. miesięczna transmisja danych (GB)
+Max. tygodniowa transmisja danych (MB)
+Jeśli ta opcja jest włączona, to program\nbędzie automatycznie usuwał licznik transmisji danych w wybranym dniu.\n(Jeśli ilość transmitowanych danych osiągnie\n90% limitu to program poinformuje Cię o tym!)
+Jeśli zdefiniowany jest limit tygodniowy to\nprogram poinformuje Cię gdy ilość danych transmitowanych\nzbliży się do limitu!
+Wykorzystałeś już 90% miesięcznego limitu!
+Wykorzystałeś już 90% tygodniowego limitu!
+Opcje kasowania
+Wyczyść dane miesięcznej transmisji
+Wyczyść dane tygodniowej transmisji
+Wyczyść dane "5 minut"
+Wyczyść licznik czasu
+Brak danych o postępie połączenia.\nJest dużo takich komunikatów! (Spróbuj zresetować swój telefon\nlub zmienić konfigurację!)
+Program próbuje zabić zamrożony proces. Proszę czekać...
+Ustawienia dla profesjonalistów
+Wyłącz autentykację.
+Ustawienia skryptu pppd
+Nie wymaga od peera autentykacji. Ta opcja wymaga uprawnień root-a.\n(Zwykle wymagane w Debianie.)
+Włącz tryb Debug
+Plik ~./gprsec/conn.log będzie tworzony w trybie Debug.\nJeśli Twoje połączenie się nie uda, proszę przysłać nam ten plik w "Bugreport"!
+Włącz Kompresję BCD
+Wymaga od peer-a kompresji pakietów wysyłanych, używając schematu BSD-Compress i zgadza się kompresować pakiety wysyłane do peer-a.\nTo jest funkcja kompresji w czasie rzeczywistym dla transmitowanych danych!\nUWAGA! JEŚLI UŻYJESZ TEGO, TWOJE POŁĄCZENIE BĘDZIE ZAWSZE WYSYŁAĆ I ODBIERAĆ DANE DO/Z SERWERA\nPOMIMO, ŻE NIE BĘDZIE TAKIEJ POTRZEBY.\n(Jest to użyteczne jeśli chcesz pobrać/wysłać duży plik. Nie zapominaj o swoich limitach podczas używania tej funkcji!\nPowinieneś więc wyłączyć tę funkcję po pobraniu/wysłaniu plików!\nWiadomość: Kiedy używasz tę funkcję, plik conn.log będzie stale rósł.)
+APN dostawcy (Access Point Name)
+Jeśli program zna APN wybranego dostawcy\nto pokaże się w następnym polu, jeśli nie, to użytkownik musi go wpisać.\nW sieciach CDMA nie trzeba podawać APN.
+Telefon nie był jeszcze testowany!
+Nie mogę znaleźć\nwybranego portu!
+Szukaj nowszej wersji!
+Możesz sprawdzić czy na naszych stronach\njest nowsza wersja GPRS Easy Connect!\n(Jeśli zaktualizujesz w ten sposób, program się zainstaluje,\na stary zostanie usunięty!)
+Zatrzymaj pobieranie!
+Szukam...
+Nie mogę połączyć się z serwerem!
+Nie ma nowszej wersji na serwerze!
+Ustalam serwer nazw...
+Nie mogę znaleźć serwera nazw!
+Połączenie z easyconnect.linuxuser.hu powiodło się.
+Żądanie HTTP wysłane, czekam na odpowiedź...
+Trwa pobieranie...\nWielkość: *** KB
+Program został pobrany.\nNazwa programu:\n***
+Prędkość połączenia
+Wyłącz obserwowanie transmisji danych
+Jeśli ta opcja jest wybrana, to program nie będzie\nobserwował transmisji danych!\n(To jest użyteczne jeśli masz bardzo wolnego winchester-a!)
+Wygląda na to, że połączyłeś się poprawnie\nprzez "oficjalnie" nie testowany telefon!\nJeśli chciałbyś zostać naszym głównym testerem, proszę wypełnij ten formularz!:
+Twoje nazwisko?
+Twój adres e-mail?
+Twoja dystrybucja (z numerem wersji)?
+Inne uwagi?
+Dzięki ale nie przeszkadzaj mi więcej w przyszłości!
+Transmisja danych powiodła się!
+Nie podałeś nazwiska!
+Nie podałeś e-maila!
+Nie podałeś nazwy dystrybucji!
+Skanowanie portów dla ekspertów
+Dodaj/Usuń nazwę użytkownika
+Nowy użytkownik?
+Nowe hasło?
+Wybierz parę użytkownik-hasło!
+Usuń nazwę użytkownika!
+Jeśli ta opcja jest aktywna to algorytm skanowania portów pokaże wszystkie możliwe porty do połączenia!\n(W przeciwnym razie tylko pierwszych osiem znalezionych portów.)
+Możesz dodać/usunąć użytkownik(a/ów) z dostępem do GPRS.\n(Ta opcja potrzebna jest tylko pod FreeBSD i działa dla root-a.)
+Dodaj/usuń użytkowników dla GPRS EC
+Dodaj użytkownika
+Usuń użytkownika
+Ten numer DNS nie będzie używany jeśli nie jesteś root-em!\nPoproś administratora systemu aby ustawił Twój DNS\nw pliku /etc/resolf.conf!Remove username
+Nie możesz ustawić DNS jako dynamiczny pod FreeBSD!
+Znalazłem zamrożony proces pppd!\nCzy mogę spróbować zabić ten zamrożony proces teraz?
+Wspomóż zespół GPRS Easy Connect!
+Jeśli lubisz ten program i chciałbyś pomóc w naszej pracy, proszę wspomóż nas.
+Oto co chielibyśmy dostać:
+Nasi sponsorzy:
+Tak, oferuję następujące rzeczy:
+Twój adres IP:
+Wyślij intencję wsparcia!
+Nie podałeś nam wszystkich potrzebnych danych!
+Nie mogłem zapisać do bazy na serwerze.\nProszę spróbować ponownie.
+Jeśli zaznaczyłeś jedną lub więcej pozycji z listy posiadanych rzeczy\ni wypełniłeś pola nazwisko i e-mail,\n\nto skontaktujemy się z Tobą poprzez e-mail gdy prześlesz te dane!\n\nProszę, upewnij się, że Twoje zamiary są poważne!
+Nie ma pliku "/etc/ppp/options"!\nPoproś root-a aby go stworzył. (Powinien być pusty.)
+Nie ma wpisanych serwerów nazw w pliku /etc/resolv.conf!\nPoproś root-a aby wpisał przynajmniej jednen serwer!\n(DNS Twojego dostawcy będą najlepsze,\nale jeśli dostawca pozwala możesz wpisać również inne.)
+Tryb zwięzły
+Główne okno jest w trybie zwięzłym.\Ustawienia nie są dostępne w tym trybie.
+W trybie zwięzłym nie można zmieniać ustawień\nJeśli chcesz wyłączyć ten tryb,\nkliknij tutaj.
+Normalny kolor
+Kolor pierwszoplanowy
+Wybierz skórkę
+ Lub sprawdź ustawienia prędkości telefonu! W niektórych telefonach domyślna prędkość komunikacji po kablu to 9600 b/s, spróbuj tej prędkości teraz.\n(Na naszej stronie w dziale Wiedza możesz znaleźć jak przyśpieszyć swój telefon.)
+Proces łączenia wykrył błąd: "***"
+Uwaga! Nie mogę zmienić domyślnej trasy, wciąż to jest "***"!
+Ustanawianie połączenia...
+Tworzę połączenie... *** %
+GPRS Easy Connect jest offline
+Status
+Statystyki
+Serwer nie nadał użytecznego adresu IP. Zwykle oznacza to, że APN, nazwa użytkownika lub hasło są niepoprawne. Powinieneś zapytać o nie swojego providera.
+Po wybraniu nowej skórki musisz zrestartować program aby zadziałała!\nBardzo ważne!:\nJeśli używasz dużej skórki GPRS Easy Connect zużyje więcej zasobów systemowych! Użyte zasoby systemowe będą większe jeśli zmienisz skórki wielokrotnie bez restartu programu!
+Przyśpieszanie Programu Łączenia
+Pryzśpieszanie transmisji telefonu po kablu.(Eksperymentalnie!)
+*** to wybrany port komunikacyjny. (Możesz go zmienić w setupie GPRS Easy Connect.)
+Pożądana nowa prędkość transmisji?
+Nie mogę znaleźć wybranego portu. Zobacz menu Easy GPRS Connect!
+Proszę o cierpliwość!\nPróbuję zapisać nową prędkość...
+Wszystko OK! Nowa prędkość ustawiona!\nTeraz prędkość komunikacji Twojego telefonu\nprzez kabel wynosi\n*** b/s\n\nNie zapomnij również zmienić prędkości w setupie!
+Limit czasu przekroczony!\nNie można było ustawić nowej prędkości!
+Rozpoczęło się wyszukiwanie.
+Nie można znaleźć bieżącej prędkości.
+#***: Próba znalezienia bieżącej prędkości przy *** b/s.
+\nUruchamiam algorytm sprawdzający...\n
+Powodzenie!\nBieżąca prędkość to *** b/s, nowa będzie: *** b/s
+\nSkrypt zmieniający prędkość zakończył działanie.\nKliknij "Zastosuj" aby wykonać!
+\nNie można połączyć się z telefonem, sprawdź to!
+Wybierz czcionkę
+Wybinerz kolor
+Miesięczne dane transmisji zostały usunięte.

@@ -1,0 +1,152 @@
+Yhdistä
+Katkaise
+Asetukset GPRS Easy Connect
+Lopeta
+Valitse puhelimen tyyppi\n(Asetusvalikko)
+Tärkeä
+Käynnistyksen jälkeen...
+Valitse portti
+OK/Tallenna tiedot
+Asetukset GPRS Easy Connect***
+Virhe (GPRS Easy Connect)
+Onnistuneen yhteyden jälkeen
+Käynnistä tämä selain onnistuneen yhteydenoton jälkeen:
+Ota ominaisuus käyttöön.
+Muuta yhteysikkuna ikoniksi.
+Tärkeää (GPRS Easy Connect)
+Automaattinen yhteys.
+Asetustiedostoa ei löydy!\nTarkista asetukset!
+Poista tilastotiedot
+Yhteys muodostumassa...
+Virhe yhteydessä
+Yhteyden muodostus on estetty.\nProsessi *** käyttää resurssia.
+Yhteys on keskeytetty soittoaikarajan vuoksi.\nTarkista puhelimen asetukset.
+Puhelin ei ehkä ole päällä. Tarkistatko?
+Yhteyden muodostus onnistui!
+Yhteyden muodostus onnistui.\nPaikallinen IP-osoite: ***\nUlkoinen IP-osoite: ***\nEnsimmäinen DNS-palvelin: ***\nToinen DNS-palvelin: ***
+Yhteyden muodostus keskeytetty.\nVerkko ei vastaa!
+Yhteensä dataa vastaanotettu "***":illa
+Yhteesnä dataa lähetetty "***":illa
+Yhteensä dataa lähetetty
+Tavua vastaanotettu
+Tavua lähetetty
+Paketteja vastaanotettu
+Paketteja lähetetty
+Aktiivisen yhteyden keskinopeus
+Aktiivisen yhteyden kesto
+Kaikkien yhteyksien kesto yhteensä
+Nykyisen vastaanoton nopeus
+Nykyisen lähetyksen nopeus
+Yhteys keskeytetty.\nGPRS-verkon kapasiteetti on ylitetty.
+Yhteys keskeytetty asetusvirheen vuoksi.\nTarkista asetukset.
+Yhteys keskeytetty käyttäjän toimesta.\nAkku tyhjä.\nDatakaapelissa vika.
+Yhteys keskeytetty.
+Erikoisia tilastoja (GPRS Easy Connect)
+Ilman lisätietoja
+Lisätiedoilla
+Viivat
+Pylväät
+5 minuutin aktiiviyhteyden keskinopeus ja niiden keskinopeus
+Näytä/kätke tilastoikkuna.
+Erikoisia tilastoja.
+Yhdistäminen epäonnistui ulkoisen vian vuoksi, käynnistä puhelin uudestaan.
+Tunti
+Valitse kieli!
+Aikaa jäljellä uuden yhteyden muodostukseen:
+Uusi yhteyden muodostus
+Keskeytä
+Verkkoprotokollaa ei löydy\nEi käyttökelpoista GPRS-palvelua!
+GPRS Easy Connect ikoniksi
+Vain yksi GPRS Easy Connect voi olla käytössä!
+Valitse yhteyden tarjoaja!
+Tiedostoa nimeltä apn ei löydy!
+Käyttäjätunnus:
+Salasana:
+Lue tärkeät ohjeet!
+Asetustiedostoa ei löydy!\nTarkista asetukset.
+Ei ole tarvittavia oikeuksia pppd:n käyttöön!\nLue FAQ tai tärkeät tiedot!
+Tekijä
+Puuttuvia parametreja!
+Ei valittua puhelinta!
+Ei valittua porttia!
+Tuntematon kieli!
+Ei valittua palveluntarjoajaa!
+Valitse puhelimen tyyppi
+Pakolliset parametrit
+Valinnaiset parametrit
+Aikaväli yhteyden tarkkailemiseen (ms)
+Onko dynaaminen DNS sallittu?
+Harvinaiset parametrit käytössä
+Oletus
+Palveluntarjoajan oman CID:n asetus
+Muu
+Sulje tämä ikkuna
+Tiedon tallennuksen alku
+Puuttuvia asetusparametrejä!\nTarkista asetukset!
+Staattiselle DNS:lle\ntarvitaan root-oikeuksia!
+Kysy palveluntarjoajaltasi!
+Historia
+Poista äänimerkit käytöstä
+Yhdistä uudelleen taustalla
+Virhe
+Liian monta yhteyden yritystä\nKäynnistä puhelin uudelleen.
+Ok
+Kuinka monta uudelleen yhteyden ottoa sallittu?
+Poista CGQ käskyt.
+Viimeinen asetus mahdollisuus jos yhdistäminen epäonnistuu.\nJotkut jakeluversiot tarvitsevat sitä (esim.RedHat).
+Jotkut palveluntarjoajat tarvitsevat tätä erityisparametria.\nKysy sitä palveluntarjoajaltasi!
+Useimmiten sinun tulee täyttää se.\nSe on palveluntarjoajasi oma parametri.
+Sen pitää olla palveluntarjoajasi yleinen parametri\n tai sinun henkilökohtainen koodisi.
+Jos haluat käyttää staattista DNS:ää.
+
+Jossakin tapauksissa yhteys on varmempi.
+Onnistuneen yhteyden jälkeen valittu\nselain kännistyy automaattisesti.\nJos tietokoneessasi ei ole selainta\nsulkeutuu GPRS Easy Connect.
+Jos asetus "uudelleen yhdistäminen" on aktivoitu\nniin silloin GPRS Easy Connect uudelleen yhdistää taustalla.\nVoit nähdä toiminnan panelissa.
+
+Voit antaa toisen yhteysnumeron.
+Jotkut palveluntarjoajat tarvitsevat oman yhteysnumeron.\nKysy palveluntarjoajaltasi.
+Jos puhelintasi ei näy tuettujen puhelimien listassa, yritä valita lähinnä oleva.\nTodennäköisesti se toimii, siinä tapauksessa, ole hyvä ja ilmoita meille.
+Siirrety data
+Viimeisen 7 päivän aikana siirretty data
+Rajoituksien katselu
+Poistopäivämäärä
+Max.kuukausittainen data siirto (GB)
+Max. viikottainen data siirto (MB)
+Jos tämä valikko on aktivoitu, poistaa ohjelma\nautomaattisesti datan lähetyslaskimesta valittunapäivänä.\n(Jos lähetettyn datan määrä saavuttaa\n90% rajan, sillon ohjelma muistuttaa sinua siitä)
+Jos viikottainen yläraja on määritelty,\nohjelma muistuttaa sinua\nkun lähetetty data määrä lähestyy rajaa.
+Olet käyttäny kuukausirajaasi 90%!
+Olet käyttäny viikorajaasi 90%!
+Poistojen vaihtoehdot
+Nollaa kuukausi datalaskuria
+Nollaa viikko datalaskuria
+Nollaa "5 minuutin" datalaskuria
+Nollaa ajanlaskuria
+Yhdistämisyritykset eivät saa vastakaikua.\nSiihen on monta syytä! (Yritä käynnistää puhelin uudelleen\ntai tarkista asetukset.)
+Ohjelma yrittää sammuttaa kiinni juuttunutta prosessia.Pieni hetki...
+Asetukset ammattilaisille
+Poista automaattinen tunnistus
+pppd scriptin asetukset
+Älä vaadi vastapuolen tunnistusta. Tämä vaihtoehto vaatii root oikeuksia.\n(Tavallisesti varsinkin Debianissa.)
+Debug päällä
+Tiedostoa ~./gprsec/conn.log luodaan debug tilassa.\nJos et saa yhteyttä lähetä meille tämän tiedoston "Buggi raportissa")
+Kytke päälle BCD Compress
+Pyydä vastapuolen lähettämään datapakettejä\npakattuna käyttäen BCD-Compress menetelmää\nja suostu pakkaamaan dataa minkä lähetät vastapuolelle.\nSe on Real Time pakkausmenetelmä datasiirtoja varten!\nVAROITUS! JOS KÄYTÄT SITÄ, DATAA SIIRTYY KOKO AJAN OSAPUOLIEN VÄLILLÄ\nVAIKKA TODELLISTA DATAA EI SIIRRYKÄÄN.\n(Se on hyödyllistä jos tahdot siirtää isoja tiedostoja.  Älä unohda rajoituksesi jos sellaista on kun käytät tätä ominaisuutta!\nHuom.:Kun tämä ominaisuus on aktiivinen, tiedosto conn.log kasvaa koko ajan.)
+Yhteydentarjoajan APN (Access Point Name)
+Jos ohjelma tuntee yhteydentarjoajan APN,\nsilloin se näkyy seuraavassa ruudussa. Jos se ei ole siellä, silloin käyttäjän pitää kirjoittaa nimen.\nCDMA systeemin verkko ei vaadi APN.
+Puhelinta ei ole vielä testattu.
+
+Etsi uudempaa versiota!
+Voit tarkistaa sivultamme onko uudempaa versiota\nGPRS Easy Connectista\nJos olet päivittänyt, niin vanhempi versio korvataan uudella.
+Lopeta siirto!
+Etsii...
+Ei yhteyttä palvelimeen!
+Uudempaa versiota ei palvelimella!
+Tarkistaa nimipalvelimet...
+Niminpalvelin ei löytynyt!
+Yhteys easyconnect.linuxuser onnistui.
+HTTP pyyntö lähetetty, odotan vastausta...
+Siirto menossa...\nKokonais koko: *** KB
+Ohjelma on siirretty.\nOhjelman nimi on:\n***
+Yhteyden nopeus
+Kytke pois datan tarkkailun siirto
+Jos tämä asetus on päällä, niin ohjelma ei\ntarkkaile datan määrää.

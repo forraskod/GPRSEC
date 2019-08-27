@@ -1,0 +1,232 @@
+Connect
+Disconnect
+[removed]
+Exit
+Select the type of your handset\n(Setup menu)
+[removed]
+After the starting...
+Select the port
+[removed]
+Setup GPRS Easy Connect***
+Error (GPRS Easy Connect)
+After the successfull connection...
+Start this browser\nafter the successfull connection:
+[removed]
+[removed]
+[removed]
+Automatic connection.
+Can't find the configuration file!\nCheck your setting!
+Remove of statistics data
+[removed]
+Error in connection
+The connection is blocked by***\nprocess using the resource.
+The connection is interrupted due to dialing\ntime limit. Please reset your handset.
+Perhaps you did not switch on your mobile,\ndid you?
+Successful connection!
+Successful connection.\nYour local IP address: ***\nYour remote IP adress: ***\nPrimary DNS server: ***\nSecondary DNS server: ***
+Connection interrupted.\nNo network answer!
+Total data downloaded with "***"
+Total data uploaded with "***"
+[removed]
+Bytes downloaded
+Bytes uploaded
+[removed]
+[removed]
+The average speed of the active connection
+Duration of active connection
+Duration of total connections
+Speed of current download
+Speed of current upload
+Connection interrupted.\nThe GPRS network is overloaded.
+Connection interrupted due to\nconfiguration error.\n(Probably your selected port isn't right,\nor it's permission is denied!)
+Connection interrupted by user.\nFlat battery.\nData cable failure.
+Connection interrupted.
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+Diagram
+[removed]
+[removed]
+Select your language!
+[removed]
+Re-connect
+[removed]
+[removed]
+Iconify the GPRS Easy Connect
+[removed]
+Choose your provider!
+[removed]
+User:
+Password:
+Read the important information! (Under "Other" menu.)
+Could not find the setup file!\nCheck your settings!
+You're not authorized for use pppd!\nAs root set the setuid bit of that or make that runable by users!
+Made by
+Missing setup parameters!
+No phone selected!
+No port selected!
+Unsupported language!
+No provider selected!
+Select the type of your handset
+Obligatory parameters
+Optional parameters
+Time interval of watching the connection (ms)
+Is the dynamic DNS allowed?
+Rare parameters in use
+[removed]
+Setting of provider's own CID
+Other
+[removed]
+Begining of the data's save
+[removed]
+[removed]
+Ask your provider!
+History
+Disable the bell signals
+[removed]
+[removed]
+Too many reconnects happend!\nYou should reset your phone.
+[removed]
+How many attempts are allowed for reconnect?
+Disable the CGQ commands.
+Last setup chance if the connecting process fails.\nSome distributions needs it (e.g: RedHat).
+Some providers needs this special parameter.\nYou should ask about it your provider!
+Mostly you must to fill it in.\nIt's your provider's own parameter\nYou should ask about it your provider!
+It should be your provider's generally parameter or your individual code.\nAsk your provider!
+If you would like to use static DNS.
+[removed]
+In some cases this can offer a more stable connection.
+After the successfull connection the selected\nbrowser will automaticly starts.\nIf that isn't on you computer then\nthe GPRS Easy Connect will close!
+[removed]
+[removed]
+You can give an other calling number.
+Some providers need they own calling number.\nAsk about it your provider.
+If you don't see your phone in the supported phones list, try to select a similar phone.\nProbably it will work. In this case, please, inform us!
+Transmitted data
+Transmitted data in last 7 days
+Limit monitoring
+Date of erase
+Max. mounthly data transmission (GB)
+Max. weekly data transmission (MB)
+If these option is active, then the program will\nautomaticly erase the data transmission counter on the selected day.\n(If the transmitted data quantity will be reached\nthe 90% of limits, then the program will remind you!)
+If the weekly limit is defined then the\nprogram will remind you when your transmitted\ndata quantity approaches that!
+You have used your mounthly limit's 90% up!
+You have used your weekly limit's 90% up!
+[removed]
+Reset mounthly transmitted data
+Reset weekly transmitted data
+[removed]
+Reset the time counter
+[removed]
+[removed]
+[removed]
+Disable self-authentication.
+[removed]
+Do not require the peer to authenticate itself. This option requires root privilege.\n(Usually it needs by using Debian.)
+Debug mode on
+The ~./gprsec/conn.log file will be made in a debug mode.\nIf your connect will not build up then please send us this file in your "Bugreport"!
+Enable BCD Compress
+Request that the peer compress packets that it sends, using the BSD-Compress scheme and agree to compress packets sent to the peer.\nIt's a real time comression function for data transmission!\nWARNING! IF YOU USE IT YOUR CONNECTION WILL BE ALWAYS SENDING AND RECIVING DATA FROM/TO THE SERVER\nEVEN THERE'S NO VALID DATA TRANSMISSION.\n(It's useful if you want to down(up)load a larger file. Don't forget about your limit(s) if you have that(those) using this funtion!\nSo you should turn off this function after the down(up)load!\nNote: While this funtion is active the conn.log file will be growing countinuously.)
+The provider's APN (Access Point Name)
+If the program has known the selected provider's APN,\nthen these will be shown in the next entry cell, if not, then the user has to give this name.\nBy the CDMA system networks no need to give the APN.
+Phone hasn't tested yet!
+Couldn't find the\nthe selected port!
+Search newer version!
+[removed]
+[removed]
+Searching...
+Couldn't connect to server!
+There is no newer version on the server!
+Resolving nameserver...
+Couldn't find the nameserver!
+Connecting to the easyconnect.linuxuser.hu is successfull.
+HTTP request sent, waiting for answer...
+The downloading is in progress...\nTotal size: *** KB
+The program is downloaded.\nThe name of program is:\n***
+Speed of the connection
+Disable watching of data-transmission.
+If this option is active, then the program won't\nbe watching the data transmissions!\n(It is usefull if you have a very slow winchester!)
+It seems like you've connected successfully\nan "officially" non-tested phone!\nIf you would like to be our main tester, please fill this form up!:
+Your name?
+Your e-mail address?
+Your distribution (with the version number)?
+Other notice?
+Thanks, but do not disturb me with this in the future!
+[removed]
+You didn't give your name!
+You didn't give your e-mail!
+You didn't give the name of your distribution!
+Expert port scan
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+If this option is active, then the port scan\nalgorythm will show all of your possibility connection ports!\n(Otherwise only the first eight found ports.)
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+There's a frozen pppd process!\nMay I try to kill this frozen process now?
+Donate the GPRS Easy Connect team!
+If you like this program and you would like to help our work, please donate to us.
+What we would like to get:
+Our sponsors:
+Yes, I offer the following thing(s):
+[removed]
+Send the intention of the donate!
+You didn't give us all needed data!
+Couldn't write into the server's database.\nPlease try it again.
+If you have selected one or more items above from the list of claimed things.\nand filled the name and the e-mail entries,\n\nthen we will contact with you via e-mail after you send these informations!\n\nPlease be sure your aim is serious!
+There's no "/etc/ppp/options" file!\nAsk the root to make it. (It should be empty.)
+[removed]
+[removed]
+[removed]
+[removed]
+Normal color
+Foreground color
+Select a theme
+ Or check your phone's set connection speed! Some phone's default connetion speed via data cable is 9600 b/s, try this connection speed now.\n(You can find a way how to speed up your phone on our website under the Knowledge menu.)
+The connection process detected an error: "***"
+Warning! Can't change the default route, it's still "***"!
+Getting connection...
+Connection is building... *** %
+GPRS Easy Connect is offline now
+Status
+Statistics
+The server didn't give usable remote IP address. Usualy it means one or more of APN, username or password is/are bad. You should ask about those your provider's custumer service.
+Very important!:\nIf you use a difficult theme the GPRS Easy Connect will use more system sources! Some available themes are not perfect, so you can get GTK error messages in the console (if you run program from there), which not means trouble for running of program.
+Usable DNS IP(s) found in /etc/resolv.conf file:\n\n***\n***\n\nYou can overwrite this/these DNS(s) by DNS(s) known by GPRSEC, which is/are:\n\n***\n***\n\nFor the overwrite click "Yes", if you want to keep the current DNS(s) click "No"!\n(The file will be overwritten right now!)
+Couldn't find usable DNS IP(s) in the /etc/resolv.conf file. You can use only dynamic DNS.
+Information
+[recommended]
+The DNS numbers are not variable by user, the potential static DNS is red from /etc/resolv.conf. The dynamic DNS will be given by the provider after the successful connection and the program will use that/those.
+\nIf APN list or connection scripts will be updated then this file will be copied into the user's home directory, from where GPRSEC is going to read and work with that.
+There is no known DNS for this provider and there is no usable DNS in the /etc/resolv.conf file too.
+You set static DNS earlier. Now it's turned to dynamic, because the earlier set DNS is not same it's provider's DNS certainly. If you want to use new static DNS for your newly selected provider, you need to select static DNS again!
+Connected with a non-tested phone!
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+Select a font
+Select a color
+Monthly transmittion data are removed
+Getting informations from the server...
+\nThe GPRS Easy Connect is a unique\nprogram which can help you to make\nthe GPRS Internet connection by\nthe easiest way.\nThis program supports the most\nphones & providers of the world.\nThis program is free and\ncome under the GNU GPL.\n\nHave a lot of fun with this!\n\nPeter Simon (simon.peter@gprsec.hu)\n\nGabor Pinter (pinter.gabor@gprsec.hu\n\nAndrea Bravetti (brand77@gmail.com)\n\nwww.gprsec.hu
+Select an other browser
+File is not runable by ***!
+Select an other port
+What you have selected is not a device!
+You don't have permission to read that file!
+This system lacks kernel support for PPP. This could be because the PPP kernel module could not be loaded, or because PPP was not included in the kernel configuration. If PPP was included as a module, try `/sbin/modprobe -v ppp'.  If that fails, check that ppp.o exists in /lib/modules/`uname -r`/net. See README.linux file in the ppp distribution for more details.
+You can select an unknown, non-found browser manually. Be careful when you choose a binary file!
+You can select a non-found port manually. Be careful!

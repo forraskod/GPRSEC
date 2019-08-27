@@ -1,0 +1,222 @@
+Bağlan
+Bağlantıyı kes
+GPRS Easy Connect ayarları
+Çık
+Telefonunuzun modelini seçiniz\n(Ayarlar meüsünden)
+Önemli
+Bağlandıktan sonra...
+Port seçiniz
+Ayarları kaydet
+GPRS Easy Connect*** ayarları
+Hata (GPRS Easy Connect)
+Başarılı bağlantıdan sonra...
+Bu browseri çalıştır başarılı bağlantıdan sonra:
+Bu özelliği aç.
+Bağlantı penceresini küçült.
+Önemli (GPRS Easy Connect)
+Otomatik bağlantı.
+Ayarlar dosyası bulunamıyor!\nAyarlarınızı kontrol edin!
+İstatistik bilgilerini sil
+Bağlanılıyor...
+Bağlantıda hata
+Bağlantınız tarafından*** engellendi\nkaynaklar kullanılıyor.
+Aramadan dolayı bağlantı kesildi\nzaman aşımı.Lütfen telefonunuzu kapatıp açın.
+Muhtemelen telefonunuz açık değil,\nöyle mi?
+Bağlantı başarılı!
+Bağlantı başarılı.\nYerel IP addresi: ***\nUzak IP adresi: ***\nBirincil DNS serverı: ***\nİkincil DNS serverı: ***
+Bağlantı kesildi.\nAğ cevap vermiyor!
+"***" ile toplam alınan veri
+"***" ile toplam yollanan veri
+Toplam veri alış-verişi
+Byte alındı
+Byte yollandı
+Paket alındı
+Paket yollandı
+Aktif bağlantının ortalama hızı
+Aktif bağlantı süresi
+Toplam bağlantı süresi
+Şu anki veri alma hızı
+Şu anki veri yollama hızı
+Bağlantı kesildi.\nGPRS Ağı aşırı yüklü.
+Bağlantı ayar hatasından \ndolayı kesildi.\n(Muhtemelen seçtiğiniz port doğru değil,\nya da erişiminiz engellendi!)
+Kullanıcı tarafından bağlantı kesildi.\nZayıf pil.\nVeri kablosu hatası.
+Bağlantı kesildi.
+Özel istatistikler (GPRS Easy Connect)
+Destekleyici veri olmadan
+Destekleyici veri ile
+Satırlar
+Sütunlar
+Aktif bağlantının 5 dk. ortalama hızı.\nve hepsinin ortalaması.
+İstatistik penceresini göster/gizle.
+Özel istatistikler.
+Bağlantı işlemi hatalı\nDışsal hata için.\nTelefonunuzu kapatıp açmalısınız.
+saat
+Dil seçiniz!
+Tekrar baılantı için kalan süre:
+Tekrar bağlan
+İptal
+Ağ protokolü bulunamıyor\nKullanılabilir GPRS servisi yok!
+GPRS Easy Connect'i küçült
+Birden fazla çalıştıramazsınız\nGPRS Easy Connect!
+Şebeke seçiniz!
+Apn dosya ismi yok!
+Kullanıcı:
+Şifre:
+Önemli yazısını okuyunuz! ("Diğerleri" menüsü altında.)
+Ayar dosyası bulunamıyor!\nAyarlarınızı kontrol ediniz!
+pppd kullanmak için yetkili değilsiniz!\nFAQ veya önemli yazısını okuyunuz!
+Tarafından
+Kayıp ayar parametreleri!
+Telefon seçili değil!
+Port seçili değil!
+Bilinmeyen dil!
+Şebeke seçili değil!
+Telefonunuzun modelini seçiniz
+Zorunlu parametreler
+Ekstra parametreler
+Aktif bağlantıdaki bekleme/gecikme süresi (ms)
+Dinamik DNS için izin varmı?
+Az kullanılan parametreler
+Öntanımlı
+Şebekenizin CID ayarları
+Diğerleri
+Pencereyi kapat
+Veriler kayıt edilmeye başlanıyor
+Kayıp ayar parametreleri!\nAyarları kontrol ediniz!
+Sabit DNS için\nroot kullanıcısı olmalısınız!
+Şebekenize sorun!
+Geçmiş
+Zil sinyalini geçersiz yap
+Arkaplanda tekrar bağlan
+Hata
+Çok fazla tekrar bağlantı gerçekleşti!\nTelefonunuzu kapatıp açmalısınız.
+Tamam
+Kaç defa tekrar bağlantı için izin var?
+CGQ komutlarını geçersiz yap.
+Bağlantı başarısız olduğundan son ayarlar değişti.\nBazı dağıtımlar için gerekli (örn.: RedHat).\n
+Bazı şebekeler özel parametrelere ihtiyaç duyar.\nşebekenize sorunuz!
+Sıklıkla boşlukları doldurmalısınız.\nşebekenizin özel parametresi\nBu konuyu şebekenize sormalısınız!
+Kişisel kodlarınızda şebekenizin genel ayarlarını gözönünde bulundurunuz.\nşebekenize sorunuz!
+Eğer sabit DNS kullanmak isterseniz.
+
+Bazı konularda daha sağlam bağlantı yapabilir.
+Başarılı bağlantıdan sonra seçilmiş\nbrowserınız otomatik olarak başlayacaktır.\nSizin bilgisayarınız değil ise\nGPRS Easy Connect kapanacak!
+"tekrar-bağlan" seçeneği aktif ise\n GPRS Easy Connect arkaplanda tekrar bağlanacaktır.\nTekrar bağlantı sırasında gerisayımı panelinizde görebilirsiniz.
+
+Başka bir arama numarası veriniz.
+Bazı şebekeler kendi arama numaralarına ihtiyaç duyarlar.\nşebekenize sorunuz.
+Desteklenen telefonlar listesinde kendi telefonunuzu göremiyorsanız benzer bir telefonu seçiniz.\nMuhtemelen çalışacaktır. Lütfen bizi bilgilendiriniz!
+Veri alışverişi
+Geçen hafta yollanan veri
+Sınırları izle
+Silinme tarihi
+Max. Aylık veri alışverişi (GB)
+Max. Haftalık veri alışverişi (MB)
+Bu seçenek aktif olursa\nseçilen günde otomatik olarak veri alışverişi bilgileri silinecektir.\n(Veri alışverişi belirtilen miktarın\n %90 yaklaştığında, program size hatırlatmada bulunacaktır!)
+Haftalık limitler belirlenirse\nprogram tarafından size\nlimitlere yaklaşıldığı bilgisi hatırlatılacaktır!
+Aylık kullanım limitlerinizin %90'nına yaklaştınız!
+Haftalık kullanmım limitlerinizin %90'nına yaklaştınız!
+Silme seçenekleri
+Aylık veri alışverişi bilgilerini sıfırla
+Haftalık veri alışveriş bilgilerini sıfırla
+"5 dk." veriyi sıfırla
+Zaman sayacını sıfırla
+Bağlantı işleminden cevap yok.\nPekçok nedenden dolayı olabilir! (Telefonunuzu resetlemeyi\nya da ayarlarınızı tekrar gözden geçiriniz!)
+Program donmuş işlemleri kapatmaya çalışıyor. Lütfen bekleyiniz...
+Profesyoneller için ayarlar
+Kendinden yetkilendirmeyi etkinsizleştir.
+pppd script ayarları
+Kendinden yetkilendirme gerekli değildir. Bu özellik root hakları ister.\n(Genellikle Debian kullanıcıları içindir.)
+Debug mod açık
+Debug mod tarafından ~/.gprsec/ dosyası yaratılacaktır.\nEğer bağlantı sağlayamıyorsanız lütfen bu dosyayı bize "Bugreport" olarak bildirin
+BCD sıkıştırmayı etkinleştir
+Yollanacak paketlerin sıkıştırılma isteğidir, BSD-Compress şeklinde kullanılır ve karşı tarafa yollanması için anlaşılır.\nVeri alış-verişinde gerçek zamanlı sıkıştırma fonksiyonudur!\nUYARI! EĞER KULLANILIRSA, BAĞLANTINIZ SÜREKLI OLARAK SUNUCUDAN/SUNUCUYA DATA YOLLAYIP ALACAKTIR\nBU GERÇEK BIR DATA ALIŞ-VERİŞİ DEĞİLDİR.\n(Büyük dosyaların almasında veya yollamasında çok kullanışlı ve faydalıdır. Bu fonksiyonu kullanırsanız dosya alma ve yollama limitlerinizi unutmayınız!\nDosya alma veya yollama işleminiz bittiğinde bu özelliliği kapayınız!\nNot: Bu özellik açık olduğu sürece conn.log dosyasıda sürekli büyüyecektir.)
+Şebekenin APN'si (Bağlantı Noktası İsmi)
+Eğer program seçili olan şebekenin APN'sini biliyorsa ,\nondan sonra gelecek olan boşlukta gözükecektir, bilmiyorsa kullanıcı kendisi girmelidir.\nCDMA sistemi kullanan networklerde APN girmeye gerek yoktur.
+Telefon henüz test edilmedi!
+Secilen port \nbulunamadi!
+Yeni sürümü ara!
+GPRS Easy Connect'in yeni sürümünü sitemizde arayabilirsiniz\n(Bu şekilde yenileme yaparsanız eski sürüm silinecektir!)
+İndirmeyi durdur!
+Arıyor...
+Ana makinaya bağlanılamadı!
+Yeni sürüm bulunamadı!
+Nameserver çözümleniyor...
+Nameserver bulunamadı!
+easyconnect.linuxuser.hu bağlantısı başarılı.
+HTTP isteği yollandı, cevap bekleniyor...
+İndiriliyor...\nToplam boyut: *** KB
+Program alındı.\nProgramın ismi:\n***
+Bağlantı hızı
+Veri alış-verişinin izlenmesini etkinsizleştir.
+Bu seçenek etkinleştirilirse, program\nveri alış-verişini izlemeyi durduracak!\n(Bilgisayarınız yavaş ise bu seçenek yararlı olabilir!)
+Test edilmemiş bir telefon ile\nbaşarılı şekilde bağlanıldı!\nTest edicilerimizden biri olmak istiyorsanız, lütfen bu formu doldurunuz!:
+İsminiz?
+e-posta adresiniz?
+Dağıtımınız (sürüm numarası ile birlikte)?
+Başka bildiriminiz?
+Teşekkür ederiz, Lütfen daha sonra beni bu konuda rahatsız etmeyin!
+Veri alış-verişi başarılı!
+İsminizi yazmadınız!
+e-posta adresinizi yazmadınız!
+Dağıtım bilgilerini yazmadınız!
+Uzman port taraması
+Kullanıcı ekle/çıkart
+Yeni kullanıcı adı?
+Yeni şifre?
+Kullanıcı adı-şifre çiftini seç!
+Kullanıcı adını kaldır!
+Bu özellik seçilirse, port taraması\niçin kullanılan algoritma bütün olası bağlantı portlarını gösterecek!\n(Aksi takdirde sadece ilk sekiz port bulunacak.)
+GPRS bağlantısına kullanıcı(isimleri) ekleyip/çıkartabilirsiniz.\n(Bu özellik sadece FreeBSD altında root kullanıcısı içindir.)
+GPRS EC için kullanıcı ekle/çıkart
+Kullanıcı ekle
+Kullanıcı çıkart
+root kullanıcısı değilseniz DNS numaralarını kullanamazsınız!\nSistem adminine /etc/resolf.conf dosyasındakı/nDNS numara(ları) için başvurun!
+FreeBSS dağıtımında DNS numara(ları)nı dinamik olarak değiştiremezsiniz!
+Donmuş bir pppd süreci var!\nSüreci öldürmeyi denememi istermisiniz?
+GPRS Easy Connect takımına bağışta bulunun!
+Programı beğendiyseniz ve bize yardımcı olmak istiyorsanız, lütfen bize bağışta bulunun.
+Ne almak isteriz:
+Sponsorlarımız:
+Evet, Bunları önerebilirim:
+IP adresiniz:
+Bağış yapmaktaki amacınızı yollayınız!
+Bize gerekli bütün bilgileri vermediniz!
+Database'e yazılamadı.\nLütfen tekrar deneyiniz.
+Yukarıda bulunan listeden bir ve ya bir kaç tanesini talep edip\nisminizi ve e-posta adresinizi yazdıysanız\nbilgilerinizi yolladıktan sonra sizinle e-posta yolu ile bağlantıya geçilecektir!\nLütfen, gerçekci olup olmadığınıza karar verin!
+"/etc/ppp/options" dosyası bulunamadı!\nLütfen admin ile görüşün. (Boş olmalı)
+"etc/resolv.conf" dosyasında nameserver bilgileri bulunamadı.\nLütfen admin ile görüşün. \n(En iyi seçenek GPRS sağlayıcınızın DNS(leri)dir,\nBaşka DNS numara(ları)da kullanılabiliyorsa eklenebilir!)
+Küçülltülmüş mod
+Ana pencere küçültülmüş.\nAyarlar bu fonksiyon aktif olduğu sürece kullanılamaz.
+Küçültülmüş modda ayarları değiştiremezsiniz.\nEğer bu modu kapatmak istiyorsanız,\nburaya tıklayınız.
+Normal renkler
+Önplan renkler
+Arabirim seçin
+Bazı telefonlarda data kablosu ile ön seçimli bağlantı hızı 9600 b/s dir. Bu bağlantı hızını kullanabilirsiniz, ya da telefonunuzun bağlantı hızı ayarlarını kontrol ediniz!\n(Bağlantı hızını arttırmaya yönelik bilgileri web sayfamızın Knowledge bölümünde bulabilirsiniz.)
+Bağlantı sürecinde hata oluştu: "***"
+Uyarı! Öntanımlı yönlendirmeyi değiştiremezsiniz, süreç şu anda "***"!
+Bağlanılıyor...
+Bağlantı sağlandı... *** %
+GPRS Easy Connect offline durumda
+Durum
+İstatistikler
+Anamakina kullanılabilir IP adresi vermedi. Genelde APN için kullanıcı ve şifrede hata var anlamına gelir. Lütfen servis sağlayıcınızın müşteri hizmetlerine danışınız.
+Yeni bir arabirim seçtikten sonra lütfen programı yeniden başlatınız!\nÇok önemli!:\nGPRS Easy Connect ağır bir arabirim seçildiğinde daha fazla sistem kaynağı tüketecektir! Program yeniden başlatılmaz ise sistem kaynakları arabirim değiştirildikten sonra daha hızlı tüketilecektir.
+Bağlantı programı hızlandırılıyor
+Data kablosu için kullanılacak hız arttırılıyor.(Deneysel!)
+Seçili port *** .(GPRS Easy Connect programının ayarlar bölümünden değiştirebilirsiniz)
+İstenen aktarım hızı?
+Seçili port bulunamadı.GPRS Easy Connect ayarlar bölümüne bakın!
+Lütfen bekleyiniz!\nYeni hız ayarları kayıt ediliyor...
+Yeni hız ayarlandı!\nTelefonunuzun data kablosu için\nbağlantı hızı *** b/s\n\nLütfen ayarlar bölümünden hızınızı değiştirmeyi unutmayın!
+Zaman aşımı!\nYeni hız ayarlanamadı!
+Arama başlatıldı.
+Şimdiki hız bulunamadı.
+#***: Şimdiki **** b/s hız bulunmaya çalışılıyor.
+\nKontrol algoritması başladı...\n
+Başarılı!\nŞuanki baglantı hızınız *** b/s, yeni bağlantı hızınız: *** b/s
+\nHız değiştirme yçnergesi tamam.\nKullanabilmeniz için "Onayla" tuşunu tıklayınız!
+\nTelefona bağlanılamadı, kontrol ediniz!
+Yazı tipi seçiniz
+Renk seçiniz
+Aylık aktarım verileri silindi

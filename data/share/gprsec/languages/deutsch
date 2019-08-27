@@ -1,0 +1,232 @@
+Verbinden
+Trennen
+GPRS Easy Connect einrichten
+Beenden
+Bitte wählen Sie Ihren Handy-Typ(GPRS Easy Connect einrichten)
+Wichtige Hinweise
+Nach dem Starten...
+Wählen Sie den Anschlussport
+Anwenden
+GPRS Easy Connect Setup
+Fehler (GPRS Easy Connect)
+Nach erfolgreich hergestellter Verbindung....
+Browser automatisch bei Verbindung starten:
+Diese Funktion aktivieren
+Verbindungsfenster minimieren
+Wichtig (GPRS Easy Connect)
+Verbindung automatisch herstellen
+Konfigurationsdatei nicht gefunden!Bitte kontrollieren Sie Ihre Einstellungen!
+Statistiken zurücksetzen
+Verbindung wird hergestellt...
+Verbindungsfehler
+Die Verbindung wird durch den Prozess ***, der diese Resource verwendet, blockiert.
+Die Verbindung wurde durch wegen des Zeitlimits der Wahlversuche unterbrochen.Bitte setzen Sie Ihr Handy zurück.
+Bitte kontrollieren Sie, ob Ihr Handy eingeschaltet ist.
+Verbindung erfolgreich hergestellt!
+Verbindung erfolgreich!Ihre lokale IP-Adresse: ***Ihre remote IP-Adresse: ***Primärer DNS Server: ***Sekundärer DNS Server: ***
+Verbindung unterbrochen.Netzwerk antwortet nicht!
+Daten empfangen (Benutzer "***")
+Daten gesendet (Benutzer "***")
+Gesamtwerte
+Bytes empfangen
+Bytes gesendet
+Pakete empfangen
+Pakete gesendet
+Durchschnittliche Transferraten der aktiven Verbindung
+Dauer der aktiven Verbindung
+Dauer aller Verbindungen
+aktuelle Empfangsgeschwindigkeit
+aktuelle Sendegeschwindigkeit
+Verbindung unterbrochen.Das GPRS Netzwerk ist überlastet.
+Verbindung wegen Konfigurationfehler unterbrochen.Überprüfen Sie die Einstellungen.
+Verbindung durch Benutzer unterbrochen.Batterie leer oder Fehler am Datenkabel.
+Verbindung unterbrochen.
+Besondere Statistiken (GPRS Easy Connect) 
+Ohne Angabe von Daten
+Mit Angabe von Daten
+Liniendiagramm
+Blockdiagramm
+Durchschnittliche Transferrate per 5 Minutensowie deren Durchschnitt.
+Statistikfenster anzeigen/ausblenden.
+Diagramm
+Verbindungsvorgang durch externen Fehler fehlgeschlagen.Setzen Sie Ihr Handy bitte zurück.
+Uhrzeit
+Wählen Sie Ihre Sprache!
+Verbleibende Zeit bis zum erneuten Verbindungsaufbau:
+Verbindungsaufbau wiederholen
+Abbrechen
+Kein Netz gefundenGPRS Dienst nicht verfügbar!
+GPRS Easy Connect minimieren
+Sie können nur eine Instanz von GPRS Easy Connect ausführen!
+Wählen Sie Ihren Anbieter!
+Keine Datei namens APN!
+Benutzer:
+Kennwort:
+Lesen Sie bitte die wichtige Informationen im Menü - Erweitert...!
+Konfigurationsdatei nicht gefunden!Überprüfen Sie Ihre Einstellungen!
+Sie verfügen über keine ausreichenden Rechte,um pppd zu verwendenLesen Sie die FAQ oder die wichtigen Informationen!
+Entwickelt von
+Fehlende Einstellungsparameter!
+Kein Handy gewählt!
+Kein Anschlussport gewählt!
+Keine unterstützte Sprache!
+Kein Anbieter gewählt!
+Wählen Sie Ihren Handytyp
+Erforderliche Einstellungen
+Optionale Einstellungen
+Intervall der Verbindungskontrolle (ms)
+Dynamisches DNS zulassen
+Selten verwendete Parameter
+Vorgabe
+Angabe der CID des Providers
+Erweitert
+Dieses Fenster schliessen
+Datensicherung wird gestartet
+Fehlende Konfigurationsparameter!Bitte prüfen Sie Ihre Einstellungen!
+Statisches DNS ist nurfür den Benutzer "root" möglich!
+Fragen Sie Ihren Provider!
+Historie
+Akustische Signale deaktivieren
+Verbindung im Hintergrund wiederherstellen
+Fehler
+Zu viele Verbindungsversuche!Sie sollten Ihr Handy zurücksetzen.
+OK
+Anzahl der Versuche zur Verbindungsherstellung?
+CGQ Kommandos deaktivieren.
+Letzter Versuch, wenn eine Verbindungherstellung scheitert.Einige Distributionen erfordern dies (z.B. RedHat).
+Einige Provider benötigen diesen besonderen Parameter.Sie sollten ihn bei Ihrem Provider erfragen!
+Angabe meistens erforderlich.Wird vom Provider vorgegebenBitte bei Ihrem Provider erfragen!
+Allgemeiner Wert Ihres Providers oder Ihr eigenes Kennwort.Fragen Sie Ihren Provider!
+Wenn Sie statisches DNS verwenden wollen.
+
+Kann in manchen Fällen zu einer stabileren Verbindung führen.
+Nach Herstellung einer erfolgreichen Verbindung wird der gewählte Browser automatisch gestartet.Wenn dieser nicht auf Ihrem Computer gefunden wird, wird GPRS EasyConnect beendet!
+Wenn die Option "Verbindungsaufbau wiederholen" aktiviert ist,stellt GPRS EasyConnect die Verbindung im Hintergrund erneut her.Ein entsprechender CountDown wird im Panel angezeigt.
+
+Sie können eine andere Rufnummer angeben.
+Einige Provider erfordern die Angabe Ihrer eigenen Rufnummer.Erfragen Sie dies bitte ggf. bei Ihren Provider!
+Wenn Ihr Handy nicht in der Liste der unterstützen Handys enthalten ist,versuchen Sie bitte ein ähnliches Gerät.Möglicherweise funktioniert dies.In diesem Fall lassen Sie uns das bitte wissen!
+Gesendete Daten
+Gesendete Daten in den letzen 7 Tagen
+Grenzwertüberwachung
+Zähler-Reset am
+Max. Datentransfer pro Monat(GB)
+Max. Datentransfer pro Woche(MB)
+Wenn diese Option gewählt wurde, wird das Programmam entsprechenden Tag den Transferzähler automatisch zurücksetzen.(Wenn die übertragene Datenmenge 90% des Limitserreicht, wird das Programm eine Warnung ausgeben!)
+Wenn ein wöchentliches Limit definiert wurde,wird das Programm Sie warnen, wenn die übermittelten Datendieses Limit erreichen!
+Sie haben 90% des monatlichen Limits überschritten!
+Sie haben 90% des wöchentlichen Limits überschritten!
+Löschoptionen
+Monatlichen Datentransfer zurücksetzen
+Wöchentlichen Datentransfer zurücksetzen
+"5 Minuten" Werte zurücksetzen
+Zähler zurücksetzen
+Verbindungsvorgang kann nicht erkannt werden.Hierfür gibt es viele Gründe! (Starten Sie das Programm neu,setzen Sie Ihr Handy zurück oder überprüfenSie Ihre Einstellungen.
+Das Programm versucht, den eingefrorenen Prozess zu beenden. Einen Moment bitte...
+Einstellungen für Fortgeschrittene
+Selbstauthentifizierung deaktivieren.
+Einstellung des pppd Scripts
+Authentifierung des Peers nicht erforderlich. Diese Option erfordert Root Privilegien.(üblicherweise bei Verwendung von Debian.)
+Debug Modus aktivieren
+Die Datei ~/.gprsec/conn.log wird im Debug-Modus erstellt.Wenn eine Verbindung nicht erfolgreich hergestellt werden kann, senden Sie uns bitte diese Datei zusammen mit Ihrem "Fehlerbericht"!
+BCD Kompression aktivieren
+Fordern, daß gesendete und empfangene Daten mit dem BSD-Compress Schema komprimiert werdenDies ist eine Echtzeitkompressions-Funktion für Datenübermittlung!WARNUNG! WENN DIES AKTIVIERT IST,WERDEN üBER PERMANENT DATEN AN DEN SERVER GESENDET UND EMPFANGENAUCH WENN KEINE GüLTIGE DATENüBERMITTLUNG ERFOLGT.(Nur sinnvoll für den Up-/Download grösserer Dateien. Denken Sie auch an die Limits, sofern Sie welche definiert haben!Nach Beendigung des Up-/Downloads sollten Sie diese Funktion wieder deaktivieren!Hinweis: Solange diese Funktion aktiviert ist, wächst die Datei conn.log ständig an.)
+APN des Providers (Access Point Name)
+Wenn das Programm den APN des gewählten Providers kennt,wird dieser Name im nächsten Feld angezeigt.Wenn nicht, muss der Name durch den Anwender eingegeben werden.In CDMA Netzwerken ist die Angabe des APN nicht erforderlich.
+Handy wurde noch nicht getestet!
+Der gewählte Anschlusskonnte nicht gefunden werden!
+Suche neuere Version!
+Sie können prüfen, ob eine neuere Version vonGPRS Easy Connect auf unserer Site vorhanden ist!(Die bestehende Version wird überschrieben,wenn Sie das Update auf diese Weise durchführen!)
+Download beenden!
+Suche...
+Verbindung zum Server fehlgeschlagen!
+Keine neuere Version auf dem Server vorhanden!
+Auflösen des Nameservers...
+Nameserver nicht gefunden!
+Verbindung zu easyconnect.linuxuser erfolgreich.
+HTTP Anfrage gesendet, Warten auf Antwort...
+Download läuft...Gesamtgrösse: *** KB
+Programm wurde heruntergeladen.Der Name des Programms lautet:***
+Verbindungsgeschwindigkeit
+Überwachung der Datenübertragung deaktivieren.
+Wenn diese Option aktiv ist, wird das Programmdie Datenübertragung nicht überwachen!(Sinnvoll bei sehr langsamen Festplatten!)
+Augenscheinlich funktioniert bei Ihnen ein "offiziell" nicht getestetes Handy erfolgreich!Wenn Sie unsere Haupttestperson sein wollen, füllen Sie bitte dieses Formular aus:
+Ihr Name?
+Ihre Emailadresse?
+Verwendete Distribution (inkl. Versionsnummer)?
+Weitere Hinweise?
+Danke - ich möchte in Zukunft nicht mehr damit belästigt werden!
+Datenübertragung erfolgreich
+Sie haben keinen Name angegeben
+Sie haben keine Emailadresse angegeben
+Sie haben keine Distribution angegeben
+Experten Portscan
+Benutzername hinzufügen/entfernen
+Neuer Benutzername?
+Neues Passwort?
+Wählen Sie ein Benutzer-Passwort Kombination!
+Benutzernamen entfernen!
+Wenn diese Option aktiviert ist, kann der PortscanAlgorithmus alle möglichen Verbindungsports anzeigen!(Andernfalls werden nur die ersten acht gefundenen Ports angezeigt.)
+Sie können für den Zugriff auf GPRS Verbinden Benutzer hinzufügen/entfernen.(Diese Option wird nur unter FreeBSD benötigt und nur für Root verfügbar.)
+Benutzernamen für GPRS EC hinzufügen/entfernen
+Benutzername hinzufügen
+Benutzername entfernen
+Die DNS Adresse wird nicht verwendet, wenn Sie nicht Root sind!Fragen Sie den Systemadministrator,damit er Ihre DNS Adresse(n) in /etc/resolv.conf einträgt.
+Sie können die DNS Adressen unter FreeBSD nicht dynamisch setzen!
+Eingefrorenen pppd Prozess gefunden!Soll ich versuchen, diesen Prozess jetzt zu beenden?
+Spenden Sie für das GPRS Easy Connect Team!
+Wenn Ihnen dieses Programm gefällt und Sie unsere Arbeit unterstützen möchten, spenden Sie bitte.
+Was wir uns wünschen:
+Unsere Sponsoren:
+Ja, ich biete folgendes:
+Ihre IP Adresse:
+Spendenerklärung senden!
+Sie haben nicht alle erforderlichen Daten angegeben!
+Schreibzugriff auf die Serverdatenbank nicht möglich!Bitte erneut versuchen.
+Sie haben ein oder mehrere Sachen aus der Liste der gewünschten Dinge ausgewähltund Name sowie Email Adresse angegeben.Wir werden Sie per Email kontaktieren, wenn Sie uns diese Informationen übermitteln.Wir gehen davon aus, daß Sie Ihre Absicht ernst meinen.
+Die Datei /etc/ppp/options konnte nicht gefunden werden!Bitten Sie root, diese zu erstellen. (Sie sollte leer sein.)
+Kein Nameservereintrag in /etc/resolv.conf gefunden!Bitten Sie root, mindestens einen Nameservereintrag zu erstellen.(Sinnvoller Weise verwenden Sie die DNS Angaben Ihres Providers.Wenn dieser es zuläßt, können Sie auch andere DNS Server wählen.)
+Kompaktmodus
+Das Hauptfenster befindet sich im Kompaktmodus.Solange diese Funktion aktiv ist, sind die Einstellungen nicht verfügbar.
+Im Kompaktmodus können Sie Einstellungen nicht verändert werden.Klicken Sie hier, um diese Modus abzuschalten.
+Standardfarbe
+Vordergrundfarbe
+Wählen Sie ein Thema
+ Oder prüfen Sie die Übertragungsrate Ihres Telefons! Einige Geräte verwenden eine Übertragungsrate von 9600 bps - versuchen Sie diese Rate jetzt.(Auf unserer Website unter Knowledge können Sie erfahren, wie Sie die Geschwindigkeit Ihres Gerätes erhöhen können.)
+Der Verbindungsprozess hat einen Fehler erkannt: "***"
+Warnung! Standardroute kann nicht geändert werden. Es ist immer noch "***"!
+Verbindung herstellen...
+Verbindung wird aufgebaut... *** %
+GPRS Easy Connect ist nun offline
+Status
+Statistiken
+Der Server hat keine gültige IP Adresse übermittelt. Normalerweise bedeutet dies, dass APN, Benutzername oder Passwort falsch sind. Sie sollten den Kundendienst Ihres Providers danach fragen.
+Nachdem Sie ein neues Thema gewählt haben, sollte das Programm neu gestartet werden, damit das gewählte Thema korrekt angezeigt wird!Wichtiger Hinweis!Wenn Sie ein umfangreiches Thema wählen, verwendet GPRS Easy Connect mehr Systemresourcen! Die verwendeten Resourcen erhöhen sich, wenn Themen oft ohne Neustart geändert wurden!
+Programm zur Erhöhung der Verbindungsgeschwindigkeit
+Erhöhung der Übertragungsraten für Datenkabelverbindung (experimentell!)
+*** ist der gewählte Anchlussport. (Sie können dies über das Setup-Menu von GPRS Easy Connect ändern.)
+Gewünschte Übertragungsrate?
+Gewählter Port konnte nicht gefunden werden. Öffnen Sie das GPRS Easy Connect Setup-Menü!
+Bitte warten!Neue Gewschwindigkeit wird getestet...
+OK! Neue Übertragungsrate wurde aktiviert!Die Kommunikationsgeschwindigkeit Ihre Telefonsüber Datenkabel beträgt***bpsDenken Sie daran, diese Rate auch im Setup-Menü einzustellen!
+Zeit abgelaufen!Neue Übertragungsrate konnte nicht aktiviert werden!
+Suche wurde gestartet.
+Aktuelle Geschwindigkeit konnte nicht erkannt werden.
+#***: Versuche aktuelle Rate mit *** bps.
+Algorithmus wird geprüft...
+Erfoglreich!The currently connection is *** b/s, the new will be is: *** b/s
+Das Script zur Transferratenänderung wird beendet.Klicken Sie auf "Anwenden", um diese Einstellung zu aktivieren!
+Verbindung zum Telefon konnte nicht hergestellt werden. Bitte prüfen!
+Wählen Sie einen Font
+Wählen Sie eine Farbe
+Monatliche Übertragungsdaten wurden gelöscht
+Serverinformationen werden abgefragt...
+GPRS Easy Connect ist ein einzigartigesProgramm, das auf einfachste Weise beim Aufbau einer GPRS Internetverbindungbehilflich ist.Dieses Programm unterstützt die meistenMobiltelefone & Provider der Welt.Das Programm ist kostenlose und unterliegtder GNU GPL.Viel Spass damit!Peter Simon (simon.peter@gprsec.hu)Gabor Pinter (pinter.gabor@gprsec.huAndrea Bravetti (brand77@gmail.com)www.gprsec.hu
+Wählen Sie einen anderen Browser
+Datei nicht ausführbar mit ***!
+Wählen Sie einen anderen Port
+Sie haben kein gültiges Gerät gewählt!
+Sie haben keine Leseberechtigung für diese Datei!
+Das System bietet keine Kernelunterstützung fpr PPP. Entweder konnte das Kernel-PPP Modul nicht geladen werden oder PPP ist in Ihrer Kernelkonfiguration nicht enthalten. Wenn PPP als Modul existiert, versuchen Sie `/sbin/modprobe -v ppp' auszuführen.  Wenn dies fehlschlägt, überprüfen Sie, ob ppp.o in /lib/modules/`uname -r`/net existiert. See README.linux file in the ppp distribution for more details.
+Sie können einen unbekannten, nicht gefundenen Browser manuell wählen. Seien Sie vorsichtig, wenn Sie eine Binärdatei wählen!
+Sie können einen nicht gefundenen Port manuell wählen. Seien Sie vorsichtigt!

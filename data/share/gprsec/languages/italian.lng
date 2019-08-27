@@ -1,0 +1,78 @@
+#
+# Script Generator
+# Version 1.0.1 For Linux
+#
+# Italian Language File
+#
+# Author: Andrea Bravetti <brand77@genie.it>
+#
+# 2004.03.25.
+#
+
+Script Generator
+Versione 1.0.1
+Questo programma genera i file necessari per le connessioni GPRS e CDMA supportate da GPRS Easy Connect.
+(Premere Q o q per uscire in qualunque momento.)
+Per quale tipo di connessione volete generare i file? [1] = GPRS o [2] = CDMA
+Nella prossima schermata il programma mostrerà i telefoni supportati.
+Memorizzate il numero di riga del telefono che intendete usare!
+(I telefoni marcati con "*" non sono stati ancora testati!)
+Per visualizzare la lista dei telefoni supportati premere un tasto!
+Telefoni supportati:
+Il numero del telefono selezionato è:
+Nella prossima schermata il programma mostrerà gli operatori supportati.
+Memorizzate il numero di riga dell'operatore che intendete usare!
+Per visualizzare la lista degli operatori supportati premere un tasto.
+Operatori:
+Numero di linea dell'operatore selezionato: (Se vuoi impostare l'APN manualmente premi invio.)
+Per visualizzare la prossima schermata premere un tasto.
+Premere un tasto e digitare il numero di riga scelto!
+Digitare la porta che si intende utilizzare! (es.: COM = /dev/cuaa*, USB = /dev/ucom*)
+Velocità massima della connessione? (per le porte COM potrebbe essere 115200)
+APN del vostro operatore:
+Nome utente per la connessione: (se non è richiesto premere invio)
+Password:
+Per avviare la connessione digitare: pppd file %s or /usr/sbin/pppd file %s
+
+Non avete inserito tutti i parametri!
+Nomero di riga errato!
+Errore: impossibile trovare il file %s!
+Errore: impossibile scrivere nel file %s!
+
+Chat script per il telefono %s
+
+I file sono stati creati dal programma Script Generator, scritto da Gabor Pinter <pinter.gabor@linuxuser.hu> per GPRS Easy Connect.
+I file generati vengono forniti e sono utilizzabili secondo la GNU General Public License!
+Disconnessione...
+Disconnesso.
+File di configurazione di pppd per il telefono %s
+
+Abilita le funzionalità di debug per la connessione.
+Porta
+Velocità
+Utilizzare il controllo di flusso hardware (i.e. RTS/CTS) per le porta seriale.
+Utilizzare le linee di controllo del modem.
+Specifica se pppd deve creare un lock file tipo UUCP per assicurare un accesso esclusivo al dispositivo.
+Con questaopzione, pppd accetterà tutti i caratteri di controllo.
+Disabilita la contrattazione del protocollo di compressione sia in ricezione che in trasmissione.
+Disabilita la compressione delle intestazioni sia in ricezione che in trasmissione.
+Disabilita la contrattazione del magic number. Con questa opzione pppd non può rilevare una linea di tipo loopback.
+Disabilita la contrattazione del protocollo CCP.
+Disabilita la compressione delle intestazioni TCP/IP tipo Van Jacobson sia in ricezione che in trasmissione.
+Disabilita la compressione del connection-ID nella compressione delle intestazioni TCP/IP tipo Van Jacobson.
+Non effettuare il distacco dal terminale di controllo.
+Disabilita la determizione dell'IP locale in base all'hostname quando nessun indirizzo IP locale viene specificato (comportamento predefinito).
+Questa opzione impone a pppd di creare una route predefinita quando IPCP è attivato, e rimuoverla quando termina il collegamento.
+Richiedi fino a 2 indirizzi di server DNS.
+Non richiedere al server di autenticare se stesso.
+Imposta nome/password usati per autenticare il sistema presso il server come name/password.
+Script di connessione.
+Script di disconnessione.
+Questo script di connessione cerca di utilizzare i DNS del provider tramite l'opzione usepeerdns.
+Se avrà successo dovrete aggiungere al file /etc/resolv.conf questo/i DNS e dovrete commentare o eliminare l'opzione usepeerdns dal file %s!
+
+I/il DNS del provider selezionato:
+
+#
+# END
+#

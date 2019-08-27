@@ -1,0 +1,162 @@
+Conectar
+Desconectar
+[removed]
+Salir
+Seleccionar el tipo de terminal\n(menú Configurar)
+[removed]
+Después del comienzo...
+Selecione el puerto
+[removed]
+Configurar GPRS Easy Connect***
+Error (GPRS Easy Connect)
+Despúes de la conexión satisfactoria...
+Inicie este navegador\ndespués de la conexión satisfactoria:
+[removed]
+[removed]
+[removed]
+Conexión automática
+¡No se puede encontrar el archivo de configuración!\n¡Chequee su configuración!
+Remover datos estadísticos
+[removed]
+Error en conexión
+La conexión es bloqueada por***\nproceso usando el recurso.
+La conexión es interrumpida por marcación\nlímite de tiempo. Por favor reinicie su terminal.
+Quizás no encendió su móvil,\n¿lo hizo?
+¡Conexión satisfactoria!
+Conexión satisfactoria\nSu dirección IP local: ***\nSu dirección IP remota: ***\nServidor DNS primario: ***\nServidor DNS secundario: ***
+Conexión interrumpida.\n¡Sin respuesta de la red!
+Datos totales descargados con "***"
+Datos totales enviados con "***"
+[removed]
+Bytes descargados
+Bytes enviados
+[removed]
+[removed]
+Velocidad media de la conexión activa
+Duración de la conexión activa
+Duración de conexiones totales
+Velocidad de la descarga actual
+Velocidad del envío actual
+Conexión interumpida.\nLa red GPRS está sobrecargada.
+Conexión interrumpida debido\na error de configuración.\n(Probablemente su puerto seleccionado\nno es correcto o tiene el permiso denegado)
+Conexión interrumpida por el usuario.\nBatería agotada.\nFallo en cable de datos.
+Conexión interrumpida.
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+Diagrama
+[removed]
+[removed]
+Seleccione su lengua
+[removed]
+Reconexión
+[removed]
+[removed]
+Mostrar GPRS Easy Connect
+[removed]
+Elija su proveedor
+[removed]
+Usuario:
+Contraseña:
+¡Lea la información importante! (bajo menú "Otros")
+¡No se encuentra el archivo de configuración!\n¡Chequee sus parámetros!
+¡No está autorizado para el uso de pppd!\n¡Lea las FAQ o información importante!
+Hecho por
+¡Parámetros de configuración desaparecidos!
+¡Terminal no selecionado!
+¡Puerto no seleccionado!
+¡Lenguaje desconocido!
+¡Proveedor no selecionado!
+Seleccione el modelo de tu terminal
+Parámetros obligatorios
+Parámetros opcionales
+Intervalo de tiempo de monitoreo de conexión (ms)
+¿Permitir DNS dinámica?
+Parámetros especiales
+[removed]
+Establezca el CID del proveedor
+Otro
+[removed]
+Comienzo de datos guardados
+[removed]
+[removed]
+¡Pregunte a su proveedor!
+Historia
+Deshabilitar campanas sonoras
+[removed]
+[removed]
+¡Demasiadas reconexiones realizadas!\nDebería reiniciar su terminal.
+[removed]
+¿Cuántos intentos permite en reconexión?
+Deshabilitar comandos CGQ
+Último cambio en configuración si el proceso de conexión falla.\nAlgunas distribuciones la necesitan (p.ej.: Red Hat).\n
+Algunos proveedores necesitan este parámetro especial.\n¡Debería preguntarlo a su proveedor!
+Debería rellenarlo habitualmente.\nEs un parámetro de su proveedor\n¡Debería preguntarlo a su proveedor!
+Debería ser un parámetro general de su proveedor o su código individual.\n¡Pregunte a su proveedor!
+Si le gustaría usar DNS estática.
+[removed]
+En algunos casos puede dar una conexión más estable.
+Después de la conexión satisfactoria se iniciará\nel navegador seleccionado.\n¡Si no está en su computadora entonces\GPRS Easy Connect se cerrará!
+[removed]
+[removed]
+Puede dar otro número de marcación
+Algunos proveedores necesitan su propio número de marcación.\nPregunte a su proveedor.
+Si no ve su terminal en la lista de móviles soportados, trate de seleccionar un terminal parecido.\nProbablemente funcione. En este caso, por favor, ¡infórmenos!
+Datos transmitidos
+Datos transmitidos en la última semana
+Visualizar límites
+Fecha de borrado
+Max. transmisión de datos mensuales (GB)
+Max. transmisión de datos semanales (MB)
+Si esta opción está activa, entonces el programa\n borrará automáticamente el contador de transmisión de datos el día seleccionado.\n(¡Si la cantidad de datos transmitidos\nalcanza el 90% de límite, entonces el programa se lo recordará!)
+¡Si el límite semanal es definido, entonces\nel programa se lo recordará cuando la cantidad\nde sus datos transmitidos se acerque!
+¡Ha usado su 90% del límite mensual!
+¡Ha usado su 90% del límite semanal!
+[removed]
+Borrar datos transmitidos mensualmente
+Borrar datos transmitidos semanalmente
+[removed]
+Borrar el contador de tiempo
+[removed]
+[removed]
+[removed]
+Deshabilitar auto-autentificación
+[removed]
+No requerir al proveedor auto-autentificarse. Esta opción requiere privilegios de administrador\n(Usualmente necesita Debian)
+Modo depuración
+El archivo ~./gprsec/conn.log se hará en modo de depuración.\nSi su conexión no se efectúa, por favor ¡envíenos el archivo con su informe de fallos!
+Habilitar compresión BCD
+Pedir que el proveedor comprima los paquetes que manda usando el esquema de compresión BSD. Es una función de compresión en tiempo real \npara transmisión de datos. ¡PELIGRO! SI USA ESTO,\nSU CONEXIÓN SIEMPRE ENVIARÁ Y RECIBIRÁ DATOS HACIA/DESDE EL SERVIDOR INCLUSO SI NO HAY DATOS VÁLIDOS PARA TRANSMISIÓN.\n(Es útil si quiere subir o bajar archivos grandes). No  olvide su límite/s si los tiene, usando esta función. Debería desactivar esta función después\n de subir o bajar los datos. Nota: Mientras la función está activada, el archivo conn.log crecerá continuamente.)
+El proveedor de APN (nombre del nodo de acceso)
+Si el programa conoce el proveedor APN seleccionado,\nentonces será mostrado en la próxima celda de entrada, si no el usuario tiene que dar el nombre.\nPara redes de sistemas CDMA no es necesario dar el APN.
+¡El teléfono no ha sido probado todavía!
+¡No se puede encontrar\n el puerto seleccionado!
+¡Buscar nueva versión!
+[removed]
+[removed]
+Buscando...
+¡No se puede conectar al servidor!
+¡No existe una nueva versión en el servidor!
+Resolviendo nombre del servidor...
+¡No se puede encontrar el nombre del servidor!
+Conexión a easyconnect.linuxuser.hu satisfactoria
+Petición HTTP enviada, esperando respuesta...
+Descarga en proceso...\nTamaño total: *** KB
+Programa descargado.\nEl nombre del programa es:\n***
+Velocidad de conexión
+Deshabilitar seguimiento de transmisión de datos
+¡Si esta opción está activa, entonces el programa\n no visualizará la transmisión de datos!\n(¡Es útil si tiene un Winchester demasiado lento!)
+Parece que lo ha conectado satisfactoriamente\nmóvil no probado oficialmente\nSi quiere ser nuestro principal probador, por favor, rellene este formulario:
+¿Nombre?
+¿Dirección de correo-e?
+¿Distribución (con el número de versión)?
+¿Otra notificación?
+¡Gracias, pero no me moleste con esto en el futuro!
+[removed]
+¡No dió su nombre!
+¡No dió su correo-e!
+¡No dió el nombre de su distribución!

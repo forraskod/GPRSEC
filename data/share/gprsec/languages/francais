@@ -1,0 +1,188 @@
+Connecter
+Déconnecter
+Paramétrer GPRS Easy Connect
+Fermer
+Selectionnez votre type de téléphone portable\n(Menu Paramétrage)
+Important
+Après le démarrage...
+Sélectionnez le port
+OK/Enregistrer
+Paramétrer GPRS Easy Connect***
+Erreur (GPRS Easy Connect)
+Après une connexion réussie...
+Lancer ce navigateur\naprès une connexion réussie:
+Activer cette fonction.
+Reduire la fenêtre de connection.
+Important (GPRS Easy Connect)
+Connexion automatique.
+Je ne peux trouver votre fichier de configuration!\nVérifiez votre configuration!
+Effacement des données statistiques
+Connexion en cours...
+Erreur pendant la connexion
+La connexon est bloquée par***\nprocessus utilisant la ressource.
+La connexion est interrompue à cause du dépassement de délai d'attente. Ré-initialisez votre mobile, s'il vous plait.
+Peut-être n'avez-vous pas allumé votre mobile?
+Connexion réussie!
+Connexion réussie.\nVotre adresse IP locale: ***\nVotre adresse IP distante: ***\nDNS Primaire: ***\nDNS secondaire: ***
+Connexion interrompue.\nPas de réponse du réseau!
+Volume de télécharg. desc. avec "***"
+Volume de télécharg. mont. avec "***"
+Volume total de données téléchargées
+Bytes téléch. (desc.)
+Bytes téléch. (mont.)
+Paquets téléch. (desc.)
+Paquets téléch. (mont.)
+La vitesse moyene de la connexion active
+Durée de la connexion active
+Durée totale des connexions
+Vitesse du téléchargement courant (descendant)
+Vitesse du téléchargement courant (ascendant)
+Connexion interrompue.\nLe réseau GPRS est surchargé.
+La connexion est interrompue ? cause d'une erreur de configuration.\n(Probablement que le port que vous avez sélectionné n'est pas bon,\n ou que vous n'vez pas les droits!)
+Connexion interrompue par l'utilisateur.\nBatterie à plat.\nDéfaillance du cable de données.
+Connexion interrompue.
+Diagramme (GPRS Easy Connect)
+Sans données supplémentaires
+Avec données supplémentaires
+Lignes
+Colonnes
+Vitesse moyenne d'une connexion active sur 5 minutes.\nEt moyenne de celles-ci.
+Montrer/Cacher la fenêtre de statistiques.
+Diagramme
+La procédure de connexion a échoué\ndû à une erreur externe.\nVous devriez ré-initialiser votre téléphone.
+heure
+Sélectionnez votre langage!
+Temps de latence avant reconnexion:
+Reconnexion
+Annuler
+Je ne peux trouver de protocole réseau en fonction\nService GPRS inutilisable!
+Réduire GPRS Easy Connect
+Vous ne pouvez pas lancer plus d'un\nGPRS Easy Connect!
+Choisissez votre fournisseur d'accès!
+Pas de fichier nommé apn!
+Utilisateur:
+Mot de passe:
+Lisez les informations importantes! (Dans le menu "Autre".)
+Je ne trouve pas de fichier de configuration!\nVérifiez vos paramétrages!
+Vous n'êtes pas autorisé à utiliser pppd!\nLisez la FAQ ou les "informations importantes!
+Fait par
+Paramètres d'installation manquants!
+Pas de téléphone séletionné!
+Pas de port sélectionné!
+Langage inconnu!
+Pas de fournisseur d'accès sélectionné!
+Sélectionner le type de votre mobile
+Paramètres obligatoires
+Paramètres optionnels
+Fréquence de surveillance de la connexion (ms)
+Le DNS dynamique est-il autorisé?
+Paramètres rarement utilisés
+Défaut
+Configuration du CID propre au fournisseur d'accès
+Autre
+Fermer cette fenêtre
+Début de la sauvegarde des données
+Paramètres de configuration manquants!\nVérifiez votre configuration!
+Pour le DNS statique\nvous devez être 'root'!
+Demandez à votre fournisseur d'accès!
+Historique
+Désactiver le signal système
+Reconnecter en tâche de fond
+Erreur
+Trop de reconnexions!\nVous devriez ré-initialiser votre téléphone.
+OK
+Combien de tentatives de connexion autorisées?
+Désactiver les commandes CGQ.
+Dernière chance de paramétrage si la procédure de connexion échoue.\nCertaines distributions en ont besoin (ex.: RedHat).
+Certains fournisseurs d'accès ont besoin de ce paramètre spécial.\nVous devriez vous renseigner à ce propos auprès de votre fournisseur!
+Vous devez principalement le remplir.\nC'est le paramètre propre à votre fournisseur d'accès\nVous devriez vous renseigner à ce propos auprès de votre fournisseur!
+Ce devrait être le paramètre générique de votre fournisseur d'accès ou votre propre code.\nDemandez à votre fournisseur d'accès!
+Si vous désirez utiliser le DNS statique.
+
+Dans certains cas, cela peut rendre la connexion plus stable.
+Après une connexion réussie le navigateur\n sélectionné sera automatiquement lancé.\nS'il n'est pas installé sur votre ordinateur\nGPRS Easy se fermera!
+Si l'option de "reconnexion" est activée\n GPRS Easy Connect se reconnectera en tâche de fond.\nVous verrez un compte à rebours dans la fenêtre durant la reconnexion.
+
+Vous pouvez donner un autre numéro d'appel.
+Certains fournisseurs d'accès ont besoin de leur propre numéro d'appel.\nDemandez-le à votre fournisseur d'accès.
+Si vous ne voyez pas votre téléphone dans la liste des téléphones supportés, essayez de sélectionner un téléphone similaire.\nCela marchera probablement. Dans ce cas, tenez-nous au courant s'il vous plait!
+Données transmises
+Données transmises au cours de la semaine dernière
+Vérification des limites
+Date d'effacement
+Transmission mensuelle max.(Go)
+Transmission hebdomadaire max.(Mo)
+Si cette option est activée, le programme effacera\nautomatiquement le compteur de transmission pour le jour selectionné.\n(Si le volume transmis atteint 90% de la limite fixée\nle programme vous le dira!)
+Si la limite hebdomadaire est définie,\nle programme vous préviendra lorsque le volume transmis approche cette limite!
+Vous avez atteint 90% de votre quotat mensuel!
+Vous avez atteint 90% de votre quotat hebdomadaire!
+Options d'effacement
+Remise à zéro du compteur mensuel
+Remise à zéro du compteur hebdomadaire
+Remise à zéro des "données sur 5 minutes"
+Remise à zéro de l'horloge
+Il n'y a pas de signe de progression de connexion\nIl y a beaucoup de raisons possibles! (Essayez de ré-initialiser \nvotre téléphone ou de revoir ses réglages!
+Le programme essaye de tuer un 'zombie'. Un moment s'il vous plait...
+Réglages pour les professionnels
+Désactiver l'authentifaction automatique.
+Réglage du script de 'pppd'
+N'a pas besoin d'authentification. Cette option requiert les privilèges de 'root'.\n(Habituellement nécessaire dans le cas d'une Debian.)
+Mode Déboggage activé
+Le fichier ~./gprsec/conn.log sera créé en mode déboggage\nSi vous n'arrivez pas à vous connecter, envoyez ce fichier dans votre rapport de bogue!
+Activer la compression BCD
+Demande à l'hote de compresser les paquets qu'il envoie, utilisant le format BSD-Compress et accepter de compresser les paquets envoyés à l'hote.\nC'est une fonction de compression en temps réel pour la transmission de données!\nATTENTION! SI VOUS L'UTIISEZ, VOTRE CONNEXION ENVERRA ET RECEVRA CONSTAMMENT \nDES DONNEES VERS ET EN PROVENANCE DU \nSERVEUR MEME S'IL N'Y A PAS DE DONNEES TRANSMISES (c'est utile si vous voulez télécharger un gros fichier. N'oubliez pas vos quotats si\n vous utilisez cette fonction. Vous devriez donc stopper cette\n fonction après un téléchargement.\nNote: Tant que cette fonction est active, le fichier conn.log sera alimenté.)
+Le nom du point d'accès du fornisseur d'accès
+Si le program a connaissance du point d'accès du fornisseur d'accès\nCe sera alors montré dans le prochain formulaire, autrement l'utilisateur devra le préciser.\nPar le système de réseaux CDMA il n'est pas besoin de donner le point d'accès.
+Le téléphone n'a pas encore été testé!
+
+Cherche la nouvelle version!
+Vous pouvez vérifier s'il y a une nouvelle verion de\n GPRS Easy Connect sur notre site!\n(Si vous mettez à jour votre programme de cette façon,\nl'ancienne version sera effacée!)
+Arrêter le téléchargement!
+Recherche...
+Impossible de se connecter au serveur!
+Pas de nouvelle version sur le serveur!
+Résolution du nom de serveur...
+Impossible de trouver le nom de serveur!
+Connexion à easyconnect.linuxuser réussie.
+Requête HTTP envoyée, en attente de réponse...
+Téléchargement en cours...\nTaille: *** KB
+Le programme est téléchargé.\nLe nom du programme est:\n***
+Vitesse de connexion
+Désactiver la surveillance de la connexion
+Si cette option est active, le programme ne suveillerra\nalors pas les transmissions de données!\n(c'est utile si vous avez une winchester tr?s lente...)
+Il semble que vous avez réussi à vous connecter avec un téléphone "non-officiellement supporté"!\nSi vous voulez être notre testeur principal, remplissez ce formulaire, s'il vous plait!:
+Votre nom?
+Votre adresse e-mail?
+Votre distribution (avec numéro de version)?
+Informations complémentaires?
+Merci, mais ne me dérangez plus avec ceci ultérieurement!
+Données transmises correctement!
+Vous n'avez pas donné votre nom!
+Vous n'avez pas donné votre adrese e-mail!
+Vous n'avez pas donné le nom de votre distribution!
+Détection de port (mode expert)
+Ajouter/Supprimer utilisateur
+Nouvel utilisateur?
+Nouveau mot de passe?
+Choisissez un couple utilisateur-mot de passe!
+Effacer l'utilisateur!
+Si cette option est activée, l'algorythme de détection\nde ports montrera tous vos ports de connexion possible!\n(Autrement seulement les huit premiers ports trouvés.)
+Vous pouvez ajouter/effacer un accès utilisateur pour la connexion GPRS.\n(Cette option n'est nécessaire que pour FreeBSD et l'accès en root.)
+Ajouter/Effacer des utilisateurs pour GPRS EC
+Ajouter un utilisateur
+Effacer un utilisateur
+Cette adresse DNS ne sera utilisée qui si vous êtes root!\nDemandez à votre administrateur système de positionner vos DNS\n dans le fichier /etc/resolf.conf!
+Vous ne pouvez pas avoir de DNS dynamique sous FreeBSD!
+Il y a un processus pppd inerte!\nPuis-je essayer de le tuer maintenant?
+Faire un don à l'équipe de GPRS Easy Connect!
+Si vous appréciez ce programme et désirez nous aider, envoyez de l'argent, s'il vous plait.
+Ce que nous aimerions obtenir:
+Nos sponsors:
+Oui, j'offre les choses suivantes:
+Votre adresse IP:
+Envoyer la promesse de don!
+Vous ne nous avez pas fourni toutes les données nécessaires!
+Je n'ai pas pu écrire dans la base du serveur.\nRecommencez, s'il vous plait.
+Si vous avez sélectionné une ou plusieurs choses parmi la liste des articles désirés.\net avez donné vos noms et e-mail,\n\nNous vous contacterons alors par e-mail après que vous ayez transmis ces informations!\n\nS'il vous plait, soyez sûr de de vos intentions!
+Il n'y a pas de fichier "/etc/ppp/options"!\nDemandez à root d'en créer un. (Il devra être vide.)
+Il n'y a pas de serveur de noms indiqué dans le fichier /etc/resolv.conf!\nDemandez à root au moins un serveur de nom!\n(Classiquement, ce sera celui de votre fournisseur d'accès,\nmais s'il le permet, vous pourrez en choisir d'autres.)

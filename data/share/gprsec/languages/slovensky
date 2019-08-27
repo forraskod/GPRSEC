@@ -1,0 +1,227 @@
+Pripojiť
+Odpojiť
+[removed]
+Koniec
+Zvoľ typ tvojho telefónu\n(Nastavenia)
+[removed]
+Po spustení...
+Zvoľ si port
+[removed]
+Nastav GPRS Easy Connect***
+Chyba (GPRS Easy Connect)
+Po úspešnom pripojení...
+Spusť tento prehliadač\npo úspešnom pripojení
+[removed]
+[removed]
+[removed]
+Automatické pripojenie.
+Konfiguračný súbor nebol nájdený!\nSkontroluj svoje nastavenia!
+Odstránenie štatistických dát
+[removed]
+Chyba v pripojení
+Proces ***\nblokuje pripojenie - používa rovnaké zdroje.
+Spojenie bolo prerušené kvôli obmedzenému\nčasu na pripojenie. Prosím reštartuj svoj mobil.
+Je možné,že si zabudol,\nzapnúť svoj mobil?
+Spojenie úspešné!
+Spojenie úspešné.\nTvoja lokálna IP adresa: ***\nTvoja vzdialená IP adresa: ***\nPrimárny DNS server: ***\nSekundárny DNS server: ***
+Connection interrupted.\nSieť neodpovedá!
+Celkový objem prijatých dát "***"
+Celkový objem odoslaných dát "***"
+[removed]
+Prijaté bajty
+Odoslané bajty
+[removed]
+[removed]
+Priemerná rýchlosť aktívneho pripojenia
+Trvanie aktívneho pripojenia
+Trvanie všetkých pripojení
+Momentálna rýchlosť sťahovania
+Momentálna rýchlosť odosielania dát
+Spojenie prerušené.\nSieť GPRS je preťažená.
+Spojenie prerušené kvôli\nchybnému nastaveniu.\n(Zvolený port pravdepodobne nie je správny,\nalebo bol k nemu zakázaný prístup!)
+Spojenie prerušené užívateľom.\nSlabá batéria.\nChyba dátového kábla.
+Spojenie prerušené.
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+Graf
+[removed]
+[removed]
+Zvoľ si jazyk!
+[removed]
+Znovu pripojiť
+[removed]
+[removed]
+Zbaľ GPRS Easy Connect do ikonky
+[removed]
+Zvoľ svojho operátora!
+[removed]
+Užívateľ:
+Heslo:
+Prečítaj si dôležité informácie! (V menu "Ostatné".)
+Súbor s nastaveniami nebol nájdený!\nSkontroluj svoje nastavenia!
+Nemáš povolenie na používanie pppd!\nPrihlás sa ako root a povoľ používanie užívateľmi!
+Autor
+Chýbajúce parametre nastavenia!
+Žiadny zvolený telefón!!
+Žiadny zvolený port!
+Nepodporovaný jazyk!
+Žiadny zvolený operátor!
+Zvoľ typ svojho mobilu
+Povinné parametre
+Voliteľné parametre
+Časový interval sledovania pripojenia (ms)
+Je povolená dynamická DNS?
+Sú použité zvláštne parametre
+[removed]
+Nastavovanie operátorovho CID 
+Ostatné
+[removed]
+Začiatok ukladania dát
+[removed]
+[removed]
+Spýtajte sa svojho poskytovateľa!
+História
+Vypni zvukové upozornenia!
+[removed]
+[removed]
+Pripojenie prebehlo priveľa krát!\nReštartuj telefón.
+[removed]
+Koľko pokusov o opätovné pripojenie je povolených?
+Zakáž CGQ príkazy.
+Posledná šanca nastavenia, ak zlyhá pokus o pripojenie.\nNiektoré distribúcie ho potrebujú (napr. RedHat).
+Niektorí operátori potrebujú tento špeciálny parameter.\nOpýtajte sa naň vášho operátora!
+Musíte to vyplniť.\nSú to vlastné parametre vášho operátora.\nOpýtajte sa ho na ne!
+Všeobecný parameter vášho operátora, alebo váš individuálny kód.\nOpýtajte sa operátora!
+Ak chcete používať statickú DNS.
+[removed]
+Toto môže niekedy zvýšiť stabilitu pripojenia.
+Po úspešnom pripojení sa automaticky\nspustí nasledujúci prehliadač.\nak nie je na vašom počítači,\nGPRS Easy Connect sa zavrie!
+[removed]
+[removed]
+Môžte zadať aj iné vytáčacie číslo.
+Niektorí operátori vyžadujú vlastné vytáčacie číslo.\nSpýtajte sa naň svojho operátora.
+Ak nevidíte váš telefón v zozname podporovaných telefónov, skúste zvoliť podobný telefón.\nPravdepodobne to bude fungovať. Ak ano, prosím dajte nám vedieť!
+Prenesené dáta.
+Prenesené dáta za posledných 7 dní.
+Monitorovanie limitu
+Dátum vymazania
+Maximálny mesačný objem prenesených dát (GB)
+Maximálny týždenný objem prenesených dát (MB)
+Ak je táto možnosť aktívna, program\nautomaticky vymaže počítadlo prenesených dát v určený deň.\n(Ak objem prenesených dát dosiahne\n90% limitu, program vás upozorní!)
+Ak je zadaný povolený objem prenesených dát,\nprogram vás upozorní, keď objem\nprenesených dát bude vyčerpaný!
+Mesačný objem prenesených dát dosiahol 90% limitu!
+Týždenný objem prenesených dát dosiahol 90% limitu!
+[removed]
+Vynuluj mesačné počítalo prenesených dát
+Vynuluj týždenné počítalo prenesených dát
+[removed]
+Vynuluj počítadlo času
+[removed]
+[removed]
+[removed]
+Znefunkčni samo-prihlasovanie.
+[removed]
+Nepožadovať autentifikáciu. Táto možnosť vyžaduje práva root-a.\n(Väčšinou v Debiane.)
+Mód ladenia (debug) zapnutý
+Súbor ~./gprsec/conn.log bude vytvorený v móde ladenia.\nAk sa spojenie nevytvorí, prosím pošlite nám tento súbor ako "Bugreport"!
+Zapni BCD kompresiu
+Požaduj od peera aby komprimoval posielané balíky pomocou BSD-kompresnej schémy a akceptuj zasielanie komprimovaných balíkov peerovi.\nJe to real-time kompresná funkcia pre prenos dát!\nPOZOR! AK JU POUŽIJETE, PRIPOJENIE BUDE VŽDY POSIELAŤ A PRIJÍMAŤ DATA ZO SERVRA\nAJ KEĎ NEDOCHÁDZA K SKUTOČNÉMU PRENOSU DÁT.\n(Je to užitočné, ak chceš stiahnuť/odoslať väčší súbor. Pri používaní tejto funkcie nezabudnite na obmedzenia prenesených dát!\nVypnite túto funkciu po ukončení sťahovania/odosielania!\nPoznámka: Ak je táto funkcia aktívna, súbor logu pripojenia stále rastie.)
+Operátorovo APN (Názov prístupového bodu)
+If the program has known the selected provider's APN,\nthen these will be shown in the next entry cell, if not, then the user has to give this name.\nBy the CDMA system networks no need to give the APN.
+Telefón ešte nebol testovaný!
+Zvolený port\nnebol nájdený!
+Vyhľadať novšiu verziu!
+[removed]
+[removed]
+Hľadá sa...
+Spojenie so serverom nemohlo byť vytvorené!
+Na serveri sa nenachádza novšia verzia!
+Zisťuje sa nameserver...
+Nameserver nebol nájdený!
+Spojenie s easyconnect.linuxuser.hu bolo úspešné.
+HTTP požiadavka bola zaslaná, čakám na odpoveď...
+Práve prebieha sťahovanie...\nCelková veľkosť: *** KB
+Program je stiahnutý.\nNázov programu je:\n***
+Rýchlosť pripojenia
+Vypni sledovanie prenosu dát.
+Ak je táto možnosť aktívna, program\nnebude sledovať prenos dát!\n(Je to užitočné ak máte veľmi pomalý winchester!)
+Vyzerá to tak, že si sa úspešne pripojil prostredníctvom\noficiálne netestovaného telefónu!\nAk chceš byť naším testerom, vyplň prosím tento formulár!:
+Tvoje meno?
+Tvoj e-mail?
+Tvoja distribúcia (a jej číslo)?
+Ďalšia poznámka?
+Ďakujem, ale už ma tým v budúcnosti nevyrušujte!
+[removed]
+Nezadal si svoje meno!
+Nezadal si svoj e-mail!
+Nezadal si názov distribúcie!
+Scanovanie portov pre expertov
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+Ak je táto možnosť aktívna, algorytmus\nna skenovanie portov ukáže všetky možné použiteľné porty!\n(Inak iba prvých 8 nájdených.)
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+Pppd proces zamrzol!\nMôžem sa pokúsiť tento proces ukončiť?
+Podporte GPRS Easy Connect team!
+Ak sa vám páči tento program, a chceli by ste oceniť našu prácu, podporte nás.
+Čo potrebujeme:
+Naši sponzori:
+Áno, ponúkam nasledujúce:
+[removed]
+Oznám úmysel darovať!
+Nezadali ste vśetky potrebné údaje!
+Nie je možné zapisovať do databázy na serveri.\nProsím skús znova.
+Ak ste zvolili jednu alebo viac položiek zo zoznamu vecí hore\na vyplnili meno a e-mail,\n\nkontaktujeme vás mejlom potom ako odošlete tieto informácie!\n\nProsíme vás o seriózne úmysly!
+Nejestvuje súbor "/etc/ppp/options"!\nPožiadajte roota aby ho vytvoril. (Má byť prázdny.)
+[removed]
+[removed]
+[removed]
+[removed]
+Normálna farba
+Farba popredia
+Zvoľ si tému
+Alebo skontroluj rýchosť pripojenia nastavenú v telefóne! Rýchlosť niektorých telefónov cez dátový kábel je 9600 b/s, vyskúšaj túto rýchlosť.\n(Spôsob, ako zrýchliť svoj telefón nájdete na webstránke pod menu "Knowledge".)
+Pripájací proces ohlásil chybu: "***"
+POZOR! Nie je možné zmeniť predvolenú route, je stále "***"!
+Získava sa spojenie...
+Spojenie sa vytvára... *** %
+GPRS Easy Connect je stále offline
+Stav
+Štatistika
+Server neposkytol použiteľnú IP adresu. Väčšinou to znamená, že jedno alebo viac APN, prihlasovacie meno, alebo heslo sú chybné. Spýtajte sa na ne uživateľského servisu vášho operátora.
+Veľmi dôležité!:\nAk používate komplikovanú tému, GPRS Easy Connect bude používať viac systémových prostriedkov! Niektoré témy nie sú bezchybné, takže konzola môže hlásiť chybové hlásenia od GTK (ak spúšťate program z konzoly), ktoré však neovplyvnia jeho chod.
+Použiteľné DNS IP boli nájdené v súbore /etc/resolv.conf :\n\n***\n***\n\nMôžte tieto DNS prepísať DNSkami zistenými programom GPRSEC, ktoré sú:\n\n***\n***\n\nPre zmenu kliknite "Áno", ak chcete ponechať terajšie DNS, kliknite "Nie"!\n(Súbor bude prepísaný okamžite!)
+V súbore /etc/resolv.conf neboli nájdené použiteľné DNS IP adresy. Môžu sa použiť len dynamické DNS.
+Informácie
+[recommended]
+DNS čísla nie sú premenlivé, možná statická DNS je načítaná z /etc/resolv.conf. Dynamická DNS bude pridelená operátorom po úspešnom pripojení a použitá programom.
+\nAk bude APN zoznam pripájacích skriptov aktualizovaný, tak tento súbor bude skopírovaný do užívateľovho domáceho priečinka, odkiaľ bude z neho GPRSEC čítať a pracovať s ním.
+Tento operátor má neznámu DNS a v /etc/resolv.conf nie je tiež žiadna použiteľná DNS.
+Už si nastavil statickú DNS. Teraz je zmenená na dynamickú, pretože prednastavená DNS určite nie je totožná s operátorovou DNS. Ak chceš používať novú statickú DNS u novo zvoleného operátora, musíš znovu nastaviť statickú DNS!
+Pripojené s netestovaným telefónom!
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+Zvoľ písmo
+Zvoľ farbu
+Mesačné prenesené dáta sú odstránené
+Získavajú sa informácie zo servera...
+\nGPRS Easy Connect je unikátny\nprogram, ktorý vám môže pomôcť nastaviť\nGPRS pripojenie k internetu\njednoduchým spôsobom.\nTento program podporuje väčšinu\ntelefónov a operátorov na svete.\nProgram je zdarma a podlieha\nGNU GPL licencii.\n\nVeľa zábavy vám prajem!\n\nPeter Simon (simon.peter@gprsec.hu)\n\nGabor Pinter (pinter.gabor@gprsec.hu\n\nAndrea Bravetti (brand77@gmail.com)\n\nwww.gprsec.hu
+
+
+

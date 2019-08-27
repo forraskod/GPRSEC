@@ -1,0 +1,225 @@
+Conectar
+Desconectar
+[removed]
+Sair
+Selecione o tipo de seu celular (Menu de Instalação)
+[removed]
+Após o início...
+Selecione a porta
+[removed]
+Instalação GPRS Easy Connect***
+Erro (GPRS Easy Connect)
+Após a conexão bem sucedida...
+Inicie este Navegador após conectar:
+[removed]
+[removed]
+[removed]
+Conexão automática.
+Não encontro o arquivo de configuração! Veja suas configurações!
+Remoção de dados estatísticos
+[removed]
+Erro na conexão
+A conexão está bloqueada pelo*** processo estar usando o recurso.
+A conexão foi interrompida devido ao tempo limite da discagem. Por favor reinicie seu celular.
+Talvez você não tenha trocado no seu celular, você trocou?
+Conexão bem sucedida!
+Conexão bem sucedida. Seu endereço IP local: *** Seu endereço IP remoto: *** Servidor DNS primário: *** Servidor DNS secundário: ***
+Conexão interrompida. Sem resposta de rede!
+Total de dados baixados com "***"
+Todal de dados enviados com "***"
+[removed]
+Bytes baixados
+Bytes enviados
+[removed]
+[removed]
+A média de velocidade da sua atual conexão
+Duração da conexão ativa
+Duração de todas as conexões
+Velocidade do download atual
+Velocidade do atual envio
+Conexão interrompida. A rede GPRS está sobrecarregada.
+Conexão interrompida devido á erro de configuração. (Provavelmente você selecionou a porta errada,\ou não tem permissão!)
+Conexão interrompida pelo usuário. Bateria descarregada. Falha no cabo.
+Conexão interrompida.
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+Diagrama
+[removed]
+[removed]
+Selecione sua língua!
+[removed]
+Re-conectar
+[removed]
+[removed]
+Iconificar o GPRS Easy Connect
+[removed]
+Escolha seu provedor!
+[removed]
+Usuário:
+Senha:
+Leia a informação importante! (Em "Outros" no menu.)
+Não encontrei o arquivo de configuração! Veja suas configurações!
+Você não esta autorizado a usar o pppd! Como usuário root altere o "setuid bit" dele ou faça-o executável pelos usuários!
+Feito por
+Faltando parâmetos de instalação!
+Nenhum celular selecionado!!
+Nenhuma porta selecionada!
+Língua não suportada!
+Nenhum provedor selecionado!
+Selecione o tipo de seu celular
+Parâmetros obrigatórios
+Parâmetros opcionais
+Tempo de intervalo de visualização da conexão (ms)
+DNS dinâmico habilitado?
+Parâmetros raros em uso
+[removed]
+Configuração do CID do provedor
+Outro
+[removed]
+Inicio dos dados salvos
+[removed]
+[removed]
+Pergunte ao seu provedor!
+Histórico
+Desabilite os sinais sonoros
+[removed]
+[removed]
+Ocorreram muitas reconexões! Seria melhor você reiniciar seu celular.
+[removed]
+Quantas tentativas de reconectar?
+Desabilita comandos CGQ.
+Última chance de configuração caso o processo de conexão falhe. Algumas distribuições necessitam disto (ex.: RedHat).
+Alguns provedores necessitam deste parâmetro especial. Você pode questionar isso junto ao seu provedor!
+Geralmente você deve preencher isto. São parâmetros do seu provedor Você pode questionar isso junto ao seu provedor!
+Pode geralmente ser um parâmetro de seu provedor ou um código individual. Pergunte ao seu provedor!
+Se você quiser usar DNS estático.
+[removed]
+Em alguns casos isto oferece uma conexão mais estável.
+Após uma conexão bem sucedida o navegador selecionado irá iniciar automaticamente. Se ele não estiver em seu computador então o GPRS Easy Connect será fechado!
+[removed]
+[removed]
+Você pode passar outro número para a chamada.
+Alguns provedores precisam de seus próprios números de chamada. Pergunte ao seu provedor.
+Se você não encontrar seu celular na lista, tente selecionar um aparelho similar. Provavelmente funcionará. Neste caso, por favor, nos informe!
+Dados transmitidos
+Dados transmitidos nos últimos 7 dias
+Monitoração do Limíte
+Data em que foi apagado
+Max. transmissão de dados mensal (GB)
+Max. transmissão de dados semanal (MB)
+Se esta opção estiver ativa, então o programa apagará automaticamente o contador de transmissão do dia selecionado. (Se a quantidade de dados tiver alcançado 90% dos limites, então o programa lembrará você!)
+Se o limite semanal estiver definido então o programa lembrará você quando a quantidade de dados transmitidos alcançar o valor definido!
+Você usou mais de 90% do limite mensal!
+Você usou mais de 90% do limite semanal!
+[removed]
+Limpar a transmissão mensal
+Limpar a transmissão semanal
+[removed]
+Limpar o contador de tempo
+[removed]
+[removed]
+[removed]
+Desabilita a auto autenticação
+[removed]
+Não requer que o provedor se autentique. Esta opção requer privilégio de super usuário. (Geralmente é necessário quando usando o Debian.)
+Modo Debug ligado
+O arquivo ~./gprsec/conn.log será gerado no modo debug. Se sua conexão não funcionar, então envie o arquivo para nosso "Bugreport"!
+Liga a compressão BCD
+Pede ao provedor que envie os pacotes comprimidos usando o tipo BSD-Compress e aceita comprimir os pacotes enviados ao provedor. Esta é uma função de compressão real de dados transmitidos! CUIDADO! SE VOCÊ USAR ESTA OPÇÃO, SUA CONEXÃO SEMPTE ENVIARÁ E RECEBERÁ DADOS DE/PARA O SERVIDOR MESMO QUE NÃO HAJA DADOS VÁLIDOS. (Isto é útil caso você queira baixar ou enviar um arquivo grande. Não se esqueça de seus limites caso esteja usando esta opção! Então você pode desligar esta opção após o recebimente/envio do dado! Note: Enquanto esta opção estiver ligada o arquivo conn.log crescerá continuamente.)
+O APN (Access Point Name) do provedor
+Se o programa conhecer o APN do provedor selecionado, então ele mostrará na próxima célula, caso contrário, então o usuário terá de colocar o nome. Conexões CDMA não necessitam de APN.
+O celular ainda não foi testado!
+Não encontrada a  porta selecionada!
+Procurar a nova versão!
+[removed]
+[removed]
+Procurando...
+Impossível conectar ao servidor!
+Não há nova versão!
+Resolvendo servidor de nomes...
+Não encontrado o servidor de nomes!
+Sucesso na conexão ao easyconnect.linuxuser.hu.
+Requisição HTTP enviada, aguardando resposta...
+O download esta em progresso... Total: *** KB
+O programa foi baixado. O nome do programa é: ***
+Velocidade da conexão
+Desabilita visualização da transmissão.
+Se esta opção estiver ativa, então o programa não olhará as transmissões de dados! (Isto é útil caso você tenha um HD muito lento!)
+Parece que você se conectou com um celular ainda não testado! Se você quiser ser nosso líder de testes deste celular, preecha este formulário!:
+Seu nome?
+Seu endereço de email?
+Sua distribuição (com o número da versão)?
+Outros dados?
+Obrigado, mas não me perturbe mais com isso!
+[removed]
+Você não preencheu seu nome!
+Você não preencheu seu email!
+Você não preencheu sua distribuição!
+Ajuda a procurar a porta
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+Se esta opção estiver ativa, então o algorítmo de procura de portas mostrará todas as portas de conexão! (De outra forma, apenas as 8 primeiras portas encontradas)
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+Existe um processo congelado do pppd! Posso tentar matar este processo?
+Doações ao time do GPRS Easy Connect!
+Se você gostou deste programa e gostaria de nos ajudar, por favor doe a nós.
+O que gostariamos conseguir:
+Nossos padrinhos:
+Sim, Eu ofereço a(s) seguinte(s) coisa(s):
+[removed]
+Enviar a intenão em doar!
+Você não nos enviou todos os dados necessários!
+Impossível gravar no servidor de dados. Por favor, tente novamente.
+Se você selecionou um ou mais itens da lista. e preencheu com seu nome e email, então nós contataremos você pelo email após o envio das informações!  Por favor, seja sério em sua ajuda!
+Não existe o arquivo "/etc/ppp/options"! O super usuário deve criá-lo. (O arquivo pode ser vazio.)
+[removed]
+[removed]
+[removed]
+[removed]
+Cor normal
+Cor de fundo
+Tema selecionado
+ Ou cheque a configuração de velocidade do seu celular! Algumas velocidades via cabo de dados é de 9600 b/s, tente esta velocidade agora. (Você pode encontrar como aumentar a velocidade em nosso site no menu Knowledge.)
+O processo de conexão detectou um erro: "***"
+Cuidado! Não mude a rota padrão, ela ainda é "***"!
+Obtendo conexão...
+A conexão esta feita... *** %
+O GPRS Easy Connect está desligado agora
+Status
+Estatísticas
+O servidor não deu um IP remoto válido. Geralmente isto ocorre, porque o usuário ou senha estão incorretos. Você pode requisitar os dados junto ao provedor.
+Muito importante!: Se você utilizar um tema muito pesado o GPRS Easy Connect irá usar mais recursos do sistema! Alguns temas disponíveis não são perfeitos, então você poderá ver mensagens de erro do GTK no terminal (se você estiver rodando o programa a partir do mesmo), o que não significa que o programa não esta funcionando.
+Alguns IP(s) de DNS foram encontrados no arquivo /etc/resolv.conf:  *** ***  Você pode sobrescrevê-los pelos DNS(s) conhecidos pelo GPRSEC, qua são:  *** ***  Para sobrescrever clique "Sim", se você deseja manter os IP(s) atuais clique "Não"! (O arquivo será sobrescrito agora!)
+Impossível encontrar IP(s) de DNS no arquivo /etc/resolv.conf. Você somente pode usar DNS dinâmico.
+Informação
+[recommended]
+Os endereços de DNS não são variáveis por usuário, o provável DNS estático esta sendo lido do /etc/resolv.conf. O DNS dinâmico será obtido pelo provedor após a conexão e o programa os usará.
+ Se a lista de APN ou os scripts de conexão forem atualizados então este arquivo será copiado para o diretório home do usuário, de onde o GPRSEC irá ler e trabalhar com ele.
+Não há DNS conhecido para este provedor e também não há um DNS utilizável no arquivo /etc/resolv.conf.
+Você configurou um DNS estático antes. Agora ele será alterado para dinâmico, porque o DNS anterior não é o mesmo que o do provedor. Se você quiser usar o DNS estático para o provedor escolhido, você precisa selecionar DNS estático novamente!
+Conectado com um celular não testado!
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+[removed]
+Fonte selecionada
+Cor selecionada
+Apagada a transmissão de dados mensal
+Pegando informação do servidor...
+ O GPRS Easy Connect é o único programa que pode ajudá-lo a gerar uma conexão internet GPRS do jeito mais facil. Este programa suporta a maioria dos celulares e provedores do mundo. Este programa é livre e esta sob a licença GNU GPL.  Divirta-se com ele!  Peter Simon (simon.peter@gprsec.hu)  Gabor Pinter (pinter.gabor@gprsec.hu  Andrea Bravetti (brand77@gmail.com)  www.gprsec.hu
+

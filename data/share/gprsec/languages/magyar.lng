@@ -1,0 +1,54 @@
+#
+# Script Generator 0.7.1
+# Hungarian Language File
+#
+# 2003.07.19.
+#
+
+Script Generator
+Verzió 0.7.1
+A program feladata a GPRS Easy Connect által támogatott készülékek GPRS és CDMA internet alapú kapcsolódáshoz szükséges fájlok elkészítése.
+(A programból bármikor a q vagy Q gombok valamelyikének lenyomásával tudsz kilépni.)
+[1] = GPRS vagy [2] = CDMA rendszerû készülékekhez kívánsz szkriptet készíteni?
+A következõ lépésben a program felsorolja a támogatott készülékeket.
+Keresd ki azt amelyiket használni akarsz és jegyezd meg a sorszámát.
+(A *-al megjelölt készülékek még nem voltak tesztelve.)
+Támogatott készülékek listájának megtekintéséhez nyomj le egy gombot.
+A kiválasztott készülék sorszáma:
+Add meg a csatlakozási felületet! (COM1 = /dev/ttyS0, COM2 = /dev/ttyS1, IrDA = /dev/ircomm0)
+Kapcsolat maximális sebessége (COM esetén 115200, míg IrDA esetén 57600 a javasolt):
+Szolgáltató APN-je:
+Csatlakozáshoz szükséges felhasználónév (ne adj meg semmit ha nem szükséges):
+Csatlakozáshoz szükséges jelszó:
+A kapcsolat indításához gépeld be: pppd file 
+ vagy /usr/sbin/pppd file 
+Nem adtál meg minden adatot!
+Hibás sorszám!
+Hiba: nem található a(z) 
+ fájl!
+Chat szkript a(z) 
+ készülékhez
+Készült a Script Generator programmal, melyet Pintér Gábor <pinter.gabor@gprsec.hu> készített a GPRS Easy Connect programhoz.
+A Script Generator és az általa készített fájlok a GNU General Public License jogi feltételeinek megfelelõen használhatók.
+Kapcsolat megszakítása...
+Kapcsolat megszakadt.
+pppd opciós fájl a(z) 
+ készülékhez
+Hibakeresõ mód
+Eszköz, amin keresztül a készülék kapcsolódik a számítógéphez
+Sebesség
+A kiszolgálótól érkezõ összes vezérlõkarakter feldolgozása
+Tömörítések kikapcsolása mindkét irányban
+Nem választ le a vezérlõ terminálról
+Kiszolgálótól kapott DNS használata
+Kapcsolódás azonosítás nélkül
+Kapcsolódáshoz szükséges felhasználónév/jelszó
+Egyéb opciók
+Kapcsolódást végrehajtó szkript
+Lekapcsolódást végrehajtó szkript
+Jelenleg támogatott készülékek:
+A lista további részének megtekintéséhez nyomj le egy gombot...
+
+#
+# END
+#
