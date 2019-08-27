@@ -8,3 +8,6 @@ This program is available under the GNU GPL license.
 
 For Author See the AUTHORS file.
 
+___________
+
+Project was running in 2004-2007
