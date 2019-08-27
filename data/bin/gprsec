@@ -1,0 +1,5337 @@
+#!/usr/bin/perl
+
+#
+# GPRS Easy Connect V3.0.1
+#
+# GUI connecting and configurator program for GPRS, EDGE, UMTS 
+# internet access for Linux distributions.
+# Software made by:
+# Peter Simon (main program),
+# Gabor Pinter (connecting scripts, installer, SG, website, database),
+# Andrea Bravetti (patches, algorythms, relative GTK widgets)
+#
+# Before you use it, read COPYING file sure enough!
+#
+# Peter Simon <simon.peter@gprsec.hu>
+# Gabor Pinter <pinter.gabor@gprsec.hu>
+# Andrea Bravetti <brand77@gmail.com>
+#
+# http://gprsec.hu
+#
+#
+
+# version number
+$VERSION = "3.0.1";
+
+# Gtk uses unicode strings; thus we require perl>=5.8.x, which is unicode internally.
+$REQUIRED_PERL_VERSION = 5.008;
+$REQUIRED_GTK2_VERSION = '2.2.1';
+$REQUIRED_GLIB_PERL_VERSION = '1.05';
+$REQUIRED_GTK2_PERL_VERSION = '1.05';
+$REQUIRED_PPPD_VERSION = '2.4.1'; # that's wrong, 2.4.1 only in case we use linkname...
+
+require $REQUIRED_PERL_VERSION;
+
+use POSIX "uname";
+($sysname, $nodename, $release, $version, $machine ) = uname;
+#$sysname = $^O;
+#aix,AmigaOS,beos,cygwin,dec_osf,dos,freebsd,irix,linux,MacOS,MSDOS
+#MSWin32,netbsd,NetWare,openbsd,os2,qnx,RISCOS,solaris,sunos,uwin,VMS,vos...
+
+os_check();
+load_Glib();
+load_Gtk2();
+
+$let_to_kill=1; # pppd kill is not enabled, see below!
+$currency_sign=chr(164);
+$watch_conn_modifier=980;
+$home=$ENV{HOME};
+
+$mainargv= shift @ARGV;
+
+if ($mainargv ne "-nosplash") {
+	splash();
+}
+
+app_init ();
+
+sub app_init {
+	#my $splash_win = splash();
+	if ($mainargv ne "-nosplash") {
+		$splash_win->show_all();
+	}
+	slpash_text("Loading Encode module...");
+	use Encode;
+	slpash_text("Loading Gtk2::TrayIcon module...");
+	use Gtk2::TrayIcon;
+	slpash_text("Loading Gnome2 module...");
+	use Gnome2;
+	slpash_text("Loading Gnome2::Canvas module...");
+	use Gnome2::Canvas;
+	slpash_text("Loading Socket module...");
+	use Socket;
+	slpash_text("Loading Getopt::Long module...");
+	use Getopt::Long;
+	slpash_text("Loading POSIX module...");
+
+	$icon= Gtk2::TrayIcon->new("EC");
+	$icon_label= Gtk2::Label->new("EC");
+	$icon->add($icon_label);
+	$icon->show_all();
+
+	# user's home dir
+	users_home ();
+	
+	#redirect of STDERR to ~/.gprsec/stderr
+	if (-e "$home/.gprsec/stderr") {
+		`rm -f "$home/.gprsec/stderr"`;
+	}
+	
+	
+	open(STDERR, ">$home/.gprsec/stderr") || die "Can't redirect STDERR";
+
+	#netstat's syntax
+	get_netstat_syntax();
+	
+	# read of possibility themes
+	slpash_text("Detecting available themes...");
+	load_themes ();
+
+	#read of configuration
+	slpash_text("Reading configuration...");
+	read_conf ();
+
+	# read of language settings
+	slpash_text("Loading text...");
+	lang_reader ();
+
+	# read/set of the stocks
+	slpash_text("Definiating stock images...");
+	def_stock ();
+
+	slpash_text("Reading phone's setup...");
+	telcsibeolv ();
+
+	slpash_text("Reading provider's data...");
+	apn_definition();
+
+	slpash_text("Detecting available languages...");
+	language_read();
+
+	slpash_text("Detecting comunication ports...");
+	port_scan();
+
+	slpash_text("Starting main window...");
+	mainwindow();
+
+	while (Gtk2->events_pending) {
+		Gtk2->main_iteration;
+	}
+} # end of init
+
+sub check_set {
+	if (!$phonetype) {
+		warning_window (text_linker($cl[5]));
+		$mainwin_discon_butt->set_sensitive(0);
+		$mainwin_connect_butt->set_sensitive(0);
+	}
+}
+
+sub lang_reader {
+# reading languages
+# default is english
+# algorhythm overwrites english texts to translated texts
+	undef $clx;
+	undef @temp_cl;
+	$temp_cl[0]=" ";
+	open (FILE, "<$gprs_shared_path/gprsec/languages/english");
+	binmode FILE;
+	while ($red_line=<FILE>) {
+		chomp $red_line;
+		$red_line=~s /\\n/\n/g;
+		binmode $red_line;
+		$red_line=decode_utf8($red_line);
+		push (@temp_cl, $red_line);
+	}
+
+	$cl[0]=" ";
+	open (FILE, "<$gprs_shared_path/gprsec/languages/$sel_lang");
+	binmode FILE;
+	while ($red_line=<FILE>) {
+		chomp $red_line;
+		$red_line=~s /\\n/\n/g;
+		binmode $red_line;
+		$red_line=decode_utf8($red_line);
+		push (@cl, $red_line);
+	}
+	#overwite english
+	$tempsl_len=@temp_cl;
+	for ($clx=0; $clx<=$tempsl_len; $clx++) {
+		if (!$cl[$clx] && $temp_cl[$clx]) {
+			$cl[$clx]=$temp_cl[$clx];
+		}
+	}
+}
+
+sub text_linker {
+	# subrutin of printing texts
+	undef $kirak;
+	undef $po;
+	@l_temp=split /\*\*\*/, $_[0];
+	foreach (@l_temp) {
+		$po++;
+		$kirak.="$_$_[$po]";
+	}
+	return $kirak;
+}
+
+sub users_home {
+	# user
+	$who_r=`whoami`;
+	chomp $who_r;
+	# user's home dir
+	$global_home=$ENV{"HOME"};
+	if (!-e "$global_home/.gprsec") {
+		`mkdir $global_home/.gprsec`;
+	}
+}
+
+sub read_conf {
+	# deleting previously error file
+	if (-e "$ENV{HOME}/.gprsec/error") {
+		`rm $ENV{HOME}/.gprsec/error`;
+	}
+	# read previous (old) configs
+	open (FILE, "<$global_home/.gprsec/EasyConn.config");
+	while ($red_line=<FILE>) {
+		$line.=$red_line;
+	}
+	close FILE;
+	@spl=split /\:/, $line;
+	
+	#change (if needed) to the new config architecture
+	@spl2=split /\n/, $line;
+	$tempspl2=@spl2;
+	
+	if ($tempspl2<40) {
+			foreach ($phonetype,$sel_port,$co_pan,$brow,$br_on,$autocsat,$sel_lang,$cw_ic,$sel_szolg,$user,$passw,$reconn_on,$time_interval,$reg_time,$din_eng,$cid,$dns1,$dns2,$no_beep,$bg_rec,$reconn_db,$no_cgq,$other_numb,$havit_v,$monthlylimit_v,$weeklylimit_v,$mounth,$no_auth,$debug,$bsd_comp,$connspeed,$no_dev,$no_tel,$def_apn,$compact,$newly,$theme,$htmlcolor,$fg_color) {
+		undef $_;
+		}
+	new_config_save();
+	}
+	
+	if ($tempspl>1) {
+		$old_bad=1;
+	}
+
+	if (!$old_bad) {
+		# read previous (new) configs
+		undef @spl;
+		undef @spl_comment;
+		open (FILE, "<$global_home/.gprsec/EasyConn.config");
+			while ($red_line=<FILE>) {
+				@spl_temp=split /\#/, "$red_line";
+				push (@spl, $spl_temp[0]);
+				push (@spl_comment, "#".$spl_temp[1]);
+			}
+		close FILE;
+		undef $old_bad;
+	}
+	
+
+	$phonetype=$spl[0];
+	($manufacturer, $phone_type)=split / /, $phonetype,2;
+	$sel_port=$spl[1];
+	if ($sel_port=~ /My\ Port/) {
+		$eff_port=$sel_port;
+		$eff_port=~ s/\((.+)\)/$1/e;
+		$eff_port=$1;
+		$ports{$sel_port}=$eff_port;
+	}
+	$co_pan=$spl[2];
+	$brow=$spl[3];
+	$br_on=$spl[4];
+	$autocsat=$spl[5];
+	$sel_lang=$spl[6];
+	$cw_ic=$spl[7];
+	$sel_szolg=$spl[8];
+	$user=$spl[9];
+	$passw=$spl[10];
+	$reconn_on=$spl[11];
+	$time_interval=$spl[12];
+	if ($time_interval<200) {
+		$time_interval=200;
+	}
+	$reg_time=$spl[13];
+	$din_eng=$spl[14];
+	$cid=$spl[15];
+	$dns1=$spl[16];
+	$dns2=$spl[17];
+	$no_beep=$spl[18];
+	$bg_rec=$spl[19];
+	$reconn_db=$spl[20];
+	$no_cgq=$spl[21];
+	$other_numb=$spl[22];
+	$havit_v=$spl[23];
+	$monthlylimit_v=$spl[24];
+	$weeklylimit_v=$spl[25];
+	$del_mounth=$spl[26];
+	
+	($mp, $perc, $ora, $nap, $mounth, $ev)=localtime();
+	$mounth++;
+	
+	if (!$del_mounth) {
+		$del_mounth=$mounth;
+	}
+	
+	$no_auth=$spl[27];
+	$debug=$spl[28];
+	$bsd_comp=$spl[29];
+	# continued below
+
+	$def_language=$ENV{LANG};
+	$lang{cs_CZ}="cesky";
+	$lang{de_DE}="deutsch";
+	$lang{de_AT}="deutsch";
+	$lang{fi_FI}="suomi";
+	$lang{fr_FR}="francais";
+	$lang{hu_HU}="magyar";
+	$lang{it_IT}="italiano";
+	$lang{es_ES}="espanol";
+	$lang{tr_TR}="turkce";
+	$lang{sk_SK}="slovensky";
+	$lang{pt_BR}="brazilian";
+	$lang{nn_NO}="norsk";
+	$lang{pl_PL}="polish";
+	
+	# set default language
+	if (!$sel_lang) {
+		foreach $keys (keys %lang) {
+			if ($keys eq $def_language) {
+				$sel_lang=$lang{$def_language};
+			}
+		}
+	}
+
+	if (!$sel_lang) { # if user's language is not translated then english will be default
+		$sel_lang="english";
+	}
+
+	if ($reconn_db<3) {
+		$reconn_db=3;
+	}
+	$connspeed=$spl[30];
+	$no_dev=$spl[31];
+	$no_tel=$spl[32];
+	$def_apn=$spl[33];
+	$compact=$spl[34];
+	$newly=$spl[35];
+	$apnid=$spl[36];
+	$theme=$spl[37];
+		$old_theme=$theme;
+	$htmlcolor=$spl[38];
+	$fg_color=$spl[39];
+	$selected_font=lc $spl[40];
+	$start_time=$spl[41];
+	$m_expert=$spl[42];
+	chomp ($m_expert);
+
+	$htmlcolor=~ tr/\+/\#/;
+	$fg_color=~ tr/\+/\#/;
+
+	if (!$selected_font) {
+		#$selected_font="sans 12";
+	}
+	
+	#default theme
+	if (!$theme && (-e $theme_path."/H2O-gtk2-Saphire/gtk-2.0/gtkrc" || -e $theme_path."/H2O-gtk2-Saphire/gtk/gtkrc")) {
+		$theme="H2O-gtk2-Saphire";
+	}
+
+	undef @filelines;
+	undef $st_found;
+	$gtkthemepath=get_gtk2_theme_path($theme_path."/".$theme,"load_themes");
+	open (FILE, "<$gtkthemepath/gtkrc");
+	while ($red_line=<FILE>) {
+		chomp $red_line;
+		push (@filelines, $red_line);
+	}
+	# detecting default bg from hex
+	foreach $red_line (@filelines) {
+		if ($red_line eq "style\ \"default\"") {
+			$st_found=1;
+		}
+		if ($red_line =~ /base\[NORMAL\]/ && $st_found) {
+			$red_line =~ s/\"(\#\S+)\"/$1/e;
+			$default_bg=$1;
+			if ($default_bg) {
+			goto fgch;}
+		}
+	}
+	# detecting default bg from dec
+	undef $st_found;
+	foreach $red_line (@filelines) {
+		if ($red_line eq "style\ \"default\"") {
+			$st_found=1;
+		}
+		if ($red_line =~ /base\[NORMAL\]/ && $st_found) {
+			$red_line =~ s/\"(\#\S+)\"/$1/e;
+			$default_bg=$1;
+			$red_line =~ s/\{(.+)\}/$1/e;
+			$default_bg=$1;
+			$default_bg=~ tr/ //d;
+			@bg_color_parts=split /\,/, $default_bg;
+			if (@bg_color_parts) {
+			$default_bg="#".color_dec_hex(@bg_color_parts);
+			last}
+		}
+	}
+	fgch:
+	# detecting default fg from hex
+	undef $st_found;
+	foreach $red_line (@filelines) {
+		if ($red_line eq "style\ \"default\"") {
+			$st_found=1;
+		}
+		if ($red_line =~ /text\[NORMAL\]/ && $st_found) {
+			$red_line =~ s/\"(\#\S+)\"/$1/e;
+			$default_fg=$1;
+			
+			if ($default_fg) {
+			goto nedcol;}
+		}
+	}
+	# detecting default fg from dec
+	undef $st_found;
+	foreach $red_line (@filelines) {
+		if ($red_line eq "style\ \"default\"") {
+			$st_found=1;
+		}
+		if ($red_line =~ /text\[NORMAL\]/ && $st_found) {
+			$red_line =~ s/\{(.+)\}/$1/e;
+			$default_fg=$1;
+			$default_fg=~ tr/ //d;
+			@fg_color_parts=split /\,/, $default_fg;
+			if (@fg_color_parts) {
+			$default_fg="#".color_dec_hex(@fg_color_parts);
+			last}
+		}
+	}
+	nedcol:
+	
+	if ($old_bad) {
+		new_config_save();
+		# read previous (new) configs
+		undef @spl;
+		undef @spl_comment;
+		open (FILE, "<$global_home/.gprsec/EasyConn.config");
+			while ($red_line=<FILE>) {
+				@spl_temp=split /\#/, "$red_line";
+				push (@spl, $spl_temp[0]);
+				push (@spl_comment, "#".$spl_temp[1]);
+			}
+		close FILE;
+		undef $old_bad;
+	}
+	
+	# trying to wake up the earlier selected port
+	$try_port=$sel_port;
+	$try_port=~ s/\((\S+)\)/$1/e;
+	$try_port=$1;
+	`$try_port 2>/dev/null`;
+
+} # end of the reading setting sub
+
+sub telcsibeolv {
+	undef %teltype;
+	# read phone's script from the $gprs_shared_path/gprsec/tools dir
+	# or from the updated script
+	
+	SCRIPT_version();
+	
+	if ($orig_ver_SCRIPT < $upg_ver_SCRIPT) { # the upgrade file is newer, let's use it!
+		$telcsik_fajl=`cat $home/.gprsec/upgrade/gprs-chat-scripts`;
+	} else {
+		$telcsik_fajl=`cat $gprs_shared_path/gprsec/tools/gprs-chat-scripts`; # the original sript file is newer
+	}
+	
+	@telcsik3=split /\[/, $telcsik_fajl;
+	shift (@telcsik3);
+	foreach (@telcsik3) {
+		$_=~tr /\]//d;
+		@temptel = split /\n/, $_; 
+		$lentemptel=@temptel;
+		@id_tel=split /\|/, $temptel[0];
+		$phone_id=$id_tel[0];
+		$temptel[0]=$id_tel[1];
+		
+		if (!$temptel[0]) {
+			$temptel[0]=$phone_id;
+			undef $phone_id;
+		} else {
+			$phoneids{$temptel[0]}=$phone_id;
+		}
+	
+		$temptel2=$temptel[0];
+		$temptel2=~tr /\*//d;
+		$telcsikepek{$temptel2}=$temptel[1];
+		for ($sx=2; $sx<=$lentemptel; $sx++) {
+			if ($debug) {
+				$teltype{$temptel[0]}.="SAY '\\nC#".$sx."'\n".$temptel[$sx]."\n\n"; # when debug mode is on
+			} else {
+				$teltype{$temptel[0]}.=$temptel[$sx]."\n";
+			}
+		}
+	}
+}
+
+sub apn_definition {
+	# definition of the APNs
+	APN_version();
+	
+	if ($orig_ver_APN < $upg_ver_APN) { # the APN upgrade file is newer, let's use it!
+		$apn_path="$home/.gprsec/upgrade/apn";
+	} else {
+		$apn_path="$gprs_shared_path/gprsec/tools/apn"; # the original sript file is newer
+	}
+	
+	open (FILE, "<$apn_path");
+	while ($red_line=<FILE>) {
+		$elsochar=substr ($red_line, 0, 1);
+		if ($elsochar ne "#" && $elsochar ne " " && $elsochar && $elsochar ne "\n") {
+			@apn_tomb=split/\t/,$red_line;
+			foreach (@apn_tomb) {chomp $_}
+			if (!$apn_tomb[3]) {$apn_tomb[3]="???"}
+			if (!$apn_tomb[4]) {$apn_tomb[4]="???"}
+			$apn_tomb[3]=~s /\(\*\)/anything/;
+			$apn_tomb[4]=~s /\(\*\)/anything/;
+			$apn_tomb[3]=~s /\(\*{2}\)//;
+			$apn_tomb[4]=~s /\(\*{2}\)//;
+			$apn_tomb[3]=~s /\(\*{3}\)/text_linker($cl[87])/e;
+			$apn_tomb[4]=~s /\(\*{3}\)/text_linker($cl[87])/e;
+			$apn_tomb[3]=~s /\(\*{4}\)/text_linker($cl[87])/e;
+			$apn_tomb[4]=~s /\(\*{4}\)/text_linker($cl[87])/e;
+			$szolg_apn{$apn_tomb[1]}[0]=$apn_tomb[0]; #ID
+			$szolg_apn{$apn_tomb[1]}[2]=$apn_tomb[2]; #apn
+			$szolg_apn{$apn_tomb[1]}[3]=$apn_tomb[3]; #username
+			$szolg_apn{$apn_tomb[1]}[4]=$apn_tomb[4]; #password
+			$szolg_apn{$apn_tomb[1]}[5]=$apn_tomb[5]; #dns1
+			$szolg_apn{$apn_tomb[1]}[6]=$apn_tomb[6]; #dns2
+		}
+	}
+}
+
+sub language_read {
+	# reading of languages which are in the directory
+	@langs=`ls -A $gprs_shared_path/gprsec/languages/`;
+	
+	foreach (@langs) {
+		chomp $_;
+		if (!/_/ && !/.lng/ && !-d "$gprs_shared_path/gprsec/languages/$_") {
+			push (@van_lang, $_);
+			$x++;
+		}
+		
+	}
+}
+
+sub port_scan {
+# new port_scan
+# Andrea Bravetti <brand77@gmail.com>
+	undef %ports;
+	if ($eff_port) {
+		$ports{$sel_port}=$eff_port;
+	}
+	$m_findp="find /dev -type c -path";
+#	$m_redir="1>$home/.gprsec/device.lst 2>/dev/null";
+	$m_redir="2>/dev/null";
+	if ($m_expert > 0) { $m_limit="[0-9]*";}
+	else { $m_limit="[0-7]"; }
+	if ($sysname eq "Linux") {
+		port_add("COM", `$m_findp '*\/dev\/tts\/$m_limit' $m_redir;
+		$m_findp '*\/ttyS$m_limit' $m_redir`);
+		port_add("USB-COM", `$m_findp '*usb\/tts\/$m_limit' $m_redir;
+		$m_findp '*\/ttyUSB$m_limit' $m_redir`);
+		port_add("USB-ACM", `$m_findp '*\/acm\/$m_limit' $m_redir;
+		$m_findp '*\/ttyACM$m_limit' $m_redir`);
+		port_add("USB-Bluetooth", `$m_findp '*\/ttub\/$m_limit' $m_redir;
+		$m_findp '*\/ttyUB$m_limit' $m_redir`);
+
+		port_add("IrDa", `$m_findp '*\/ircomm$m_limit' $m_redir;
+		$m_findp '*\/ircomm\/$m_limit' $m_redir`);
+		port_add("Bluetooth", `$m_findp '*\/rfcomm$m_limit' $m_redir;
+		$m_findp '*\/rfcomm\/$m_limit' $m_redir`);
+		
+		port_add("NOKIA", `$m_findp '*\/dev\/ttyNC$m_limit' $m_redir;
+		$m_findp '*\/ttyNC$m_limit' $m_redir`);
+
+	}
+
+	sub port_add {
+		local($m_descr, @m_device) = @_;
+		$m_count=0;
+		chomp (@m_device);
+		foreach (reverse @m_device) {
+			$m_count=$m_count + 1;
+			if ($m_count > 9) { $m_filler=""; } else { $m_filler="0"; }
+			if ($m_expert) {
+				$m_newdescr=$_." (".$m_descr." ".$m_filler.$m_count.")";
+			} else {
+				$m_newdescr=$m_descr." ".$m_filler.$m_count." (".$_.")";
+			}
+			$ports{$m_newdescr}="$_";
+		}
+	} 
+
+	vanport();
+
+	sub vanport {
+	undef $vanegyezoport;
+		# checking "living" selected port
+		foreach $letezoportok (sort keys %ports) {
+			if ( $sel_port=~ /$ports{$letezoportok}/) {
+				$vanegyezoport=1;
+			}
+		}
+		if ($vanegyezoport!=1  && $sel_port) {
+			return ("error");
+		} else {return "ok"}
+	}
+}
+
+sub tested {
+	if ($phonetype=~/\*/) {
+		$nottested_phone_label->set_text(text_linker($cl[136]));# Phone hasn't tested yet!
+	} else {
+		$nottested_phone_label->set_text("");
+	}
+}
+
+sub browser_find {
+	#finding browsers
+	@browsers=qw (mozilla opera galeon konqueror netscape lynx links firefox amaya);
+	$def_path=$ENV{PATH};
+	@exec_path=split /\:/, $def_path;
+	push (@exec_path, "/usr/local/netscape");
+	foreach (@browsers) {
+		foreach $temp_path (@exec_path) {
+			if (-d $temp_path && !$browser_path{$_}) {
+				$browser_path{$_}=`find $temp_path -name $_ -type f -maxdepth 1 2>/dev/null`;
+				chomp ($browser_path{$_});
+			}
+		}
+	}
+
+	# if the user doesn't have enough authority for a browser, then that won't be visualized.
+	foreach $tempbr (keys %browser_path) {
+		if (!-x "$browser_path{$tempbr}") {
+			delete $browser_path{$tempbr};
+		}
+	}
+}
+
+sub mainwindow {
+	undef $leave;
+
+	$gtkthemepath=get_gtk2_theme_path("$theme_path"."/"."$theme","mainwindow");
+	if (!$fg_color && !$fg_color) {
+		Gtk2::Rc->parse_string(<<__);
+		include "$gtkthemepath/gtkrc"
+		style "default" {
+		font_name ="$selected_font"
+		  }
+		  widget "*" style "default"
+__
+	}
+
+	 if (!$htmlcolor && $fg_color){
+		Gtk2::Rc->parse_string(<<__);
+		include "$gtkthemepath/gtkrc"
+		style "default" {
+		font_name ="$selected_font"
+		fg[NORMAL] = "$fg_color" # foreground
+		}
+		widget "*" style "default"
+__
+	}
+	 if ($htmlcolor && !$fg_color){
+		Gtk2::Rc->parse_string(<<__);
+		include "$gtkthemepath/gtkrc"
+		style "default" {
+		font_name ="$selected_font"
+		text[NORMAL] = "$htmlcolor" # button & text
+		}
+		widget "*" style "default"
+__
+	}
+	 if ($htmlcolor && $fg_color){
+		Gtk2::Rc->parse_string(<<__);
+		include "$gtkthemepath/gtkrc"
+		style "default" {
+		font_name ="$selected_font"
+		text[NORMAL] = "$htmlcolor" # entry
+		fg[NORMAL] = "$fg_color" # foreground
+		}
+		widget "*" style "default"
+__
+	}
+	
+	$new_height=115;
+# Gtk2::Window 'mainwin'
+	$mainwin = Gtk2::Window->new( -toplevel);
+	$mainwin->set_default_icon_from_file ("$gprs_shared_path/gprsec/images/icons/gprsec.png");
+	$mainwin->signal_connect('destroy', sub {voice_exit(); $leave=1;on_exit_butt_clicked()});
+	$mainwin->set_title("GPRS Easy Connect $VERSION");
+	$mainwin->set_resizable (0);
+	$mainwin->set_modal(0);
+	$mainwin->realize;
+
+# Gtk2::VBox 'vbox1'
+	$mw_vbox1 = Gtk2::VBox->new;
+	$mw_vbox1->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>10);
+
+# Gtk2::HBox 'hbox2', tux, the progress and the world...
+	$mw_hbox2 = Gtk2::HBox->new;
+	$mw_hbox2->set_property('homogeneous'=>0, 'spacing'=>0, 'border_width'=>0);
+
+# Gtk2::Pixmap 'mainwin_pixmap2'
+# Tux & Beastie... I don't remember from where to get, but hope the owner doesn't mind the using...
+	$mainwin_style = $mainwin->get_style()->bg( 'normal' );
+	($mainwin_pixmap,$mainwin_mask ) = Gtk2::Gdk::Pixmap->create_from_xpm( $mainwin->window, $mainwin_style ,"$gprs_shared_path/gprsec/images/t_and_b3.xpm");
+	$mainwin_pixmap2 = Gtk2::Image->new;
+	$mainwin_pixmap2->set_from_pixmap ($mainwin_pixmap, $mainwin_mask);
+	$mainwin_pixmap2->set_size_request(80, 64 );
+	$mainwin_pixmap2->set_alignment(0.5, 0.5 );
+
+# Gtk2::VBox 'vbox2'
+	$mw_vbox2 = Gtk2::VBox->new;
+	$mw_vbox2->set_property('homogeneous'=>0, 'spacing'=>0, 'border_width'=>30);
+
+# Gtk2::ProgressBar 'mainwin_progressbar1'
+	$mainwin_progressbar1 = Gtk2::ProgressBar->new;
+	$mainwin_progressbar1->set_orientation('left_to_right' );
+	$mainwin_progressbar1->set_size_request(264, 20 );
+
+	$mw_vbox2->pack_start ($mainwin_progressbar1, 0, 0, 0);
+
+# Gtk2::Pixmap 'mainwin_pixmap3'
+	($mainwin_pixmap_3,$mainwin_mask_3 ) =  Gtk2::Gdk::Pixmap->create_from_xpm($mainwin->window, $mainwin_style , "$gprs_shared_path/gprsec/images/w1.xpm" );
+	$mainwin_pixmap3 = Gtk2::Image->new;
+	$mainwin_pixmap3->set_from_pixmap ($mainwin_pixmap_3, $mainwin_mask_3);
+	$mainwin_pixmap3->set_alignment(0.5, 0.5 );
+
+	$mw_hbox2->pack_start ($mainwin_pixmap2, 0, 0, 0);
+	$mw_hbox2->pack_start ($mw_vbox2, 1, 1, 0);
+	$mw_hbox2->pack_start ($mainwin_pixmap3, 0, 0, 0);
+
+	$mainwin_notebook1 = new Gtk2::Notebook;
+	$mainwin_notebook1->can_focus(1);
+	$mainwin_notebook1->set_show_tabs(0);
+	$mainwin_notebook1->set_show_border(0);
+
+	$status_frame = Gtk2::Frame->new ();
+	$status_frame->set_size_request(264+8, 86+$new_height-10+8-95-15 );
+	$status_frame->set_shadow_type ('in');
+
+	$statistics_frame = Gtk2::Frame->new ();
+	$statistics_frame->set_size_request(394+4, 86+$new_height-10+10-20 );
+	$statistics_frame->set_shadow_type ('in');
+		
+	$graph_frame = Gtk2::Frame->new ();
+	$graph_frame->set_size_request(394+4-70, 86+$new_height-10+10-20 );
+	$graph_frame->set_shadow_type ('in');
+	
+# the 'Status' tab...
+	$mainwin_notebook1->append_page($status_frame, text_linker($cl[201]));
+# the 'Statistics' tab...
+	$mainwin_notebook1->append_page($statistics_frame, text_linker($cl[202]));
+# the 'Graph' tab...
+	$mainwin_notebook1->append_page($graph_frame, text_linker($cl[51]));
+
+	$mw_hbox3 = Gtk2::HBox->new;
+	$mw_hbox3->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>0);
+
+	$status_radiobutton = Gtk2::RadioButton->new(undef, text_linker($cl[201]));
+	$status_radiobutton->set_active(TRUE);
+	$status_radiobutton->signal_connect('pressed', sub {voice_click(); status_window("status")});
+
+	@mainwin_radio_group1=$status_radiobutton->get_group;
+
+	$statistics_radiobutton = Gtk2::RadioButton->new(@mainwin_radio_group1, text_linker($cl[202]));
+	$statistics_radiobutton->signal_connect('pressed', sub {voice_click(); status_window("statistics")});
+
+	$graph_radiobutton = Gtk2::RadioButton->new(@mainwin_radio_group1, text_linker($cl[51]));
+	$graph_radiobutton->signal_connect('pressed', sub {voice_click(); status_window("graph")});
+
+	$mw_hbox3->pack_start ($status_radiobutton, 0, 0, 0);
+	$mw_hbox3->pack_start ($statistics_radiobutton, 0, 0, 0);
+	$mw_hbox3->pack_start ($graph_radiobutton, 0, 0, 0);
+
+# Gtk2::HBox 'hbox1', connect and disconnect buttons
+	$mw_hbox1 = Gtk2::HBox->new;
+	$mw_hbox1->set_property('homogeneous'=>0, 'spacing'=>30, 'border_width'=>0);
+
+# Gtk2::Button 'mainwin_connect_butt'
+	gtk_button_images_on ($mainwin);
+	$mainwin_connect_butt = Gtk2::Button->new_from_stock('connect');
+	$mainwin_connect_butt->set_size_request(120, 32);
+	$mainwin_connect_butt->can_focus(1);
+	$mainwin_connect_butt->signal_connect('clicked', sub {voice_click(); connect_sub()});
+	#$mainwin_connect_butt = Gtk2::Button->new_from_stock('connect');
+
+# Gtk2::Button 'mainwin_discon_butt'
+	$mainwin_discon_butt = Gtk2::Button->new_from_stock('disconnect');
+	$mainwin_discon_butt->set_size_request(120, 32);
+	$mainwin_discon_butt->can_focus(1);
+	$mainwin_discon_butt->signal_connect('clicked', sub {voice_click(); disconnect()});
+	$mainwin_discon_butt->set_sensitive(0);
+
+	$mw_hbox1->pack_start ($mainwin_connect_butt, 0, 0, 0);
+	$mw_hbox1->pack_end ($mainwin_discon_butt, 0, 0, 0);
+
+	$mw_vbox3 = Gtk2::VBox->new;
+	$mw_vbox3->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>0);
+
+	$mainwin_entryA1 = Gtk2::Entry->new;
+	$mainwin_entryA1->can_focus(0 );
+	$mainwin_entryA1->set_text("$phonetype");
+	$mainwin_entryA1->set_visibility(1 );
+	$mainwin_entryA1->set_editable(0 );
+
+	$mainwin_entryA2 = Gtk2::Entry->new;
+	$mainwin_entryA2->can_focus(0 );
+	$mainwin_entryA2->set_text("$sel_szolg");
+	$mainwin_entryA2->set_visibility(1 );
+	$mainwin_entryA2->set_editable(0 );
+
+	$mainwin_entryA3 = Gtk2::Entry->new;
+	$mainwin_entryA3->can_focus(0 );
+	$mainwin_entryA3->set_text("$sel_port");
+	$mainwin_entryA3->set_visibility(1 );
+	$mainwin_entryA3->set_editable(0 );
+
+	$mw_vbox3->pack_start ($mainwin_entryA1, 0, 0, 0);
+	$mw_vbox3->pack_start ($mainwin_entryA2, 0, 0, 0);
+	$mw_vbox3->pack_start ($mainwin_entryA3, 0, 0, 0);
+
+	$mw_vbox4 = Gtk2::VBox->new;
+	$mw_vbox4->set_property('homogeneous'=>0, 'spacing'=>0, 'border_width'=>10);
+
+# the Gtk2::Pixmap 'pixmap4_phone'
+	$phonetype_p=$phonetype;
+	$phonetype_p=~ tr/\*//d;
+	$get_tel_kep=$telcsikepek{$phonetype_p};
+	if ($get_tel_kep) {
+		dbmopen (%KEPEK, "$gprs_shared_path/gprsec/images/phones2/kepek", 0444);
+		$kep_path=$KEPEK{"$get_tel_kep"};
+		open (FILE, ">$home/.gprsec/pic.xpm");
+		print FILE $kep_path;
+		close FILE;
+		dbmclose (%KEPEK);
+		$style = $mainwin->get_style()->bg( 'normal' );
+		($pixmap, $mask ) = Gtk2::Gdk::Pixmap->create_from_xpm( $mainwin->window, $style, "$home/.gprsec/pic.xpm");
+		$mainwin_pixmap4 = Gtk2::Image->new;
+		$mainwin_pixmap4->set_from_pixmap($pixmap, $mask );
+	}
+	if ($mainwin_pixmap4) {
+		$mw_vbox4->pack_start($mainwin_pixmap4, 0, 0, 0);
+	}
+
+	$mw_hbox4 = Gtk2::HBox->new;
+	$mw_hbox4->set_property('homogeneous'=>0, 'spacing'=>50, 'border_width'=>5);
+
+	$mw_hbox4->pack_start($mw_vbox3, 1, 1, 0);
+	$mw_hbox4->pack_end($mw_vbox4, 0, 0, 0);
+
+	$mw_hbox5 = Gtk2::HBox->new;
+	$mw_hbox5->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>0);
+
+# Gtk2::Button 'setup_butt'
+	$mainwin_setup_butt =  Gtk2::Button->new_from_stock ('gtk-preferences');#Setup GPRS Easy Connect
+	$mainwin_setup_butt->set_size_request(200, 32 );
+	$mainwin_setup_butt->can_focus(1 );
+	$mainwin_setup_butt->signal_connect('clicked', sub {voice_click(); setupwindow_sub()});
+
+# Gtk2::Button 'other_butt'
+	$mainwin_other_butt = Gtk2::Button->new_from_stock ('letter-portrait');
+	$mainwin_other_butt->set_size_request(90, 32 );
+	$mainwin_other_butt->can_focus(1 );
+	$mainwin_other_butt->signal_connect('clicked', sub {voice_click(); otherwindow()});
+
+# Gtk2::Button 'exit_butt'
+	$mainwin_exit_butt =  Gtk2::Button->new_from_stock ('gtk-quit');#(_(text_linker($cl[4]))); Exit
+	$mainwin_exit_butt->set_size_request(90, 32 );
+	$mainwin_exit_butt->can_focus(1 );
+	$mainwin_exit_butt->signal_connect('clicked', sub {voice_exit(); on_exit_butt_clicked()});
+
+	$mw_hbox5->pack_start($mainwin_setup_butt, 0, 0, 0);
+	$mw_hbox5->pack_start($mainwin_other_butt, 0, 0, 0);
+	$mw_hbox5->pack_end($mainwin_exit_butt, 0, 0, 0);
+
+	$hseparator1 = Gtk2::HSeparator->new;
+	$hseparator2 = Gtk2::HSeparator->new;
+	$hseparator3 = Gtk2::HSeparator->new;
+
+	$mw_vbox1->pack_start($mw_hbox2, 0, 0, 0);
+	$mw_vbox1->pack_start($mainwin_notebook1, 0, 0, 0);
+	$mw_vbox1->pack_start($mw_hbox3, 0, 0, 0);
+	$mw_vbox1->pack_start($hseparator1, 0, 0, 0);
+	$mw_vbox1->pack_start($mw_hbox1, 0, 0, 0);
+	$mw_vbox1->pack_start($hseparator2, 0, 0, 0);
+	$mw_vbox1->pack_start($mw_hbox4, 0, 0, 0);
+	$mw_vbox1->pack_start($hseparator3, 0, 0, 0);
+	$mw_vbox1->pack_start($mw_hbox5, 0, 0, 0);
+
+	$mainwin->add($mw_vbox1);
+
+# Construct a Gtk2Text 'text4'
+	$mainwin_entryA4 = Gtk2::TextView->new ();
+	$status_frame->add($mainwin_entryA4);
+	$text=text_linker($cl[200]);
+	$buffer_mainwin_entryA4 = $mainwin_entryA4->get_buffer;
+	$buffer_mainwin_entryA4->set_text($text);
+	$mainwin_entryA4->set_justification ('center');
+	$mainwin_entryA4->set_size_request(264+4, 86+$new_height-10+4-95-15 );
+	$mainwin_entryA4->can_focus(0 );
+	$mainwin_entryA4->set_editable(0 );
+	$mainwin_entryA4->set_left_margin (3);
+	
+	$statis_vbox = Gtk2::VBox->new;
+	$statistics_frame->add($statis_vbox);
+	$statis_vbox->realize;
+
+	if (!$default_bg) {$mycolor="white"} else {$mycolor=$default_bg}
+	
+	$statis_canvas = Gnome2::Canvas->new;
+	$statis_canvas->show;
+	$statis_vbox->add($statis_canvas);
+	$root = $statis_canvas->root;
+	$statis_box = Gnome2::Canvas::Item->new ($root, 'Gnome2::Canvas::Rect',
+			x1 => -169, y1 => -80,
+			x2 => 338, y2 => 160,
+			fill_color => $mycolor,
+	);
+	
+	show_statis_label ($statis_label[1], text_linker($cl[84]), 3, 0); #Begining of the data's save
+	show_statis_label ($statis_label[2], $start_time, 275, 1); #var
+	 if (-e "$home/.gprsec/osszb_le") {
+			$ob_l_v=`cat '$home/.gprsec/osszb_le'`;
+	}
+	
+	$var_and_pref=prefixum_from_byte($ob_l_v);
+	
+	show_statis_label ($statis_label[3], text_linker($cl[28], $who_r), 3, 15); #Total data downloaded with "***"
+	show_statis_label ($statis_label[4], $var_and_pref, 330, 16); #var
+	if (-e "$home/.gprsec/osszb_fel") {
+		$ob_f_v=`cat '$home/.gprsec/osszb_fel'`;
+	}
+
+	$var_and_pref=prefixum_from_byte($ob_f_v);
+
+#total data downloaded:
+	show_statis_label ($statis_label[5], text_linker($cl[29], $who_r), 3, 30);
+	show_statis_label ($statis_label[6], $var_and_pref, 330, 31);
+	$total_transmittion_all=$ob_l_v+$ob_f_v;
+	
+	$var_and_pref=prefixum_from_byte($total_transmittion_all);
+
+#Total data uploaded with "***"
+	show_statis_label ($statis_label[7], text_linker($cl[109]), 3, 45);
+	show_statis_label ($statis_label[8], $var_and_pref, 330, 46);
+	
+		if (-e "$home/.gprsec/ossz_ido") {
+			$kapcs_idok=`cat '$home/.gprsec/ossz_ido'`;
+		}
+		$time_o=int($kapcs_idok/3600);
+		$time_p=int(($kapcs_idok-($time_o*3600))/60);
+		$time_mp=$kapcs_idok-($time_o*3600)-($time_p*60);
+
+		if ((length $time_mp)==1) {$time_mp="0".$time_mp}
+		if ((length $time_p)==1) {$time_p="0".$time_p}
+		if ((length $time_o)==1) {$time_o="0".$time_o}
+		if ((length $time_o)==0) {$time_o="00".$time_o}
+
+#Duration of total connections
+	show_statis_label ($statis_label[17], text_linker($cl[37]), 3, 60);
+	show_statis_label ($statis_label[18], "$time_o:$time_p:$time_mp", 330, 61);
+		
+		$mainap=time;
+		$mainap=int($mainap/86400);	
+		dbmopen (%NAP, "$home/.gprsec/7d", 0666);
+		foreach $key (keys %NAP) {
+			if ($key<=$mainap-7) {
+				delete $NAP{$key};
+			}
+		}
+		%DAYS=%NAP;
+		dbmclose (%NAP);
+		undef $all7day;
+
+		foreach $key (keys %DAYS) {
+			$all7day+=$DAYS{$key};
+		}
+
+	$var_and_pref=prefixum_from_byte($all7day);
+	
+	show_statis_label ($statis_label[9], text_linker($cl[110]), 3, 75); #last 7 days
+	show_statis_label ($statis_label[10], $var_and_pref, 330, 76); #var
+	
+	# Construct a Gtk2HSeparator 'hseparator5'
+	$canvas_line=Gnome2::Canvas::Item->new ($root, 'Gnome2::Canvas::Line',
+			points => [3-135, 75-17, 230,  75-17],
+			fill_color => $default_fg);
+	$canvas_line->show;
+	
+	show_statis_label ($statis_label[19], text_linker($cl[36]), 3, 95); #Duration of active connection
+	show_statis_label ($statis_label[20], " ", 330, 96); #var
+
+	show_statis_label ($statis_label[11], text_linker($cl[31]), 200, 110); #Bytes downloaded
+	show_statis_label ($statis_label[12], " kB", 330, 111); #var
+	show_statis_label ($statis_label[13], text_linker($cl[32]), 3, 110); #Bytes uploaded
+	show_statis_label ($statis_label[14], " kB", 130, 111); #var
+
+	show_statis_label ($statis_label[15], text_linker($cl[35]), 3, 125); #The average speed of the active connection
+	show_statis_label ($statis_label[16], " kBs", 330, 126); #var
+
+	show_statis_label ($statis_label[21], text_linker($cl[38]), 3, 140); #Speed of current download
+	show_statis_label ($statis_label[22], " kBs", 330, 141); #var
+	show_statis_label ($statis_label[23], text_linker($cl[39]), 3, 155); #Speed of current upload
+	show_statis_label ($statis_label[24], " kBs", 330, 156); #var
+
+	#
+# 	#Construct a Gtk2Label 'sposored by'	
+# 	$mainwin_label14 = new Gtk2::Label("Sponsored by:"); # select language
+# 	$mainwin_label14->set_justify('left' );
+# 	$mainwin_label14->set_line_wrap(1 );
+# 	$mainwin_fixed1->put($mainwin_label14, 160,155+$new_height );
+# 	$mainwin_label14->show;
+# 	$mainwin_label14->set_size_request(150, 32);
+# 	$mainwin_label14->set_alignment(0.5, 0.5 );
+# 	# sponzor's logo
+# 	$mainwin_style = $mainwin->get_style()->bg( 'normal' );
+# 	($mainwin_pixmap,$mainwin_mask ) = Gtk2::Gdk::Pixmap->create_from_xpm( $mainwin->window, $mainwin_style ,"$gprs_shared_path/gprsec/images/vodalogo.xpm");
+# 	$mainwin_pixmap2 = Gtk2::Image->new;
+# 	$mainwin_pixmap2->set_from_pixmap ($mainwin_pixmap, $mainwin_mask);
+# 	$mainwin_fixed1->put($mainwin_pixmap2, 105, 182+$new_height);
+# 	$mainwin_pixmap2->show;
+# 	$mainwin_pixmap2->set_size_request(208, 65 );
+# 	$mainwin_pixmap2->set_alignment(0.5, 0.5 );
+	#$mainwin_pixmap2->signal_connect('clicked', sub {system 'kongueror "www.vodafone.hu"'});
+	#
+
+	$graph_canvas = Gnome2::Canvas->new;
+	$graph_canvas->show;
+	$graph_frame->add($graph_canvas);
+	$root1 = $graph_canvas->root;
+	$graph_box = Gnome2::Canvas::Item->new ($root1, 'Gnome2::Canvas::Rect',
+			x1 => -169, y1 => -80,
+			x2 => 338, y2 => 160,
+			fill_color => $mycolor,
+	);
+	
+	$x1=-100; $y1=-20;
+
+	# axies
+	$graph_x_line=Gnome2::Canvas::Item->new ($root1, 'Gnome2::Canvas::Line',
+			points => [$x1+0, $y1+140, $x1+300,  $y1+140],
+			fill_color => $default_fg
+	);
+	$graph_x_line->show;
+	$graph_y_line=Gnome2::Canvas::Item->new ($root1, 'Gnome2::Canvas::Line',
+			points => [$x1+300, $y1+140, $x1+300,  $y1+20],
+			fill_color => $default_fg
+	);
+	$graph_y_line->show;
+	
+	# y mini lines & dotted lines
+	for ($x=0; $x<=120; $x+=10) {
+		$x_mini=5;
+		if ($x/20==int($x/20)) {
+			$x_mini=10;
+				$graph_x_solid_lines[$x]=Gnome2::Canvas::Item->new ($root1, 'Gnome2::Canvas::Line',
+				points => [$x1, $y1+140-$x, $x1+300,  $y1+140-$x],
+				fill_color => $default_fg,
+				line_style=>'on-off-dash'
+		);
+		$graph_x_solid_lines[$x]->show;
+		}
+		$graph_x_lines[$x]=Gnome2::Canvas::Item->new ($root1, 'Gnome2::Canvas::Line',
+			points => [$x1+300-5, $y1+140-$x, $x1+300+$x_mini,  $y1+140-$x],
+			fill_color => $default_fg
+		);
+		$graph_x_lines[$x]->show;
+	}
+	
+	#x mini lines
+	for ($x=0; $x<=300; $x+=5) {
+		$y_mini=10;
+		if ($x/50==int($x/50)) {
+			$y_mini=15;
+			#$llll=$x/50;
+		}
+		$graph_y_lines[$x]=Gnome2::Canvas::Item->new ($root1, 'Gnome2::Canvas::Line',
+			points => [$x1+$x, $y1+145, $x1+$x,  $y1+145-$y_mini],
+			fill_color => $default_fg
+		);
+		$graph_y_lines[$x]->show;
+	}
+
+		open (FILE, "<$home/.gprsec/trans");
+		while ($red_line=<FILE>) {
+			chomp $red_line;
+			if ($red_line) {
+				$red_line=~ tr /\,/\./;
+				push (@slide_dm, $red_line);
+			}
+		}
+		$dm_l=@slide_dm;
+	
+	$def_y_nick=20;
+	foreach (@slide_dm) {
+		if ($slide_max<$_) {
+			$slide_max=$_;
+		}
+	}
+	if ($slide_max) {
+	$def_y_nick=(20*6)/$slide_max;
+	$yheihgt=120/$def_y_nick;
+	}
+	
+	undef $down_x_coord;
+	undef $y_point_last;
+	undef $x_point_last;
+	undef $x;
+	foreach $down_y_coord_points_key (@slide_dm) {
+			$y_point=$down_y_coord_points_key;
+			$y_point=~ tr/\,/\./;
+			$y_point*=$def_y_nick;
+			if (!$y_point_last) {$y_point_last=$y_point}
+			$down_x_coord_points[$x]=Gnome2::Canvas::Item->new ($root1, 'Gnome2::Canvas::Line',
+			points => [$x1+300-$x_point_last, $y1+145-$y_point_last, $x1+300-$down_x_coord,  $y1+145-$y_point],
+			fill_color => "red",
+			width_pixels=>2
+		);
+		$down_x_coord_points[$x]->show;
+		$x_point_last=$down_x_coord;
+		$y_point_last=$y_point;
+		$down_x_coord+=5;
+		$x++;
+	}
+		
+	$root1_canvas_text[1]= Gnome2::Canvas::Item->new ($root1, 'Gnome2::Canvas::Text',
+			x => -105,
+			y => -15,
+		 	fill_color => "$default_fg",
+			anchor => 'GTK_ANCHOR_NW',
+			text =>"$yheihgt kB/s");
+		
+	if ($mainargv ne "-nosplash") {
+		$splash_win->destroy();
+	}
+	if ($autocsat && $mainargv ne "-nosplash") {
+		connect_sub();
+	}
+
+	$mainwin->set_position('center' );
+	$mainwin->show_all;
+
+	# checking previous settings
+	check_set();
+	
+	main Gtk2;
+
+} # end of mainwindow declaration 
+
+sub status_window {
+	$wanted_win=shift @_;
+	
+	if ($wanted_win eq "status") {
+		$mainwin_notebook1->set_current_page (0);
+		$status_radiobutton->set_active(TRUE);
+		refresh_status();
+	}
+	if ($wanted_win eq "statistics") {
+		$mainwin_notebook1->set_current_page (1);
+		$statistics_radiobutton->set_active(TRUE);
+		refresh_statistics();
+	}
+	if ($wanted_win eq "graph") {
+		$mainwin_notebook1->set_current_page (2);
+		$graph_radiobutton->set_active(TRUE);
+		refresh_graph();
+	}
+}
+
+sub refresh_status {
+	$mainwin_entryA4->set_size_request(264+4, 86+$new_height-10+4-95-15 );
+	$status_frame->set_size_request(264+8, 86+$new_height-10+8-95-15 );
+	$mainwin_entryA4->show;
+}
+
+sub refresh_statistics {
+	$statistics_frame->set_size_request(394+4, 86+$new_height-10+10-20 );
+	$statis_vbox->show_all;
+}
+
+sub refresh_graph {
+	$graph_frame->set_size_request(394+4-70, 86+$new_height-10+10-20 );
+	$graph_frame->show;
+}
+
+sub on_exit_butt_clicked {
+	$leave=1;
+	stop_upgr();
+	disconnect();
+	kill 2,$$;
+	Gtk2->main_quit;
+}
+
+sub made_by_sub {
+	$mainwin_other_TextView1->destroy;
+	undef $mainwin_other_TextView1;
+	undef $mainwin_other_TextView1_text;
+	if (-e "$gprs_shared_path/doc/gprsec-$VERSION/AUTHORS")  {
+		$mainwin_made_by_file="$gprs_shared_path/doc/gprsec-$VERSION/AUTHORS";
+		open (FILE, "<$mainwin_made_by_file");
+		while ($mainwin_sor=<FILE>) {
+			$mainwin_other_TextView1_text.=$mainwin_sor;
+		}
+
+	} 
+	
+	$mainwin_other_TextView1 = Gtk2::TextView->new ();
+	$mainwin_other_TextView1->set_editable(0 );
+	$mainwin_other_TextView1->set_border_window_size ('right', 3);
+	$buffer = $mainwin_other_TextView1->get_buffer;
+	$buffer->set_text($mainwin_other_TextView1_text);
+	$mainwin_other_scrolledwindow1->add($mainwin_other_TextView1 );
+	$mainwin_other_TextView1->set_justification ('left');
+	$mainwin_other_TextView1->show;
+	$mainwin_other_TextView1->can_focus(1 );
+	$mainwin_other_TextView1->set_left_margin (3);
+}
+
+sub history_sub {
+	$mainwin_other_TextView1->destroy;
+	undef $mainwin_other_TextView1;
+	undef $mainwin_other_TextView1_text;
+	$mainwin_his_path="$gprs_shared_path/doc/gprsec-$VERSION/history";
+	if (-e $mainwin_his_path) {
+		open (FILE, "<$mainwin_his_path");
+		while ($mainwin_sor=<FILE>) {
+			$mainwin_other_TextView1_text.=$mainwin_sor;
+		}
+	}
+	
+	$mainwin_other_TextView1 = Gtk2::TextView->new ();
+	$mainwin_other_TextView1->set_editable(0 );
+	$mainwin_other_TextView1->set_border_window_size ('right', 3);
+	$buffer = $mainwin_other_TextView1->get_buffer;
+	$buffer->set_text($mainwin_other_TextView1_text);
+	$mainwin_other_scrolledwindow1->add($mainwin_other_TextView1 );
+	$mainwin_other_TextView1->set_justification ('left');
+	$mainwin_other_TextView1->show;
+	$mainwin_other_TextView1->can_focus(1 );
+	$mainwin_other_TextView1->set_left_margin (3);
+
+}
+
+sub info_sub {
+	$mainwin_other_TextView1->destroy;
+	undef $mainwin_other_TextView1;
+	undef $mainwin_other_TextView1_text;	
+
+	$mainwin_other_TextView1_text=text_linker($cl[224]);
+$mainwin_other_TextView1_text.="\n\nTranslators:\n
+Honza Mach
+Pasi Kuokkanen & Ronja Kuokkanen
+David Lacravate
+Jakub Kasprzycki
+Andreas Krause
+Jonathan Stevano
+Tomás Mateo
+Altan Demirkilic
+David Szedely
+Jose Carlos Medeiros
+Daniel Nylander
+Nikita Bukhvostov";
+	$mainwin_other_TextView1 = Gtk2::TextView->new ();
+	$mainwin_other_TextView1->set_editable(0 );
+	$mainwin_other_TextView1->set_border_window_size ('right', 3);
+	$buffer = $mainwin_other_TextView1->get_buffer;
+	$buffer->set_text($mainwin_other_TextView1_text);
+	$mainwin_other_scrolledwindow1->add($mainwin_other_TextView1 );
+	$mainwin_other_TextView1->set_justification ('center');
+	$mainwin_other_TextView1->show;
+	$mainwin_other_TextView1->can_focus(1 );
+	$mainwin_other_TextView1->set_left_margin (3);
+}
+
+sub otherwindow {
+	if ($mainwin_otherwin) {
+		$mainwin_otherwin->destroy;
+		undef $mainwin_otherwin;
+		goto ide2;
+	}
+	ide2: 
+	# Construct a Gtk2Window 'other
+	$mainwin_otherwin = new Gtk2::Window->new;;
+	$mainwin_otherwin->set_title("Others of GPRS Easy Connect $VERSION");
+	$mainwin_otherwin->set_position('center' );
+	$mainwin_otherwin->set_modal(0 );
+	$mainwin_otherwin->set_resizable (0);
+	$mainwin_otherwin->set_size_request(500, 470 );
+	$mainwin_otherwin->show();
+	$mainwin_otherwin->signal_connect('destroy', sub {undef $stopped;$mainwin->deiconify;  stop_upgr()});
+	#
+	# Construct a Gtk2Fixed 'fixed1'
+	$mainwin_other_fixed1 = Gtk2::Fixed->new;
+	$mainwin_otherwin->add($mainwin_other_fixed1);
+	$mainwin_other_fixed1->show;
+	$mainwin_other_fixed1->set_size_request(500, 470 );
+	#
+	# Construct a Gtk2Button 'madeby_butt'
+	#	
+	$mainwin_other_madeby_butt =  Gtk2::Button->new_from_stock ('people');
+	$mainwin_other_fixed1->put($mainwin_other_madeby_butt,24, 16 );
+	$mainwin_other_madeby_butt->show;
+	$mainwin_other_madeby_butt->set_size_request(130, 32 );
+	$mainwin_other_madeby_butt->can_focus(1 );
+	$mainwin_other_madeby_butt->signal_connect('clicked', sub {voice_click();made_by_sub()});
+	#
+	# Construct a Gtk2Button 'hist_butt'
+	#
+	$mainwin_other_hist_butt =  Gtk2::Button->new_from_stock('history');
+	$mainwin_other_fixed1->put($mainwin_other_hist_butt,170, 16 );
+	$mainwin_other_hist_butt->show;
+	$mainwin_other_hist_butt->set_size_request(130, 32 );
+	$mainwin_other_hist_butt->can_focus(1 );
+	$mainwin_other_hist_butt->signal_connect('clicked', sub {voice_click();history_sub()});
+	#
+	# Construct a Gtk2Button 'info_butt'
+	#    
+	$mainwin_other_info_butt =  Gtk2::Button->new_from_stock('info');
+	$mainwin_other_fixed1->put($mainwin_other_info_butt, 316, 16 );
+	$mainwin_other_info_butt->show;
+	$mainwin_other_info_butt->set_size_request(130, 32 );
+	$mainwin_other_info_butt->can_focus(1 );
+	$mainwin_other_info_butt->signal_connect('clicked', sub {voice_click(); info_sub()});
+	#
+	# Construct a Gtk2Button 'search_butt'
+	#
+	$mainwin_other_search_butt =  Gtk2::Button->new_from_stock('upgrade');
+	$mainwin_other_fixed1->put($mainwin_other_search_butt, 60, 384 );
+	$mainwin_other_search_butt->show;
+	$mainwin_other_search_butt->set_size_request(380, 32 );
+	$mainwin_other_search_butt->can_focus(1 );
+	#$mainwin_other_search_butt->set_sensitive(0);
+	$mainwin_other_search_butt->signal_connect('clicked', sub {voice_click(); upgrade_win_sub()});
+	#
+	# Construct a Gtk2Button 'donate_butt'
+	#	
+	$mainwin_other_donate_butt =  Gtk2::Button->new_from_stock('donate');
+	$mainwin_other_fixed1->put($mainwin_other_donate_butt, 60, 424 );
+	$mainwin_other_donate_butt->show;
+	$mainwin_other_donate_butt->set_size_request(380, 32 );
+	$mainwin_other_donate_butt->can_focus(1 );
+	$mainwin_other_donate_butt->signal_connect('clicked', sub {voice_click();donate()});
+	#$mainwin_other_donate_butt->set_sensitive(0);
+	#
+	# Construct a Gtk2ScrolledWindow 'scrolledwindow1'
+	$mainwin_other_scrolledwindow1 = new Gtk2::ScrolledWindow( undef, undef);
+	$mainwin_other_scrolledwindow1->set_policy('automatic', 'always' );
+	$mainwin_other_fixed1->put($mainwin_other_scrolledwindow1, 15, 64  );
+	$mainwin_other_scrolledwindow1->show;
+	$mainwin_other_scrolledwindow1->set_size_request(480, 304 );
+		#
+		# Construct a TextView 'text1'
+		$mainwin_cmap = Gtk2::Gdk::Colormap->get_system();
+		$mainwin_color->{ 'red' } = 0xFFFF;
+		$mainwin_color->{ 'green' } = 0;
+		$mainwin_color->{ 'blue' } = 0;
+		
+		$mainwin_other_TextView1 = Gtk2::TextView->new ();
+		$mainwin_other_TextView1->set_editable(0 );
+		$mainwin_other_TextView1->set_border_window_size ('right', 3);
+		$mainwin_other_TextView1_text=text_linker($cl[224]);
+$mainwin_other_TextView1_text.="\n\nTranslators:\n
+Honza Mach
+Pasi Kuokkanen & Ronja Kuokkanen
+David Lacravate
+Jakub Kasprzycki
+Andreas Krause
+Jonathan Stevano
+Tomás Mateo
+Altan Demirkilic
+David Szedely
+Jose Carlos Medeiros
+Daniel Nylander
+Nikita Bukhvostov";
+
+		$buffer = $mainwin_other_TextView1->get_buffer;
+		$buffer->set_text($mainwin_other_TextView1_text);
+		$mainwin_other_scrolledwindow1->add($mainwin_other_TextView1 );
+		$mainwin_other_TextView1->set_justification ('center');
+		$mainwin_other_TextView1->show;
+		$mainwin_other_TextView1->can_focus(1 );
+		$mainwin_other_TextView1->set_left_margin (3);
+} # end of "other" window declaration
+
+sub setupwindow_sub {
+	@hex = (0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F);
+	
+	undef $speedup_pppd_run_file;
+	$mainwin_setup_butt->set_sensitive(0);
+	$mainwin_connect_butt->set_sensitive(0);
+	if ($setupwin) {
+		$setupwin->destroy;
+		undef $setupwin;
+		goto ide;
+	}
+	ide:
+	port_scan();
+	browser_find();
+
+# Construct a Gtk2Window 'setupwin window'
+	$setupwin = new Gtk2::Window;
+	$setupwin->set_title(text_linker($cl[10],"$VERSION "));
+	$setupwin->set_resizable(0);
+	$setupwin->set_modal(0);
+	$setupwin->realize;
+	$setupwin->signal_connect('destroy', sub {voice_click(); on_setupwin_destroy()});
+	$setupwin_tooltips= new Gtk2::Tooltips;
+	$setupwin_tooltips->enable();
+
+	create_sw_box_structure();
+
+# Gtk2::VBox 'vbox1'
+	$sw_vbox1 = Gtk2::VBox->new;
+	$sw_vbox1->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>10);
+
+# Gtk2::HBox 'hbox1', save and cancel buttons...
+	$sw_hbox1 = Gtk2::HBox->new;
+	$sw_hbox1->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>10);
+
+# Construct a Gtk2Notebook 'setupwin_notebook1'
+	$setupwin_notebook1 = new Gtk2::Notebook;
+	$setupwin_notebook1->can_focus(1);
+	$setupwin_notebook1->set_tab_pos('top');
+	$setupwin_notebook1->set_show_tabs(1);
+	$setupwin_notebook1->set_show_border(0);
+	$setupwin_notebook1->set_scrollable(1);
+	$setupwin_notebook1->set_tab_hborder(2);
+	$setupwin_notebook1->set_tab_vborder(2);
+
+	$new_notebook=1;
+	$setupwin_notebook1->signal_connect( 'switch-page',
+		sub {
+			if (!$new_notebook) {
+				voice_click();
+				
+			}
+		}
+	);
+	
+	$setupwin_notebook1_label1 = new Gtk2::Label(text_linker($cl[75]));
+	$setupwin_notebook1_label1->set_property('justify'=>'center', 'wrap'=>0);
+	$setupwin_notebook1->append_page($sw_hbox_mainparam, $setupwin_notebook1_label1);
+
+	$setupwin_notebook1_label2 = new Gtk2::Label(text_linker ($cl[76]));
+	$setupwin_notebook1_label2->set_property('justify'=>'center', 'wrap'=>0);
+	$setupwin_notebook1->append_page($sw_hbox_optparam, $setupwin_notebook1_label2);
+
+	$setupwin_notebook1_label3 = new Gtk2::Label(text_linker ($cl[79]));
+	$setupwin_notebook1_label3->set_property('justify'=>'center', 'wrap'=>0);
+	$setupwin_notebook1->append_page($sw_hbox_rareparam, $setupwin_notebook1_label3);
+
+# Construct a Gtk2Button 'setupwin_button1'
+	$setupwin_button1 =  Gtk2::Button->new_from_stock ('gtk-cancel'); # 'Cancel'
+	$setupwin_button1 = $setupwin_button1;
+	$setupwin_button1->can_focus(1 );
+	$setupwin_button1->signal_connect('clicked',
+		sub {
+			$setupwin->destroy();
+			undef $setupwin;
+			read_conf ();
+			$mainwin_setup_butt->set_sensitive(1);
+			$mainwin_connect_butt->set_sensitive(1);
+			check_set()
+		}
+	);
+
+# Construct a Gtk2Button 'setupwin_button2'
+	$setupwin_button2 =  Gtk2::Button->new_from_stock ('gtk-save'); # 'Ok / Save'
+	$setupwin_button2 = $setupwin_button2;
+	$setupwin_button2->can_focus(1 );
+	$setupwin_button2->signal_connect('clicked',
+		sub {
+			setup_save_data()
+		}
+	);
+
+# Construct a Gtk2Label 'setupwin_label13'
+	$nottested_phone_label = new Gtk2::Label('');
+	$nottested_phone_label->set_property('justify'=>'left', 'wrap'=>1);
+	$nottested_phone_label->set_alignment(0.5, 0.5);
+	$nottested_phone_label->set_size_request (320, -1);
+	tested();
+
+	$sw_hbox1->pack_start($nottested_phone_label, 0, 0, 0);
+	$sw_hbox1->pack_end($setupwin_button1, 0, 0, 0);
+	$sw_hbox1->pack_end($setupwin_button2, 0, 0, 0);
+
+	$sw_vbox1->pack_start($setupwin_notebook1, 0, 0, 0);
+	$sw_vbox1->pack_end($sw_hbox1, 0, 0, 0);
+
+	$setupwin->add($sw_vbox1);
+
+# Gtk2::VBox 'sw_vbox2', handset label & combo...
+	$sw_vbox2 = Gtk2::VBox->new;
+	$sw_vbox2->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>0);
+
+# Gtk2::HBox 'sw_hbox_phonytypes', vbox2 & phone_pic...
+	$sw_hbox_phonytypes = Gtk2::HBox->new;
+	$sw_hbox_phonytypes->set_property('homogeneous'=>0, 'spacing'=>25, 'border_width'=>0);
+
+# Construct a Gtk2Label 'setupwin_label8' # Select the type of your handset!
+	$sw_handset_label = new Gtk2::Label(text_linker($cl[74])); 
+	$sw_handset_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_handset_label->set_alignment(0,0);
+	$sw_handset_label->set_size_request (220, -1);
+
+# Construct a Gtk2Combo 'setupwin_combo1' # phonytypes
+	$sw_handset_manuf_combo = new Gtk2::Combo;
+	$sw_handset_manuf_combo->set_case_sensitive(0 );
+	$sw_handset_manuf_combo->set_use_arrows(1 );
+	$sw_handset_manuf_combo->set_use_arrows_always(0 );
+	
+	foreach $keys (keys %teltype) {
+		@fword=split /\ /, $keys;
+		$fiword=$fword[0];
+		$manufect{$fiword}=1;
+	}
+	
+	$sw_handset_manuf_combo->set_popdown_strings(sort keys %manufect);
+	
+# Construct a Gtk2Entry 'combo-entry1'
+	$sw_handset_manuf_entry = $sw_handset_manuf_combo->entry;
+	$sw_handset_manuf_entry->can_focus(1 );
+	$sw_handset_manuf_entry->set_text($manufacturer);
+	$sw_handset_manuf_entry->set_max_length(500 );
+	$sw_handset_manuf_entry->set_visibility(1 );
+	$sw_handset_manuf_entry->set_editable(0 );
+	$sw_handset_manuf_entry->signal_connect( 'changed',
+		sub {
+			combo_voice_halfer();
+			on_handset_manuf_combo_changed()
+		}
+	);
+	
+# Construct a Gtk2Combo 'setupwin_combo1' # phonytypes
+	$sw_handset_combo = new Gtk2::Combo;
+	$sw_handset_combo->set_case_sensitive(0 );
+	$sw_handset_combo->set_use_arrows(1 );
+	$sw_handset_combo->set_use_arrows_always(0 );
+	
+
+# Construct a Gtk2Entry 'combo-entry1'
+	$sw_handset_entry = $sw_handset_combo->entry;
+	$sw_handset_entry->can_focus(1 );
+	$sw_handset_entry->set_max_length(500 );
+	$sw_handset_entry->set_visibility(1 );
+	$sw_handset_entry->set_editable(0 );
+	$sw_handset_entry->signal_connect( 'changed',
+		sub {
+			combo_voice_halfer();
+			on_handset_combo_changed()
+		}
+	);
+	
+	manufecturer_fill_up();
+	$sw_handset_entry->set_text($phone_type);
+	
+	# Construct a Gtk2Entry 'sw_APN_entry' APN's entry
+	$entry = new Gtk2::Entry;
+	$entry->can_focus(1 );
+	$entry->set_text($phonetype );
+	$entry->set_max_length(0 );
+	$entry->set_visibility(1 );
+	$entry->set_editable(0 );
+	
+	$setupwin_tooltips->set_tip($sw_handset_entry, text_linker($cl[108]));
+
+
+	
+	$sw_vbox2->pack_start($sw_handset_label, 0, 0, 0);
+	$sw_vbox2->pack_start($sw_handset_manuf_combo, 0, 0, 0);
+	$sw_vbox2->pack_start($sw_handset_combo, 0, 0, 0);
+	$sw_hbox_phonytypes->pack_start($sw_vbox2, 0, 0, 0);
+	place_pic();
+
+# Construct a Gtk2Label 'setupwin_label9' Provider
+	$sw_provider_label = new Gtk2::Label(text_linker($cl[61]));
+	$sw_provider_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_provider_label->set_alignment(0, 0);
+	$sw_provider_label->set_size_request (300, -1);
+
+# Construct a Gtk2Combo 'setupwin_combo2' Provider
+	$sw_provider_combo = new Gtk2::Combo;
+	$sw_provider_combo->set_case_sensitive(0 );
+	$sw_provider_combo->set_use_arrows(1 );
+	$sw_provider_combo->set_use_arrows_always(0 );
+	$sw_provider_combo->set_popdown_strings(sort keys %szolg_apn);
+
+# Construct a Gtk2Entry 'combo-entry1' Provider
+	$sw_provider_entry = $sw_provider_combo->entry;
+	$sw_provider_entry->can_focus(1 );
+	$sw_provider_entry->set_text($sel_szolg);
+	$sw_provider_entry->set_max_length(500 );
+	$sw_provider_entry->set_visibility(1 );
+	$sw_provider_entry->set_editable(0 );
+	$sw_provider_entry->signal_connect( 'changed',
+		sub {
+			combo_voice_halfer();
+			on_combo2_changed()
+		}
+	);
+
+# Construct a Gtk2Label 'sw_APN_label' APN's entry
+	$sw_APN_label = new Gtk2::Label(text_linker($cl[134]));
+	$sw_APN_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_APN_label->set_alignment(0, 0);
+	$sw_APN_label->set_size_request (300, -1);
+
+# Construct a Gtk2Entry 'sw_APN_entry' APN's entry
+	$sw_APN_entry = new Gtk2::Entry;
+	$sw_APN_entry->can_focus(1 );
+	$sw_APN_entry->set_text($def_apn );
+	$sw_APN_entry->set_max_length(0 );
+	$sw_APN_entry->set_visibility(1 );
+	$sw_APN_entry->set_editable(1 );
+	$setupwin_tooltips->set_tip($sw_APN_entry, text_linker($cl[135]));
+
+# Gtk2::HBox '$sw_hbox_userpass', username & password...
+	$sw_hbox_userpass = Gtk2::HBox->new;
+	$sw_hbox_userpass->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>0);
+
+# Gtk2::VBox 'sw_vbox_username_left', handset label & combo...
+	$sw_vbox_username_left = Gtk2::VBox->new;
+	$sw_vbox_username_left->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>0);
+
+# Gtk2::VBox 'sw_vbox_username_left', handset label & combo...
+	$sw_vbox_username_right = Gtk2::VBox->new;
+	$sw_vbox_username_right->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>0);
+
+	$sw_hbox_userpass->pack_start($sw_vbox_username_left, 0, 0, 0);
+	$sw_hbox_userpass->pack_end($sw_vbox_username_right, 0, 0, 0);
+
+# Construct a Gtk2Label 'setupwin_label11'
+	$sw_username_label = new Gtk2::Label(text_linker($cl[63])); # username
+	$sw_username_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_username_label->set_alignment(0, 0);
+	$sw_username_label->set_size_request (140, -1);
+
+# Construct a Gtk2Entry 'setupwin_entry2' # username
+	$sw_username_entry = new Gtk2::Entry;
+	$sw_username_entry->can_focus(1 );
+	$sw_username_entry->set_text($user);
+	$sw_username_entry->set_max_length(0 );
+	$sw_username_entry->set_visibility(1 );
+	$sw_username_entry->set_editable(1 );
+	$setupwin_tooltips->set_tip($sw_username_entry, text_linker($cl[98]));
+
+	$sw_vbox_username_left->pack_start($sw_username_label,0,0,0);
+	$sw_vbox_username_left->pack_start($sw_username_entry,0,0,0);
+
+# Construct a Gtk2Label 'setupwin_label12' # password
+	$sw_password_label = new Gtk2::Label(text_linker($cl[64]));
+	$sw_password_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_password_label->set_alignment(0, 0);
+	$sw_password_label->set_size_request (140, -1);
+
+# Construct a Gtk2Entry 'setupwin_entry3' # password
+	$sw_password_entry = new Gtk2::Entry;
+	$sw_password_entry->can_focus(1 );
+	$sw_password_entry->set_text($passw);
+	$sw_password_entry->set_max_length(0 );
+	$sw_password_entry->set_visibility(1 );
+	$sw_password_entry->set_editable(1 );
+	$setupwin_tooltips->set_tip($sw_password_entry, text_linker($cl[99]));
+
+	$sw_vbox_username_right->pack_start($sw_password_label,0,0,0);
+	$sw_vbox_username_right->pack_start($sw_password_entry,0,0,0);
+
+# Construct a Gtk2Label 'setupwin_label14'
+	$sw_language_label = new Gtk2::Label(text_linker($cl[54]));
+	$sw_language_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_language_label->set_alignment(0, 0);
+	$sw_language_label->set_size_request (300, -1);
+
+
+# Construct a Gtk2Combo 'setupwin_combo3' # languages
+	$sw_language_combo_hbox = Gtk2::HBox->new;
+	$sw_language_combo_hbox->set_property('homogeneous'=>0, 'spacing'=>0, 'border_width'=>0);
+
+	$sw_language_combo = new Gtk2::Combo;
+	$sw_language_combo->set_case_sensitive(0 );
+	$sw_language_combo->set_use_arrows(1 );
+	$sw_language_combo->set_use_arrows_always(0 );
+	$sw_language_combo->set_popdown_strings(sort @van_lang);
+	$sw_language_combo->set_size_request (200, -1);
+
+	$sw_language_combo_hbox->pack_start($sw_language_combo,0,0,0);
+
+# Construct a Gtk2Entry 'combo-entry3' # languages
+	$sw_language_entry = $sw_language_combo->entry;
+	$sw_language_entry->can_focus(1 );
+	$sw_language_entry->set_text($sel_lang);
+	$sw_language_entry->set_max_length(500 );
+	$sw_language_entry->set_visibility(1 );
+	$sw_language_entry->set_editable(0 );
+	$sw_language_entry->signal_connect( 'changed', sub {combo_voice_halfer()});
+
+# Construct a Gtk2Label 'setupwin_label15' # Select the port!
+	$sw_ports_label = new Gtk2::Label(text_linker($cl[8]));
+	$sw_ports_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_ports_label->set_alignment(0, 0);
+	$sw_ports_label->set_size_request (300, -1);
+
+# Construct a Gtk2CheckButton 'setupwin_checkbutton1' #'Expert port scan'
+	$sw_portscan_checkbutton = new Gtk2::CheckButton(text_linker($cl[163]));
+	$sw_portscan_checkbutton->get_child->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_portscan_checkbutton->get_child->set_size_request (300, -1);
+	$sw_portscan_checkbutton->set_mode(1 );
+	$sw_portscan_checkbutton->set_active($m_expert);
+	$sw_portscan_checkbutton->can_focus(1 );
+	$setupwin_tooltips->set_tip($sw_portscan_checkbutton, text_linker($cl[169]));
+	$sw_portscan_checkbutton->signal_connect('pressed',
+		sub {
+			voice_click();
+			om_portscan_checkbutton_pressed()
+		}
+	);
+
+# Construct a Gtk2Combo 'setupwin_combo4' # ports
+	$sw_ports_combo_hbox = Gtk2::HBox->new;
+	$sw_ports_combo_hbox->set_property('homogeneous'=>0, 'spacing'=>0, 'border_width'=>0);
+
+	$sw_ports_combo = new Gtk2::Combo;
+	$sw_ports_combo->set_case_sensitive(0 );
+	$sw_ports_combo->set_use_arrows(1 );
+	$sw_ports_combo->set_use_arrows_always(0 );
+	$sw_ports_combo->set_popdown_strings(sort { my @a=$a=~ /(\d+)/; my @b = $b =~ /(\d+)/; $a[0] <=> $b[0] } keys %ports);
+	$sw_ports_combo->set_size_request (300, -1);
+	$sw_ports_combo_hbox->pack_start($sw_ports_combo,0,0,0);
+
+# Construct a Gtk2Entry 'combo-entry3' # order of ports
+	$sw_ports_entry = $sw_ports_combo->entry;
+	$sw_ports_entry->can_focus(1 );
+	$sw_ports_entry->set_text($sel_port);
+	$sw_ports_entry->set_max_length(500 );
+	$sw_ports_entry->set_visibility(1 );
+	$sw_ports_entry->set_editable(1 );
+	$sw_ports_entry->signal_connect( 'changed', sub {combo_voice_halfer()});
+	
+# Construct a Gtk2Label '$sw_port_button' # Select other port
+	$sw_port_button =  Gtk2::Button->new_from_stock ('file2');
+	$sw_port_button->can_focus(1 );
+	$sw_port_button->signal_connect('clicked',
+		sub {
+			voice_click();
+			port_select()
+		}
+	);
+	$setupwin_tooltips->set_tip($sw_port_button, text_linker($cl[232]));
+
+# Construct a Gtk2CheckButton 'setupwin_checkbutton2' Is the dynamic DNS allowed?
+	$sw_dyndns_checkbutton = new Gtk2::CheckButton(text_linker($cl[78]." ".$cl[208]));
+	$sw_dyndns_checkbutton->get_child->set_property('justify'=>'left', 'wrap'=>1); 
+	$sw_dyndns_checkbutton->get_child->set_size_request (300, -1);
+	$sw_dyndns_checkbutton->set_mode(1 );
+	$sw_dyndns_checkbutton->set_active($din_eng);
+	$sw_dyndns_checkbutton->can_focus(1 );
+
+	$setupwin_tooltips->set_tip($sw_dyndns_checkbutton, text_linker($cl[209]));
+	if (!$dns1) {
+		$sw_dyndns_checkbutton->set_active(1);
+	}
+	$sw_dyndns_checkbutton->signal_connect( 'pressed',
+		sub {
+			voice_click();
+			dns12()
+		}
+	);
+
+# Gtk2::HBox '$sw_hbox_userpass', username & password...
+	$sw_hbox_dns12 = Gtk2::HBox->new;
+	$sw_hbox_dns12->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>0);
+
+# Gtk2::VBox 'sw_vbox_username_left', handset label & combo...
+	$sw_vbox_dns12_left = Gtk2::VBox->new;
+	$sw_vbox_dns12_left->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>0);
+
+# Gtk2::VBox 'sw_vbox_username_left', handset label & combo...
+	$sw_vbox_dns12_right = Gtk2::VBox->new;
+	$sw_vbox_dns12_right->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>0);
+
+	$sw_hbox_dns12->pack_start($sw_vbox_dns12_left, 0, 0, 0);
+	$sw_hbox_dns12->pack_end($sw_vbox_dns12_right, 0, 0, 0);
+
+# Construct a Gtk2Label 'setupwin_label16'
+	$sw_dns1_label = new Gtk2::Label('DNS 1');
+	$sw_dns1_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_dns1_label->set_alignment(0, 0);
+	$sw_dns1_label->set_size_request (140, -1);
+
+# Construct a Gtk2Entry 'setupwin_entry4' # dns1
+	$sw_dns1_entry = new Gtk2::Entry;
+	$sw_dns1_entry->can_focus(1 );
+	$sw_dns1_entry->set_text($dns1);
+	$sw_dns1_entry->set_max_length(0 );
+	$sw_dns1_entry->set_visibility(1 );
+	$sw_dns1_entry->set_editable(1 );
+	$setupwin_tooltips->set_tip($sw_dns1_entry, text_linker($cl[100]));
+
+	$sw_vbox_dns12_left->pack_start($sw_dns1_label,0,0,0);
+	$sw_vbox_dns12_left->pack_start($sw_dns1_entry,0,0,0);
+
+# Construct a Gtk2Label 'setupwin_label17'
+	$sw_dns2_label = new Gtk2::Label('DNS 2');
+	$sw_dns2_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_dns2_label->set_alignment(0, 0);
+	$sw_dns2_label->set_size_request (140, -1);
+
+# Construct a Gtk2Entry 'setupwin_entry5' # dns2
+	$sw_dns2_entry = new Gtk2::Entry;
+	$sw_dns2_entry->can_focus(1 );
+	$sw_dns2_entry->set_text($dns2);
+	$sw_dns2_entry->set_max_length(0 );
+	$sw_dns2_entry->set_visibility(1 );
+	$sw_dns2_entry->set_editable(1 );
+	$setupwin_tooltips->set_tip($sw_dns2_entry, text_linker($cl[100]));
+
+	$sw_vbox_dns12_right->pack_start($sw_dns2_label,0,0,0);
+	$sw_vbox_dns12_right->pack_start($sw_dns2_entry,0,0,0);
+	
+	if ($din_eng==0 and $who_r eq "root") {
+		$sw_dns1_entry->set_sensitive(1);
+		$sw_dns2_entry->set_sensitive(1);
+	} else {
+		$sw_dns1_entry->set_sensitive(0);
+		$sw_dns2_entry->set_sensitive(0);
+	}
+	
+# Construct a Gtk2Label 'setupwin_label18' # 'Speed of the connection'
+	$sw_connspeed_label = new Gtk2::Label(text_linker($cl[150]));
+	$sw_connspeed_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_connspeed_label->set_alignment(0, 0);
+	$sw_connspeed_label->set_size_request (300, -1);
+
+	if (!$connspeed) {$connspeed=57600}
+	$setupwin_order_speed[0]="2147483	(2.048 Mb/s)";
+	$setupwin_order_speed[1]="460800	(56.25 kB/s)";
+	$setupwin_order_speed[2]="393216	(48 kB/s)";
+	$setupwin_order_speed[3]="230400	(28.12 KB/s)";
+	$setupwin_order_speed[4]="115200	(14.06 KB/s)";
+	$setupwin_order_speed[5]="57600	(7.03 KB/s)";
+	$setupwin_order_speed[6]="38400	(4.68 KB/s)";
+	$setupwin_order_speed[7]="19200	(2.34 KB/s)";
+	$setupwin_order_speed[8]="9600	(1.171 KB/s)";
+	$setupwin_order_speed[9]="2400		(0.292 KB/s)";
+
+# Construct a Gtk2Combo 'setupwin_combo4'
+	$sw_connspeed_combo_hbox = Gtk2::HBox->new;
+	$sw_connspeed_combo_hbox->set_property('homogeneous'=>0, 'spacing'=>0, 'border_width'=>0);
+
+	$sw_connspeed_combo = new Gtk2::Combo;
+	$sw_connspeed_combo->set_case_sensitive(0 );
+	$sw_connspeed_combo->set_use_arrows(1 );
+	$sw_connspeed_combo->set_use_arrows_always(0 );
+	$sw_connspeed_combo->set_popdown_strings(@setupwin_order_speed);
+	$sw_connspeed_combo->set_size_request (200, -1);
+
+	$sw_connspeed_combo_hbox->pack_start($sw_connspeed_combo,0,0,0);
+
+# Construct a Gtk2Entry 'combo-entry3'
+	$sw_connspeed_entry = $sw_connspeed_combo->entry;
+	$sw_connspeed_entry->can_focus(1 );
+	$sw_connspeed_entry->set_text($connspeed);
+	$sw_connspeed_entry->set_max_length(500 );
+	$sw_connspeed_entry->set_visibility(1 );
+	$sw_connspeed_entry->set_editable(0 );
+	$sw_connspeed_entry->signal_connect( 'changed',
+		sub {
+			combo_voice_halfer()
+		}
+	);
+
+# Construct a Gtk2Label 'setupwin_label24'
+	$sw_watchint_label = new Gtk2::Label(text_linker($cl[77])); # 'Time interval of watching the connecting (ms)'
+	$sw_watchint_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_watchint_label->set_alignment(0, 0);
+	$sw_watchint_label->set_size_request (300, -1);
+
+# Construct a Gtk2HScale 'setupwin_hscale2'
+	$work->{'setupwin_hscale2-adj'} = new Gtk2::Adjustment($time_interval, 200, 2000, 1, 1, 0 );
+	$sw_watchint_hscale = new Gtk2::HScale($work->{'setupwin_hscale2-adj'} );
+	$sw_watchint_hscale->set_draw_value(1 );
+	$sw_watchint_hscale->set_digits(0 );
+	$sw_watchint_hscale->set_value_pos('top' );
+	$sw_watchint_hscale->set_update_policy('continuous' );
+	$sw_watchint_hscale->can_focus(1 );
+	$setupwin_tooltips->set_tip($sw_watchint_hscale, text_linker($cl[102]));
+
+# Construct a Gtk2Label 'setupwin_label22'  # 'Re-connects (sec)?'
+	$sw_reconnect_label = new Gtk2::Label(text_linker($cl[56])." (sec) ?");
+	$sw_reconnect_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_reconnect_label->set_alignment(0, 0);
+	$sw_reconnect_label->set_size_request (300, -1);
+
+# Construct a Gtk2HScale 'setupwin_hscale4'
+	$work->{'setupwin_hscale4-adj'} = new Gtk2::Adjustment($reconn_on, 0, 60, 1, 1, 0 );
+	$sw_reconnect_hscale = new Gtk2::HScale($work->{'setupwin_hscale4-adj'} );
+	$sw_reconnect_hscale->set_draw_value(1 );
+	$sw_reconnect_hscale->set_digits(0 );
+	$sw_reconnect_hscale->set_value_pos('top' );
+	$sw_reconnect_hscale->set_update_policy('continuous' );
+	$sw_reconnect_hscale->can_focus(1 );
+	$sw_reconnect_hscale->signal_connect( "value_changed", \&check_rec_widgets);
+
+# Construct a Gtk2Label 'setupwin_label23' # 'How many attempts are allowed for reconnect?'
+	$sw_attempts_label = new Gtk2::Label(text_linker($cl[94]));
+	$sw_attempts_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_attempts_label->set_alignment(0, 0);
+	$sw_attempts_label->set_size_request (300, -1);
+
+# Construct a Gtk2HScale 'setupwin_hscale1'
+	$work->{'setupwin_hscale1-adj'} = new Gtk2::Adjustment($reconn_db, 3, 20, 1, 1, 0 );
+	$sw_attempts_hscale = new Gtk2::HScale($work->{'setupwin_hscale1-adj'} );
+	$sw_attempts_hscale->set_draw_value(1 );
+	$sw_attempts_hscale->set_digits(0 );
+	$sw_attempts_hscale->set_value_pos('top' );
+	$sw_attempts_hscale->set_update_policy('continuous' );
+	$sw_attempts_hscale = $sw_attempts_hscale;
+	$sw_attempts_hscale->can_focus(1 );
+
+	check_rec_widgets();
+
+# Construct a Gtk2Label 'setupwin_label25'
+	$sw_afterstart_label = new Gtk2::Label(text_linker($cl[7])); # 'After starting...'
+	$sw_afterstart_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_afterstart_label->set_alignment(0, 0);
+	$sw_afterstart_label->set_size_request (300, -1);
+
+# Construct a Gtk2CheckButton 'setupwin_checkbutton6' 
+	$sw_autoconn_checkbutton = new Gtk2::CheckButton(text_linker($cl[17])); # 'automatic connection'
+	$sw_autoconn_checkbutton->get_child->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_autoconn_checkbutton->get_child->set_size_request (300, -1);
+	$sw_autoconn_checkbutton->set_mode(1 );
+	$sw_autoconn_checkbutton->set_active($autocsat);
+	$sw_autoconn_checkbutton->can_focus(1 );
+	$sw_autoconn_checkbutton->signal_connect( 'pressed', sub {voice_click()});
+
+# Construct a Gtk2Label 'setupwin_label19'
+	$sw_afterconn_label = new Gtk2::Label(text_linker($cl[12])); # 'After the successfull connection'
+	$sw_afterconn_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_afterconn_label->set_alignment(0, 0);
+	$sw_afterconn_label->set_size_request (300, -1);
+
+# Construct a Gtk2CheckButton 'setupwin_checkbutton3' # Iconify main window
+	$sw_iconify_checkbutton = new Gtk2::CheckButton(text_linker($cl[59])); # 'Iconify GPRSEC'
+	$sw_iconify_checkbutton->get_child->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_iconify_checkbutton->get_child->set_size_request (300, -1);
+	$sw_iconify_checkbutton->set_mode(1 );
+	$sw_iconify_checkbutton->set_active($cw_ic);
+	$sw_iconify_checkbutton->can_focus(1 );
+	$sw_iconify_checkbutton->signal_connect( 'pressed', sub {voice_click()});
+
+# Construct a Gtk2Label 'setupwin_label21' # 'Start this browser after the successfull connection'
+	$sw_browser_label = new Gtk2::Label(text_linker($cl[13]));
+	$sw_browser_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_browser_label->set_alignment(0, 0);
+	$sw_browser_label->set_size_request (300, -1);
+	
+
+# Construct a Gtk2Combo 'setupwin_combo6' # Browsers
+	$sw_browser_combo = new Gtk2::Combo;
+	$sw_browser_combo->set_case_sensitive(0 );
+	$sw_browser_combo->set_use_arrows(1 );
+	$sw_browser_combo->set_use_arrows_always(0 );
+	$sw_browser_combo->set_popdown_strings(sort "", values %browser_path);
+
+
+# Construct a Gtk2Entry 'combo-entry6' #After the successfull connection the selected\nbrowser will automaticly starts.\nIf that isn't on you computer then\nthe GPRS Easy Connect will close!
+	$sw_browser_entry = $sw_browser_combo->entry;
+	$sw_browser_entry->show;
+	$sw_browser_entry->can_focus(1 );
+	$sw_browser_entry->set_text($brow);
+	$sw_browser_entry->set_max_length(500 );
+	$sw_browser_entry->set_visibility(1 );
+	$sw_browser_entry->set_editable(1 );
+	$setupwin_tooltips->set_tip($sw_browser_entry, text_linker($cl[103]));
+	$sw_browser_entry->signal_connect( 'changed', sub {combo_voice_halfer()});
+
+# Construct a Gtk2Label '$sw_file_button' # Select other browser
+	$sw_file_button =  Gtk2::Button->new_from_stock ('file');
+	$sw_file_button->can_focus(1 );
+	$sw_file_button->signal_connect('clicked',
+		sub {
+			voice_click();
+			file_select()
+		}
+	);
+	$setupwin_tooltips->set_tip($sw_file_button, text_linker($cl[231]));
+
+# Construct a Gtk2HSeparator 'setupwin_hseparator2'
+	$sw_hseparator1 = new Gtk2::HSeparator;
+	$sw_hseparator2 = new Gtk2::HSeparator;
+	$sw_hseparator3 = new Gtk2::HSeparator;
+	$sw_hseparator4 = new Gtk2::HSeparator;
+
+# Construct a Gtk2Label 'setupwin_label28' # 'Select a theme'
+	$sw_themes_label = new Gtk2::Label(text_linker($cl[194])); 
+	$sw_themes_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_themes_label->set_alignment(0, 0);
+	$sw_themes_label->set_size_request (300, -1);
+
+# Construct a Gtk2Combo 'setupwin_combo8' # Themes
+	$sw_themes_combo = new Gtk2::Combo;
+	$sw_themes_combo->set_case_sensitive(0 );
+	$sw_themes_combo->set_use_arrows(1 );
+	$sw_themes_combo->set_use_arrows_always(0 );
+	$sw_themes_combo->set_popdown_strings(sort keys %themes);
+
+# Construct a Gtk2Entry 'combo-entry6'  #After you've selected a new theme you should restart ....
+	$sw_themes_entry = $sw_themes_combo->entry;
+	$sw_themes_entry->can_focus(1 );
+	$sw_themes_entry->set_text($theme);
+	$sw_themes_entry->set_max_length(500 );
+	$sw_themes_entry->set_visibility(1 );
+	$sw_themes_entry->set_editable(0 );
+	$setupwin_tooltips->set_tip($sw_themes_entry, text_linker($cl[204]));
+	$sw_themes_entry->signal_connect( 'changed', sub {combo_voice_halfer()});
+
+# Gtk2::HBox '$sw_hbox_color_buttons', normal & fg colors...
+	$sw_hbox_color_buttons = Gtk2::HBox->new;
+	$sw_hbox_color_buttons->set_property('homogeneous'=>0, 'spacing'=>10, 'border_width'=>0);
+
+# normal color selection button
+	$sw_normalcolor_button =  Gtk2::Button->new_from_stock ('col_norm');
+	$sw_normalcolor_button->can_focus(1 );
+	$sw_normalcolor_button->signal_connect('clicked',
+		sub {
+			voice_click();
+			select_color()
+		}
+	);
+
+# forground color selection button
+	$sw_fgcolor_button =  Gtk2::Button->new_from_stock ('col_fg');
+	$sw_fgcolor_button->can_focus(1 );
+	$sw_fgcolor_button->signal_connect('clicked',
+		sub {
+			voice_click();
+			select_color2()
+		}
+	);
+
+	$sw_hbox_color_buttons->pack_start($sw_normalcolor_button, 0, 0, 0);
+	$sw_hbox_color_buttons->pack_end($sw_fgcolor_button, 0, 0, 0);
+
+# font selection button
+	$sw_font_button =  Gtk2::Button->new_from_stock ('font');
+	$sw_font_button->can_focus(1 );
+	$sw_font_button->signal_connect('clicked',
+		sub {
+			voice_click();
+			font_select()
+		}
+	);
+
+# Construct a Gtk2CheckButton 'checkbutton23'
+	$sw_bell_checkbutton = new Gtk2::CheckButton(text_linker($cl[89])); # 'Disable bell signals'
+	$sw_bell_checkbutton->get_child->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_bell_checkbutton->get_child->set_size_request (300, -1);
+	$sw_bell_checkbutton->set_mode(1 );
+	$sw_bell_checkbutton->set_active($no_beep);
+	$sw_bell_checkbutton->can_focus(1 );
+	$sw_bell_checkbutton->signal_connect( 'pressed', sub {voice_click()});
+
+# Construct a Gtk2Label 'setupwin_label26' # 'You can give other #'
+	$sw_ownnumber_label = new Gtk2::Label(text_linker($cl[106]));
+	$sw_ownnumber_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_ownnumber_label->set_alignment(0, 0);
+	$sw_ownnumber_label->set_size_request (300, -1);
+
+# Construct a Gtk2Entry 'setupwin_entry6' # own phone number
+# Some providers need they own calling number.\nAsk about it your provider.
+	$sw_ownnumber_entry = new Gtk2::Entry;
+	$sw_ownnumber_entry->can_focus(1 );
+	$sw_ownnumber_entry->set_text($other_numb);
+	$sw_ownnumber_entry->set_max_length(0 );
+	$sw_ownnumber_entry->set_visibility(1 );
+	$sw_ownnumber_entry->set_editable(1 );
+	$setupwin_tooltips->set_tip($sw_ownnumber_entry, text_linker($cl[107]));
+
+# Construct a Gtk2Label 'setupwin_label27'# 'Setting of provider\'s own number'
+	$sw_CID_label = new Gtk2::Label(text_linker($cl[81]));
+	$sw_CID_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_CID_label->set_alignment(0, 0);
+	$sw_CID_label->set_size_request (300, -1);
+
+# Construct a Gtk2Combo 'setupwin_combo7'
+	$sw_CID_combo = new Gtk2::Combo;
+	$sw_CID_combo->set_case_sensitive(0 );
+	$sw_CID_combo->set_use_arrows(1 );
+	$sw_CID_combo->set_use_arrows_always(0 );
+	$sw_CID_combo->set_popdown_strings("", 1..8);
+
+# Construct a Gtk2Entry 'combo-entry7' # special CID number
+	$sw_CID_entry = $sw_CID_combo->entry;
+	$sw_CID_entry->can_focus(1 );
+	$sw_CID_entry->set_text($cid);
+	$sw_CID_entry->set_max_length(500 );
+	$sw_CID_entry->set_visibility(1 );
+	$sw_CID_entry->set_editable(0 );
+	$setupwin_tooltips->set_tip($sw_CID_entry, text_linker($cl[97]));
+	$sw_CID_entry->signal_connect( 'changed',
+		sub {
+			combo_voice_halfer()
+		}
+	);
+
+# Construct a Gtk2CheckButton 'setupwin_checkbutton11' # 'Disable CGQ commands'
+#Last setup chance if the connecting process fails
+	$sw_CGQ_checkbutton = new Gtk2::CheckButton(text_linker($cl[95]));
+	$sw_CGQ_checkbutton->get_child->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_CGQ_checkbutton->get_child->set_size_request (300, -1);
+	$sw_CGQ_checkbutton->set_mode(1 );
+	$sw_CGQ_checkbutton->set_active($no_cgq);
+	$sw_CGQ_checkbutton->can_focus(1 );
+	$setupwin_tooltips->set_tip($sw_CGQ_checkbutton, text_linker($cl[96]));
+	$sw_CGQ_checkbutton->signal_connect( 'pressed', sub {voice_click()});
+
+# Construct a Gtk2CheckButton 'setupwin_checkbutton12'# 'Disable self-authentication'
+#Do not require the peer to authenticate itself...
+	$sw_selfauth_checkbutton = new Gtk2::CheckButton(text_linker($cl[127]));
+	$sw_selfauth_checkbutton->get_child->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_selfauth_checkbutton->get_child->set_size_request (300, -1);
+	$sw_selfauth_checkbutton->set_mode(1 );
+	$sw_selfauth_checkbutton->set_active($no_auth);
+	$sw_selfauth_checkbutton->can_focus(1 );
+	$setupwin_tooltips->set_tip($sw_selfauth_checkbutton, text_linker($cl[129]));
+	$sw_selfauth_checkbutton->signal_connect( 'pressed', sub {voice_click()});
+	if ($who_r ne "root") {
+		$sw_selfauth_checkbutton->set_sensitive(0);
+	}
+
+# Construct a Gtk2CheckButton 'setupwin_checkbutton13'# 'Enable BCD compress'
+	$sw_BSDcomp_checkbutton = new Gtk2::CheckButton(text_linker($cl[132]));
+	$sw_BSDcomp_checkbutton->get_child->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_BSDcomp_checkbutton->get_child->set_size_request (300, -1);
+	$sw_BSDcomp_checkbutton->set_mode(1 );
+	$sw_BSDcomp_checkbutton->set_active($bsd_comp);
+	$sw_BSDcomp_checkbutton->can_focus(1 );
+	$setupwin_tooltips->set_tip($sw_BSDcomp_checkbutton, text_linker($cl[133]));
+	$sw_BSDcomp_checkbutton->signal_connect( 'pressed', sub {voice_click()});
+
+# Construct a Gtk2CheckButton 'setupwin_checkbutton14'
+# 'DisaDiasble watching data-transmittion'
+	$sw_nowatch_checkbutton = new Gtk2::CheckButton(text_linker($cl[151]));
+	$sw_nowatch_checkbutton->get_child->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_nowatch_checkbutton->get_child->set_size_request (300, -1);
+	$sw_nowatch_checkbutton->set_mode(1 );
+	$sw_nowatch_checkbutton->set_active($no_dev);
+	$sw_nowatch_checkbutton->can_focus(1 );
+	$setupwin_tooltips->set_tip($sw_nowatch_checkbutton, text_linker($cl[152]));
+	$sw_nowatch_checkbutton->signal_connect( 'pressed', sub {voice_click()});
+
+# Construct a Gtk2CheckButton 'setupwin_checkbutton15'  # 'Debug mode on'
+#The ~./gprsec/conn.log file will be....
+	$sw_debug_checkbutton = new Gtk2::CheckButton(text_linker($cl[130]));
+	$sw_debug_checkbutton->get_child->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_debug_checkbutton->get_child->set_size_request (300, -1);
+	$sw_debug_checkbutton->set_mode(1 );
+	$sw_debug_checkbutton->set_active($debug);
+	$sw_debug_checkbutton->can_focus(1 );
+	$setupwin_tooltips->set_tip($sw_debug_checkbutton, text_linker($cl[131]));
+	$sw_debug_checkbutton->signal_connect( 'pressed', sub {voice_click()});
+
+# Construct a Gtk2Label 'setupwin_label32' # 'Limit Monitoring'
+	$sw_limits_label = new Gtk2::Label(text_linker($cl[111]));
+	$sw_limits_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_limits_label->set_alignment(0, 0);
+	$sw_limits_label->set_size_request (300, -1);
+
+# Construct a Gtk2Label 'setupwin_label30' # 'Date of erase'
+	$sw_erasedate_label = new Gtk2::Label(text_linker($cl[112]));
+	$sw_erasedate_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_erasedate_label->set_alignment(0, 0);
+	$sw_erasedate_label->set_size_request (300, -1);
+
+# Construct a Gtk2HScale 'setupwin_hscale12' # erase of the mounthly limit
+	$work->{'setupwin_hscale12-adj'} = new Gtk2::Adjustment($havit_v, 0, 31, 1, 1, 0 );
+	$sw_mounthlylimit_hscale = new Gtk2::HScale($work->{'setupwin_hscale12-adj'} );
+	$sw_mounthlylimit_hscale->set_draw_value(1 );
+	$sw_mounthlylimit_hscale->set_digits(0 );
+	$sw_mounthlylimit_hscale->set_value_pos('top' );
+	$sw_mounthlylimit_hscale->set_update_policy('continuous' );
+	$sw_mounthlylimit_hscale->can_focus(1 );
+	$setupwin_tooltips->set_tip($sw_mounthlylimit_hscale, text_linker($cl[115]));
+	$sw_mounthlylimit_hscale->signal_connect('value_changed', "setupwin_hscale12_sub" );
+
+# Construct a Gtk2Label 'setupwin_label33' # 'Max. monthly data transmissions'
+	$sw_maxmounthlytrans_label = new Gtk2::Label(text_linker($cl[113]));
+	$sw_maxmounthlytrans_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_maxmounthlytrans_label->set_alignment(0, 0);
+
+# Construct a Gtk2Entry 'setupwin_entry7' # max mounthly transmittions
+	$sw_maxmounthlytrans_entry = new Gtk2::Entry;
+	$sw_maxmounthlytrans_entry->can_focus(1 );
+	$sw_maxmounthlytrans_entry->set_text($monthlylimit_v);
+	$sw_maxmounthlytrans_entry->set_max_length(0 );
+	$sw_maxmounthlytrans_entry->set_visibility(1 );
+	$sw_maxmounthlytrans_entry->set_editable(1 );
+	if (!$havit_v){
+		$sw_maxmounthlytrans_label->set_sensitive(0);
+		$sw_maxmounthlytrans_entry->set_editable(0);
+	}
+
+# Construct a Gtk2Label 'setupwin_label34' # 'Max. weekly data transmissions'
+	$sw_maxweeklytrans_label = new Gtk2::Label(text_linker($cl[114]));
+	$sw_maxweeklytrans_label->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_maxweeklytrans_label->set_alignment(0, 0);
+	$sw_maxweeklytrans_label->set_size_request (300, -1);
+
+# Construct a Gtk2Entry 'setupwin_entry8' # max. weekly transmittions
+	$sw_maxweeklytrans_entry = new Gtk2::Entry;
+	$sw_maxweeklytrans_entry->can_focus(1 );
+	$sw_maxweeklytrans_entry->set_text($weeklylimit_v);
+	$sw_maxweeklytrans_entry->set_max_length(0 );
+	$sw_maxweeklytrans_entry->set_visibility(1 );
+	$sw_maxweeklytrans_entry->set_editable(1 );
+	$setupwin_tooltips->set_tip($sw_maxweeklytrans_entry, text_linker($cl[116]));
+
+# Construct a Gtk2CheckButton 'checkbutton17' # 'Reset mounthly transmitted data'
+	$sw_resetmounthlytrans_checkbutton = new Gtk2::CheckButton(text_linker($cl[120]));
+	$sw_resetmounthlytrans_checkbutton->get_child->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_resetmounthlytrans_checkbutton->get_child->set_size_request (300, -1);
+	$sw_resetmounthlytrans_checkbutton->set_mode(1 );
+	$sw_resetmounthlytrans_checkbutton->set_active(0 );
+	$sw_resetmounthlytrans_checkbutton->can_focus(1 );
+	$sw_resetmounthlytrans_checkbutton->signal_connect( 'pressed', sub {voice_click()});
+
+# Construct a Gtk2CheckButton 'checkbutton20' # 'Reset weakly trasmitted data'
+	$sw_resetweaklytrans_checkbutton = new Gtk2::CheckButton(text_linker($cl[121]));
+	$sw_resetweaklytrans_checkbutton->get_child->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_resetweaklytrans_checkbutton->get_child->set_size_request (300, -1);
+	$sw_resetweaklytrans_checkbutton->set_mode(1 );
+	$sw_resetweaklytrans_checkbutton->set_active(0 );
+	$sw_resetweaklytrans_checkbutton->can_focus(1 );
+	$sw_resetweaklytrans_checkbutton->signal_connect( 'pressed', sub {voice_click()});
+
+# Construct a Gtk2CheckButton 'checkbutton22' # 'Reset the time counter'
+	$sw_resettimecounter_checkbutton = new Gtk2::CheckButton(text_linker($cl[123]));
+	$sw_resettimecounter_checkbutton->get_child->set_property('justify'=>'left', 'wrap'=>1);
+	$sw_resettimecounter_checkbutton->get_child->set_size_request (300, -1);
+	$sw_resettimecounter_checkbutton->set_mode(1 );
+	$sw_resettimecounter_checkbutton->set_active(0 );
+	$sw_resettimecounter_checkbutton->can_focus(1 );
+	$sw_resettimecounter_checkbutton->signal_connect( 'pressed', sub {voice_click()});
+
+# Construct a Gtk2Button 'setupwin_button4' # 'Remove of statistics data'
+	$sw_resetstatistics_button =  Gtk2::Button->new_from_stock('delete2');
+	$sw_resetstatistics_button->can_focus(1 );
+	$sw_resetstatistics_button->signal_connect( 'clicked', sub {voice_click(); statistics_remove()});
+
+	$sw_vbox_mainparam_left->pack_start($sw_hbox_phonytypes, 0, 0, 0);
+	$sw_vbox_mainparam_left->pack_start($sw_provider_label, 0, 0, 0);
+	$sw_vbox_mainparam_left->pack_start($sw_provider_combo, 0, 0, 0);
+	$sw_vbox_mainparam_left->pack_start($sw_APN_label, 0, 0, 0);
+	$sw_vbox_mainparam_left->pack_start($sw_APN_entry, 0, 0, 0);
+	$sw_vbox_mainparam_left->pack_start($sw_hbox_userpass, 0, 0, 0);
+
+	$sw_vbox_mainparam_right->pack_start($sw_language_label, 0, 0, 0);
+	$sw_vbox_mainparam_right->pack_start($sw_language_combo_hbox, 0, 0, 0);
+	$sw_vbox_mainparam_right->pack_start($sw_ports_label, 0, 0, 0);
+	$sw_vbox_mainparam_right->pack_start($sw_portscan_checkbutton, 0, 0, 0);
+	$sw_vbox_mainparam_right->pack_start($sw_ports_combo_hbox, 0, 0, 0);
+	$sw_vbox_mainparam_right->pack_start($sw_port_button, 0, 0, 0);
+	$sw_vbox_mainparam_right->pack_start($sw_dyndns_checkbutton, 0, 0, 0);
+	$sw_vbox_mainparam_right->pack_start($sw_hbox_dns12, 0, 0, 0);
+	$sw_vbox_mainparam_right->pack_start($sw_connspeed_label, 0, 0, 0);
+	$sw_vbox_mainparam_right->pack_start($sw_connspeed_combo_hbox, 0, 0, 0);
+
+	$sw_vbox_optparam_left->pack_start($sw_watchint_label, 0, 0, 0);
+	$sw_vbox_optparam_left->pack_start($sw_watchint_hscale, 0, 0, 0);
+	$sw_vbox_optparam_left->pack_start($sw_reconnect_label, 0, 0, 0);
+	$sw_vbox_optparam_left->pack_start($sw_reconnect_hscale, 0, 0, 0);
+	$sw_vbox_optparam_left->pack_start($sw_attempts_label, 0, 0, 0);
+	$sw_vbox_optparam_left->pack_start($sw_attempts_hscale, 0, 0, 0);
+	$sw_vbox_optparam_left->pack_start($sw_afterstart_label, 0, 0, 0);
+	$sw_vbox_optparam_left->pack_start($sw_autoconn_checkbutton, 0, 0, 0);
+	$sw_vbox_optparam_left->pack_start($sw_afterconn_label, 0, 0, 0);
+	$sw_vbox_optparam_left->pack_start($sw_iconify_checkbutton, 0, 0, 0);
+
+	$sw_vbox_optparam_right->pack_start($sw_browser_label, 0, 0, 0);
+	$sw_vbox_optparam_right->pack_start($sw_browser_combo, 0, 0, 0);
+	$sw_vbox_optparam_right->pack_start($sw_file_button, 0, 0, 0);
+	$sw_vbox_optparam_right->pack_start($sw_hseparator1, 0, 0, 0);
+	$sw_vbox_optparam_right->pack_start($sw_themes_label, 0, 0, 0);
+	$sw_vbox_optparam_right->pack_start($sw_themes_combo, 0, 0, 0);
+	$sw_vbox_optparam_right->pack_start($sw_hseparator2, 0, 0, 0);
+	$sw_vbox_optparam_right->pack_start($sw_hbox_color_buttons, 0, 0, 0);
+	$sw_vbox_optparam_right->pack_start($sw_font_button, 0, 0, 0);
+	$sw_vbox_optparam_right->pack_start($sw_hseparator3, 0, 0, 0);
+	$sw_vbox_optparam_right->pack_start($sw_bell_checkbutton, 0, 0, 0);
+
+	$sw_vbox_rareparam_left->pack_start($sw_ownnumber_label, 0, 0, 0);
+	$sw_vbox_rareparam_left->pack_start($sw_ownnumber_entry, 0, 0, 0);
+	$sw_vbox_rareparam_left->pack_start($sw_CID_label, 0, 0, 0);
+	$sw_vbox_rareparam_left->pack_start($sw_CID_combo, 0, 0, 0);
+	$sw_vbox_rareparam_left->pack_start($sw_CGQ_checkbutton, 0, 0, 0);
+	$sw_vbox_rareparam_left->pack_start($sw_selfauth_checkbutton, 0, 0, 0);
+	$sw_vbox_rareparam_left->pack_start($sw_BSDcomp_checkbutton, 0, 0, 0);
+	$sw_vbox_rareparam_left->pack_start($sw_nowatch_checkbutton, 0, 0, 0);
+	$sw_vbox_rareparam_left->pack_start($sw_debug_checkbutton, 0, 0, 0);
+	#$sw_vbox_rareparam_left->pack_start($sw_useradd_button, 0, 0, 0);
+
+	$sw_vbox_rareparam_right->pack_start($sw_limits_label, 0, 0, 0);
+	$sw_vbox_rareparam_right->pack_start($sw_erasedate_label, 0, 0, 0);
+	$sw_vbox_rareparam_right->pack_start($sw_mounthlylimit_hscale, 0, 0, 0);
+	$sw_vbox_rareparam_right->pack_start($sw_maxmounthlytrans_label, 0, 0, 0);
+	$sw_vbox_rareparam_right->pack_start($sw_maxmounthlytrans_entry, 0, 0, 0);
+	$sw_vbox_rareparam_right->pack_start($sw_maxweeklytrans_label, 0, 0, 0);
+	$sw_vbox_rareparam_right->pack_start($sw_maxweeklytrans_entry, 0, 0, 0);
+	
+	$sw_vbox_rareparam_right->pack_start($sw_hseparator4, 0, 0, 0);
+	
+	$sw_vbox_rareparam_right->pack_start($sw_resetmounthlytrans_checkbutton, 0, 0, 0);
+	$sw_vbox_rareparam_right->pack_start($sw_resetweaklytrans_checkbutton, 0, 0, 0);
+	$sw_vbox_rareparam_right->pack_start($sw_resettimecounter_checkbutton, 0, 0, 0);
+	$sw_vbox_rareparam_right->pack_start($sw_resetstatistics_button, 0, 0, 0);
+
+	$setupwin->set_position('center' );
+	$setupwin->show_all;
+
+	sub on_setupwin_destroy {
+		undef $setupwin;
+		read_conf ();
+		$mainwin_setup_butt->set_sensitive(1);
+		$mainwin_connect_butt->set_sensitive(1)
+	}
+
+	sub on_handset_combo_changed {
+		$phonetype=$sw_handset_manuf_combo->entry->get_text();
+		$phonetype.=" ".$sw_handset_combo->entry->get_text();
+		tested();
+		place_pic();
+	}
+
+	sub place_pic {
+		if ($setupwin_pixmap1) {$setupwin_pixmap1->destroy; undef $setupwin_pixmap1};
+		$phonetype_p=$phonetype;
+		$phonetype_p=~ tr/\*//d;
+		$get_tel_kep=$telcsikepek{$phonetype_p};
+		if ($get_tel_kep) {
+			dbmopen (%KEPEK, "$gprs_shared_path/gprsec/images/phones2/kepek", 0444);
+			$kep_path=$KEPEK{"$get_tel_kep"};
+			open (FILE, ">$home/.gprsec/pic.xpm");
+			print FILE $kep_path;
+			close FILE;
+			dbmclose (%KEPEK);
+			$style = $setupwin->get_style()->bg( 'normal' );
+			($pixmap, $mask ) = Gtk2::Gdk::Pixmap->create_from_xpm( $setupwin->window, $style, "$home/.gprsec/pic.xpm");
+			if (!$setupwin_pixmap1) {
+				$setupwin_pixmap1 = Gtk2::Image->new;
+				$sw_hbox_phonytypes->pack_end($setupwin_pixmap1, 0, 0, 0);
+			}
+			$setupwin_pixmap1->set_from_pixmap($pixmap, $mask );
+			$setupwin_pixmap1->set_alignment(0, 0);
+			$sw_hbox_phonytypes->show_all;
+			
+		}
+	}
+
+	sub setupwin_hscale12_sub {
+		$havit_v=$work->{'setupwin_hscale12-adj'}->get_value();
+		if ($havit_v == 0) {
+			$sw_maxmounthlytrans_entry->set_text("");
+			$sw_maxmounthlytrans_entry->set_sensitive(0);
+			$sw_maxmounthlytrans_label->set_sensitive(0);
+		} else {
+			$sw_maxmounthlytrans_entry->set_sensitive(1);
+			$sw_maxmounthlytrans_label->set_sensitive(1);
+		}
+	}
+
+	sub om_portscan_checkbutton_pressed {
+# 		if (!$m_expert) {
+# 			$m_expert=1;
+# 		} else {
+# 			undef $m_expert;
+# 		}
+		$m_expert=$sw_portscan_checkbutton->get_active();
+		port_scan();
+		#read_conf();
+		
+		#$sw_ports_combo->set_popdown_strings(sort keys %ports);
+		$sw_ports_combo->set_popdown_strings(sort { my @a = $a =~ /(\d+)/; my @b = $b =~ /(\d+)/; $a[0] <=> $b[0] } keys %ports);
+		foreach $keys (sort keys %ports) {
+		}
+	}
+
+	sub check_rec_widgets {
+		$reconn_on=$work->{'setupwin_hscale4-adj'}->get_value();
+		if ($reconn_on==0) {
+			$sw_attempts_hscale->set_sensitive(0);
+			$sw_attempts_label->set_sensitive(0);
+		} else {
+			$sw_attempts_hscale->set_sensitive(1);
+			$sw_attempts_label->set_sensitive(1);
+		}
+	}
+
+sub statistics_remove {
+	$rem_mon=$sw_resetmounthlytrans_checkbutton->get_active();
+	$rem_wee=$sw_resetweaklytrans_checkbutton->get_active();
+	$rem_tim=$sw_resettimecounter_checkbutton->get_active();
+	$sw_resetmounthlytrans_checkbutton->set_active(0);
+	$sw_resetweaklytrans_checkbutton->set_active(0);
+	$sw_resettimecounter_checkbutton->set_active(0);
+	
+	if ($rem_mon) {
+		foreach (qw/osszb_fel osszb_le/) {
+			if (-e "$home/.gprsec/$_") {
+				`rm '$home/.gprsec/$_'`;
+				
+			}
+		}
+		($mp, $perc, $ora, $nap, $mounth, $ev)=localtime();
+		$mounth++;
+		$ev+=1900;
+		$start_time=" $ev/$mounth/$nap $ora:$perc";
+		new_config_save();
+		$statis_label[2]->destroy;
+		show_statis_label ($statis_label[2], $start_time, 275, 1); #var
+	}
+	if ($rem_wee) {
+			foreach (qw/7d.dir 7d.pag/) {
+				if (-e "$home/.gprsec/$_") {
+				`rm '$home/.gprsec/$_'`;
+				}
+			}
+	}
+	if ($rem_tim) {
+		if (-e "$home/.gprsec/ossz_ido") {
+			`rm '$home/.gprsec/ossz_ido'`;
+		}
+	}
+	
+}
+
+sub set_new_speed {
+	run_task ("$gprs_shared_path/gprsec/tools/sudct &");
+}
+
+	sub create_sw_box_structure {
+# OK, it not a subroutine...
+# it's much like a goto-goto, just to hide from my eyes this code...
+		$sw_hboxs_spacing=10;
+		$sw_hboxs_border_width=10;
+		
+		$sw_vboxs_spacing=10;
+		$sw_vboxs_border_width=0;
+	
+		$vseparator1 = Gtk2::VSeparator->new;
+		$vseparator2 = Gtk2::VSeparator->new;
+		$vseparator3 = Gtk2::VSeparator->new;
+		$vseparator4 = Gtk2::VSeparator->new;
+	
+	# Gtk2::HBox 'sw_hbox_mainparam', main parameters...
+		$sw_hbox_mainparam = Gtk2::HBox->new;
+		$sw_hbox_mainparam->set_property('homogeneous'=>0, 'spacing'=>$sw_hboxs_spacing, 'border_width'=>$sw_hboxs_border_width);
+	
+	# Gtk2::VBox 'sw_vbox_mainparam_left', left side main parameters...
+		$sw_vbox_mainparam_left = Gtk2::VBox->new;
+		$sw_vbox_mainparam_left->set_property('homogeneous'=>0, 'spacing'=>$sw_vboxs_spacing, 'border_width'=>$sw_vboxs_border_width);
+	
+	# Gtk2::VBox 'sw_vbox_mainparam_right', right side main parameters...
+		$sw_vbox_mainparam_right = Gtk2::VBox->new;
+		$sw_vbox_mainparam_right->set_property('homogeneous'=>0, 'spacing'=>$sw_vboxs_spacing, 'border_width'=>$sw_vboxs_border_width);
+	
+		$sw_hbox_mainparam->pack_start($sw_vbox_mainparam_left, 1, 1, 0);
+		$sw_hbox_mainparam->pack_start($vseparator1, 0, 0, 0);
+		$sw_hbox_mainparam->pack_end($sw_vbox_mainparam_right, 1, 1, 0);
+	
+	# Gtk2::HBox 'sw_hbox_optparam', optional parameters...
+		$sw_hbox_optparam = Gtk2::HBox->new;
+		$sw_hbox_optparam->set_property('homogeneous'=>0, 'spacing'=>$sw_hboxs_spacing, 'border_width'=>$sw_hboxs_border_width);
+	
+	# Gtk2::VBox 'sw_vbox_optparam_left', left side optional parameters...
+		$sw_vbox_optparam_left = Gtk2::VBox->new;
+		$sw_vbox_optparam_left->set_property('homogeneous'=>0, 'spacing'=>$sw_vboxs_spacing, 'border_width'=>$sw_vboxs_border_width);
+	
+	# Gtk2::VBox 'sw_vbox_optparam_right', right side optional parameters...
+		$sw_vbox_optparam_right = Gtk2::VBox->new;
+		$sw_vbox_optparam_right->set_property('homogeneous'=>0, 'spacing'=>$sw_vboxs_spacing, 'border_width'=>$sw_vboxs_border_width);
+	
+		$sw_hbox_optparam->pack_start($sw_vbox_optparam_left, 1, 1, 0);
+		$sw_hbox_optparam->pack_start($vseparator2, 0, 0, 0);
+		$sw_hbox_optparam->pack_end($sw_vbox_optparam_right, 1, 1, 0);
+	
+	# Gtk2::HBox 'sw_hbox_rareparam', rarely used parameters...
+		$sw_hbox_rareparam = Gtk2::HBox->new;
+		$sw_hbox_rareparam->set_property('homogeneous'=>0, 'spacing'=>$sw_hboxs_spacing, 'border_width'=>$sw_hboxs_border_width);
+	
+	# Gtk2::VBox 'sw_vbox_rareparam_left', left side rarely used parameters...
+		$sw_vbox_rareparam_left = Gtk2::VBox->new;
+		$sw_vbox_rareparam_left->set_property('homogeneous'=>0, 'spacing'=>$sw_vboxs_spacing, 'border_width'=>$sw_vboxs_border_width);
+	
+	# Gtk2::VBox 'sw_vbox_rareparam_right', right side rarely used parameters...
+		$sw_vbox_rareparam_right = Gtk2::VBox->new;
+		$sw_vbox_rareparam_right->set_property('homogeneous'=>0, 'spacing'=>$sw_vboxs_spacing, 'border_width'=>$sw_vboxs_border_width);
+	
+		$sw_hbox_rareparam->pack_start($sw_vbox_rareparam_left, 1, 1, 0);
+		$sw_hbox_rareparam->pack_start($vseparator3, 0, 0, 0);
+		$sw_hbox_rareparam->pack_end($sw_vbox_rareparam_right, 1, 1, 0);
+	
+	# Gtk2::HBox 'sw_hbox_otherparam', other parameters...
+		$sw_hbox_otherparam = Gtk2::HBox->new;
+		$sw_hbox_otherparam->set_property('homogeneous'=>0, 'spacing'=>$sw_hboxs_spacing, 'border_width'=>$sw_hboxs_border_width);
+	
+	# Gtk2::VBox 'sw_vbox_otherparam_left', left side other parameters...
+		$sw_vbox_otherparam_left = Gtk2::VBox->new;
+		$sw_vbox_otherparam_left->set_property('homogeneous'=>0, 'spacing'=>$sw_vboxs_spacing, 'border_width'=>$sw_vboxs_border_width);
+	
+	# Gtk2::VBox 'sw_vbox_otherparam_right', right side other parameters...
+		$sw_vbox_otherparam_right = Gtk2::VBox->new;
+		$sw_vbox_otherparam_right->set_property('homogeneous'=>0, 'spacing'=>$sw_vboxs_spacing, 'border_width'=>$sw_vboxs_border_width);
+	
+		$sw_hbox_otherparam->pack_start($sw_vbox_otherparam_left, 1, 1, 0);
+		$sw_hbox_otherparam->pack_start($vseparator4, 0, 0, 0);
+		$sw_hbox_otherparam->pack_end($sw_vbox_otherparam_right, 1, 1, 0);
+	
+	}
+	undef $new_notebook;
+} # end of "setup" window declaration
+
+sub setup_save_data {
+	
+	# getting setting data from the widgets
+	#
+	# Phonetype 
+	$phonetype=$sw_handset_manuf_combo->entry->get_text();
+	$phonetype.=" ".$sw_handset_combo->entry->get_text();
+	#
+	# Provider
+	$sel_szolg=$sw_provider_combo->entry->get_text();
+	#
+	# APN
+	$def_apn=$sw_APN_entry->get_text();
+	#
+	# username
+	$user=$sw_username_entry->get_text();
+	#
+	# password
+	$passw=$sw_password_entry->get_text();
+	#
+	# language
+	$sel_lang=$sw_language_combo->entry->get_text();
+	#
+	# expert port scan?
+	$m_expert=$sw_portscan_checkbutton->get_active();
+	#
+	# connection port
+	$sel_port=$sw_ports_combo->entry->get_text();
+
+	vanport();
+	#
+	# enable dynamic DNS?
+	$din_eng=$sw_dyndns_checkbutton->get_active();
+	#
+	# dns1
+	$dns1=$sw_dns1_entry->get_text();
+	#
+	# dns2
+	$dns2=$sw_dns2_entry->get_text();
+	#
+	# Connection speed 
+	$connspeed=$sw_connspeed_combo->entry->get_text();
+	$connspeed=~s /(\d+)/$1/;
+	$connspeed=$1;
+	#
+	# Iconify GPRS Easy Connect
+	$cw_ic=$sw_iconify_checkbutton->get_active();
+	#
+	# Selected browser
+	$brow=$sw_browser_combo->entry->get_text();
+	#
+	# time interval of the watching buliding connection
+	$time_interval=$work->{'setupwin_hscale2-adj'}->get_value();
+	#
+	# reconnect after the disconnect in xx sec
+	$reconn_on=$work->{'setupwin_hscale4-adj'}->get_value();
+	#
+	# number of enabled reconnections
+	$reconn_db=$work->{'setupwin_hscale1-adj'}->get_value();
+	#
+	# enable automatic connection
+	$autocsat=$sw_autoconn_checkbutton->get_active();
+	#
+	# enable automatic connection
+	$autocsat=$sw_ownnumber_entry->get_text();
+	#
+	# enable/diable bell signals
+	$no_beep=$sw_bell_checkbutton->get_active();
+	#
+	# own CID number
+	$cid=$sw_CID_combo->entry->get_text();
+	#
+	# disable CGQ commands
+	$no_cgq=$sw_CGQ_checkbutton->get_active();
+	#
+	# Do not require the peer to authenticate itself
+	$no_auth=$sw_selfauth_checkbutton->get_active();
+	#
+	# enable BSD compression
+	$bsd_comp=$sw_BSDcomp_checkbutton->get_active();
+	#
+	# disable read/write data during connection
+	$no_dev=$sw_nowatch_checkbutton->get_active();
+	#
+	# debug mode on
+	$debug=$sw_debug_checkbutton->get_active();
+	#
+	# date of erase of monthly limit's data
+	$havit_v=$work->{'setupwin_hscale12-adj'}->get_value();
+	#
+	# monthly limit
+	$monthlylimit_v=$sw_maxmounthlytrans_entry->get_text();
+# 	#
+	# weekly limit
+	$weeklylimit_v=$sw_maxweeklytrans_entry->get_text();
+	#
+	# theme
+	$theme=$sw_themes_entry->get_text();
+	if ($old_theme ne $theme) {
+		undef $htmlcolor;
+		undef $fg_color;
+	}
+
+	telcsibeolv();
+
+	# configuration blank error
+	if (!$phonetype || !$sel_port || !$sel_lang || !$sel_szolg) {
+		$osszhiba=$cl[69]."\n";
+		if (!$phonetype) {
+			push (@confhibak, $cl[70]);
+		}
+		if (!$sel_port) {
+			push (@confhibak, $cl[71]);
+		}
+		if (!$sel_lang) {
+			push (@confhibak, $cl[72]);
+		}
+		if (!$sel_szolg) {
+			push (@confhibak, $cl[73]);
+		}
+		foreach (@confhibak) {
+			$osszhiba.="\n$_";
+		}
+		warning_window (text_linker($osszhiba));
+		undef $osszhiba;
+		undef @confhibak;
+		return;
+
+	}
+
+	$newly=1;
+	new_config_save();
+	if (!$time_interval || $time_interval <200){$time_interval=200}
+	if (!$connspeed) {$connspeed=57600}
+	if (!$reconn_on && $id_disc) {
+		$id_disc->cancel;
+		undef $id_disc;
+	}
+	
+	##############################
+	# making of chat script      #
+	##############################
+
+	$sel_szolg_on=$def_apn;
+	chomp $sel_szolg_on;
+	$chat_file=$chat_eleje."\n".$teltype{$phonetype};
+	$chat_file=~s /\?\?\?/$sel_szolg_on/e;
+	($mp, $perc, $ora, $nap, $mounth, $ev)=localtime();
+	$mounth++;
+	$ev+=1900;
+	$chatduma="\n# GPRS Easy Connect program ekkor modositotta: $ev.$mounth.$nap\n";
+	$chat_file.=$chatduma."\n";
+
+	#  building of CID
+	if ($cid && $cid ne "--") {
+		$chat_file=~s /CGDCONT\=\d+/"CGDCONT\=".$cid/ge;
+		$chat_file=~s /CGQREQ\=\d+/"CGQREQ\=".$cid/ge;
+		$chat_file=~s /CGQMIN\=\d+/"CGQMIN\=".$cid/ge;
+		$chat_file=~s /(\*\d+)(\*+)\d+\#/$1.$2.$cid."#"/ge;
+	}
+
+	# personal phone number
+	if ($other_numb) {
+		$chat_file=~s /\*\d+\*+\d+\#/$other_numb/ge;
+	}
+
+	# forbidding of CGQ commands
+	if ($no_cgq==1) {
+		@chat_file_t=split /\n/, $chat_file;
+		undef $chat_file;
+		foreach (@chat_file_t) {
+			foreach $ch_temp (qw/ATS0 CGQREQ CGQMIN CGATT/) {
+				if (/$ch_temp/) {
+					undef $_;
+				}
+			}
+			$ttt++;
+			if ($_) {
+				$chat_file.=$_."\n";
+			}
+		}
+	}
+	# writing of chat script
+	$tempfilename=">$home/.gprsec/chat";
+	open (FILE, $tempfilename);
+	chmod 0666, $tempfilename;
+	print FILE $chat_file;
+
+	##############################
+	# building of pppd script    #
+	##############################
+
+	$sel_port_on=$ports{$sel_port};
+	$alap=`cat '$gprs_shared_path/gprsec/tools/gprs-conn-script'`;
+	$conn_user="\n".$sel_port_on;
+
+	if ($user eq text_linker($cl[87])) {
+		$user="unknown";
+	}
+
+	if ($passw eq text_linker($cl[87])) {
+		$passw="unknown";
+	}
+
+	if (!$user) {
+		$user="";
+	}
+
+	if (!$passw) {
+		$passw="";
+	}
+
+	if ($sysname eq "Linux") {
+		$disconnect_script="\ndisconnect '/usr/sbin/chat -e -f $gprs_shared_path/gprsec/tools/disconnect -v'";
+		$conn_sor="\nconnect '/usr/sbin/chat -e -f $home/.gprsec/chat -v'";
+		$egyben=$alap.$disconnect_script.$conn_sor.$conn_user."\nuser $user"."\npassword $passw";
+		if ($din_eng) {
+			$egyben.="\n#Enable the DNSs from server";
+			$egyben.="\nusepeerdns";
+		}
+		$egyben.="\n#With this option, pppd will accept all control characters from the peer, including those marked in the receive asyncmap";
+		$egyben.="\nreceive-all";
+		# pipe for pppd
+		$egyben.="\n"."logfile ".'"'."$home/.gprsec/conn.log".'"'."\n";
+	}
+
+
+	if ($no_auth && $who_r eq "root") {
+		$egyben.="\n#Do  not  require  the  peer to authenticate itself.";
+		$egyben.="\nnoauth";
+	}
+
+	if (!$bsd_comp) {
+		$egyben.="\nnobsdcomp";
+		$egyben.="\nnodeflate";
+	}
+	# building the CDMA system chat script
+	if ($phonetype=~ /Ac555_/) {
+		$alap=`cat '$gprs_shared_path/gprsec/tools/cdma-conn-script'`;
+		if ($sysname eq "Linux") {
+			$disconnect_script="disconnect '/usr/sbin/chat -e -f $gprs_shared_path/gprsec/tools/disconnect -v'";
+			$conn_sor="\nconnect '/usr/sbin/chat -e -t3 -f $home/.gprsec/chat -v'";
+			$conn_user="\n".$sel_port_on;
+			$egyben=$alap.$disconnect_script.$conn_sor.$conn_user."\nuser $user"."\npassword $passw";
+			$egyben.="\n"."logfile ".'"'."$home/.gprsec/conn.log".'"'."\n";
+		}
+	}
+
+	$speed_change="# Speed\n$connspeed";
+	$egyben=~s /\# Speed\n\d+/$speed_change/e;
+
+	$tempfilename=">$home/.gprsec/run";
+	open (FILE, $tempfilename);
+	chmod 0666, $tempfilename;
+	print FILE $egyben;
+
+	Gtk2->main_quit;
+	run_task ("$0 -nosplash"); #start "my name" program (with full path) without splash
+	exit;
+}
+
+sub get_gtk2_theme_path {
+	my ($basepath,$caller)=@_;
+# It may be usefull when you have installed gtk-1.0 and gtk-2.0 themes.
+# Or sometimes it may fail loading themes...
+	my $gtk2path=undef;
+	if (-e "$basepath"."/gtk-2.0/gtkrc") {
+		$gtk2path="$basepath"."/gtk-2.0";
+	} else {
+		$gtk2path="$basepath"."/gtk";
+	}
+	return "$gtk2path";
+}
+
+sub load_themes {
+
+	$theme_path=Gtk2::Rc->get_theme_dir;
+	@themes_f=`ls -d "$theme_path"/* 2>/dev/null`;
+
+	foreach (@themes_f) {
+		chomp $_;
+		@temp_themes= split /$theme_path\//, $_;
+		$gtkbasepath=$_;
+		$gtkthemepath=get_gtk2_theme_path($gtkbasepath,"load_themes");
+		if (-d $gtkthemepath && !($gtkthemepath =~ / /)) {
+			@more_png=`ls "$gtkthemepath"/`;
+			$l_mp=@more_png;
+		} else {next}
+		if (-e ($gtkthemepath."/gtkrc" || $gtkbasepath."/gtkrc")  and $l_mp > 0 ) {
+			$themes{$temp_themes[1]}=$temp_themes[0];
+			$ft++;
+			slpash_text("Found themes: $ft");
+		}
+	}
+}
+
+sub error_window {
+	voice_error();
+	$dialog = Gtk2::MessageDialog->new(undef, 'modal', 'error','ok', "$_[0]");
+	$dialog->signal_connect('response', sub { voice_click();$dialog->destroy; undef $dialog});
+	$dialog->show_all;
+}
+
+sub warning_window {
+	voice_warning();
+	$dialog = Gtk2::MessageDialog->new(undef, 'modal', 'warning','ok', "$_[0]");
+	$dialog->signal_connect('response', sub { voice_click();$dialog->destroy; undef $dialog});
+	$dialog->show_all;
+}
+
+sub info_window {
+	voice_info();
+	$dialog = Gtk2::MessageDialog->new(undef, 'modal', 'info','ok', "$_[0]");
+	$dialog->signal_connect('response', sub { voice_click();$dialog->destroy; undef $dialog});
+	$dialog->show_all;
+}
+
+sub def_stock {
+	#
+	undef @stock_variables;
+	@stock_variables=("connect", "$cl[1]", "$gprs_shared_path/gprsec/images/stocks/stock_connect.xpm");
+	stocks_set (@stock_variables);
+	#
+	@stock_variables=("disconnect", "$cl[2]", "$gprs_shared_path/gprsec/images/stocks/stock_disconnect.xpm");
+	stocks_set (@stock_variables);
+	#
+	@stock_variables=("letter-portrait", "$cl[82]", "$gprs_shared_path/gprsec/images/stocks/stock_macro-insert-breakpoint.xpm");
+	stocks_set (@stock_variables);
+	#
+	@stock_variables=("people", "$cl[68]", "$gprs_shared_path/gprsec/images/stocks/stock_people.xpm");
+	stocks_set (@stock_variables);
+	#
+	@stock_variables=("history", "$cl[88]", "$gprs_shared_path/gprsec/images/stocks/stock_history.xpm");
+	stocks_set (@stock_variables);
+	#
+	@stock_variables=("info", "Info", "$gprs_shared_path/gprsec/images/stocks/stock_about.xpm");
+	stocks_set (@stock_variables);
+	#
+	@stock_variables=("upgrade", "$cl[138]", "$gprs_shared_path/gprsec/images/stocks/stock_refresh.xpm");
+	stocks_set (@stock_variables);
+	#
+	@stock_variables=("donate", "$cl[177]", "$gprs_shared_path/gprsec/images/stocks/stock_new-meeting.xpm");
+	stocks_set (@stock_variables);
+	#
+	@stock_variables=("delete2", "$cl[19]", "$gprs_shared_path/gprsec/images/stocks/stock_delete2.xpm");
+	stocks_set (@stock_variables);
+	#
+	@stock_variables=("col_norm", "$cl[192]", "$gprs_shared_path/gprsec/images/stocks/stock_select-color.xpm");
+	stocks_set (@stock_variables);
+	#
+	@stock_variables=("col_fg", "$cl[193]", "$gprs_shared_path/gprsec/images/stocks/stock_select-color.xpm");
+	stocks_set (@stock_variables);
+	#
+	@stock_variables=("font", "$cl[220]", "$gprs_shared_path/gprsec/images/stocks/stock_font.xpm");
+	stocks_set (@stock_variables);
+	#
+	@stock_variables=("file", "$cl[225]", "$gprs_shared_path/gprsec/images/stocks/stock_open.xpm");
+	stocks_set (@stock_variables);
+	#
+	@stock_variables=("file2", "$cl[227]", "$gprs_shared_path/gprsec/images/stocks/stock_open.xpm");
+	stocks_set (@stock_variables);
+}
+
+sub stocks_set {
+	my $stock_id = $_[0];
+	Gtk2::Stock->add ({
+		stock_id => $stock_id,
+		label    => "_$_[1]",
+		modifier => [],
+		keyval   => $Gtk2::Gdk::Keysyms{C},
+		translation_domain => 'gtk2-perl-example',
+	});
+	my $icon_set = Gtk2::IconSet->new_from_pixbuf (
+	Gtk2::Gdk::Pixbuf->new_from_file($_[2]));
+	my $icon_factory = Gtk2::IconFactory->new;
+	$icon_factory->add ($stock_id, $icon_set);
+	$icon_factory->add_default;
+}
+
+sub upgrade_win_sub {
+	undef $all_files_name;
+	undef $upgr_files_numb;
+	if ($upgrade_win) {
+		$upgrade_win->deiconify;
+		return;
+	} else {
+		# Construct a Gtk2Window 'upgrade
+		$upgrade_win = new Gtk2::Window->new;;
+		$upgrade_win->set_title("Upgrade of GPRS Easy Connect $VERSION");
+		$upgrade_win->set_position('center' );
+		$upgrade_win->set_modal(0 );
+		$upgrade_win->set_resizable (0);
+		$upgrade_win->set_size_request(300, 150 );
+		$upgrade_win->show();
+		$upgrade_win->signal_connect('destroy', sub {stop_upgr("w")});
+		#
+		# Construct a Gtk2Fixed 'fixed1'
+		$upgrade_win_fixed1 = Gtk2::Fixed->new;
+		$upgrade_win->add($upgrade_win_fixed1);
+		$upgrade_win_fixed1->show;
+		$upgrade_win_fixed1->set_size_request(300, 200 );
+		#
+		# Construct a Gtk2Button 'upgrade'
+		$upgrade_win_connbutt =  Gtk2::Button->new_from_stock ('upgrade');
+		$upgrade_win_fixed1->put($upgrade_win_connbutt,40, 50 );
+		$upgrade_win_connbutt->show;
+		$upgrade_win_connbutt->set_size_request(220, 32 );
+		$upgrade_win_connbutt->can_focus(1 );
+		$upgrade_win_connbutt->signal_connect('clicked', sub {voice_click(); down_upgrade()});
+		#
+		# Construct a Gtk2ProgressBar 'progressbar3'
+		$upgrade_progressbar3 = Gtk2::ProgressBar->new;
+		$upgrade_progressbar3->set_orientation('left_to_right' );
+		$upgrade_win_fixed1->put($upgrade_progressbar3, 50, 20 );
+		$upgrade_progressbar3->show;
+		$upgrade_progressbar3->set_size_request(200, 22 );
+	}
+}
+	
+sub down_upgrade {
+	$home_upg=$ENV{HOME}."/.gprsec/upgrade";
+	if (!-e $home_upg) {
+		mkdir ("$home_upg", 0777);	# creating upgrade dir
+	}
+	undef $stopped;
+	# Construct a Gtk2Label 'setupwin_label14'
+	$upgrade_win_label1= new Gtk2::Label(text_linker($cl[141])); #Searching...
+	$upgrade_win_label1->set_property('justify'=>'center', 'wrap'=>1);
+	$upgrade_win_fixed1->put($upgrade_win_label1, 35, 90);
+	$upgrade_win_label1->show;
+	$upgrade_win_label1->set_size_request(250, 16 );
+	$upgrade_win_label1->set_alignment(0.5, 0.5 );
+		
+		
+	$upgrade_win_connbutt->destroy;
+	undef $upgrade_win_connbutt;
+	$upgrade_win_connbutt =  Gtk2::Button->new_from_stock ('gtk-cancel');
+	$upgrade_win_fixed1->put($upgrade_win_connbutt,54, 50 );
+	$upgrade_win_connbutt->show;
+	$upgrade_win_connbutt->set_size_request(192, 32 );
+	$upgrade_win_connbutt->can_focus(1 );
+	
+		open (FILE, "<$gprs_shared_path/gprsec/version");
+		$ver_GPRSEC=<FILE>;
+		$ver_GPRSEC=~tr /\.\(\)pre//d; #/
+		chomp $ver_GPRSEC;
+		@ver_GPRSEC_spl=split /\_/, $ver_GPRSEC;
+		$ver_GPRSEC=$ver_GPRSEC_spl[0];
+
+		APN_version();
+
+		if ($upg_ver_APN > $orig_ver_APN) {
+			$ver_APN=$upg_ver_APN;
+		} else {
+			$ver_APN=$orig_ver_APN;
+		}
+
+	if ($upg_ver_SCRIPT > $orig_ver_SCRIPT) {
+		$ver_SCRIPT=$upg_ver_SCRIPT;
+	} else {
+		$ver_SCRIPT=$orig_ver_SCRIPT;
+	}
+	
+		$donpid=run_task ("wget -T 30 -q -O \"$home/.gprsec/donate_get\" \"http://www.gprsec.hu/update.php?GPRSEC=$ver_GPRSEC&APN=$ver_APN&SCRIPT=$ver_SCRIPT\"");
+		undef $up_g_time;
+		$upgr_getsite=Glib::Timeout->add(100, \&upgrade_gsite);
+	#}
+}	
+
+sub upgrade_gsite {
+	$up_g_time++;
+	$doc=`cat $home/.gprsec/donate_get`;
+	chomp ($doc);
+	
+	if (($doc eq "" || $doc=~ /error/ || $doc=~ /Hiba/) && $up_g_time>100) {
+		error_window (text_linker($cl[142]));
+		$upgrade_win->destroy;
+		undef $upgrade_win;
+		Glib::Source->remove ($upgr_getsite);
+		return 0;
+	} elsif ($doc eq "0") {
+		warning_window (text_linker($cl[143]));
+		$upgrade_win->destroy;
+		undef $upgrade_win;
+		Glib::Source->remove ($upgr_getsite);
+		return 0;
+	} elsif ($doc=~ /gprsec\.hu/) {
+		@temp_doc=`cat $home/.gprsec/donate_get`;
+		$doc=@temp_doc[0];
+		chomp ($doc);
+		start_upgrade();
+	}
+	return 1;
+}
+
+sub start_upgrade {
+	Glib::Source->remove ($upgr_getsite);
+	@link_size=split /\*/, $doc;
+	$link=@link_size[0];
+	$size=@link_size[1];
+	@temp=split /\//,$link;
+	
+	$upg_prg_name= pop (@temp);
+	$wget_pid = run_task ("wget -v -P $home_upg -O $home_upg/$upg_prg_name -o $home_upg/info $link");
+	$upgr_timeout=Glib::Timeout->add(100, \&upgrade_status);
+	$upgrade_progressbar3->set_orientation ('left-to-right');
+}
+
+sub upgrade_status {
+	if (-e "$home_upg/info") {
+		$_=`cat $home_upg/info`;
+	}
+
+	if (/Resolving/ && !$resolv) {
+		$upgrade_win_label1->set_text (text_linker($cl[144]));#Resolving nameserver...
+		$resolv=1;
+	}
+	if (/Not\ Found/) {
+		Glib::Source->remove ($upgr_timeout);
+		stop_upgr();
+	}
+	if (/failed\:/) {
+		$upgrade_win_label1->set_text (text_linker($cl[145]));#Couldn't find the nameserver!
+		Glib::Source->remove ($upgr_timeout);
+		stop_upgr();
+	}
+	if (/connected\./ && !$connected) {
+		$upgrade_win_label1->set_text (text_linker($cl[146]));#Connecting to gprsec.hu is successfull.
+		$connected=1;
+	}
+	if (/HTTP/ && !$http_req) {
+		$upgrade_win_label1->set_text (text_linker($cl[147]));#HTTP request sent, waiting for answer...
+		$http_req=1;
+	}
+	if (-e "$home_upg/$upg_prg_name") {
+		($dev, $inode, $mode, $nlink, $uid, $gid, $rdev, $file_size, $atime, $mtime, $ctime, $bsize, $blocks)=stat "$home_upg/$upg_prg_name";
+		$hossz=$file_size;
+
+		if ($file_size>0) {
+			$size_inkb=(int($size/1024)*10)/10;
+			$upgrade_win_label1->set_text (text_linker($cl[148])); #The downloading is in progress...\nTotal size: *** KB
+		}
+
+		$upgrade_win_connbutt->signal_connect('clicked', sub {stop_upgr()});
+		
+	
+		if (($hossz/$size)>=1) {
+			$upgrade_progressbar3-> set_fraction(1);
+			$upgrade_progressbar3->set_text ("100 %");
+			$all_files_name.="\n".$upg_prg_name;
+			if ($upg_prg_name=~ /gprs\-chat\-script/ && $upg_prg_name=~ /tar\.gz/) {
+				push (@tool_upg_files, $upg_prg_name);
+			}
+			if ($upg_prg_name=~ /apn/ && $upg_prg_name=~ /tar\.gz/) {
+				push (@tool_upg_files, $upg_prg_name);
+			}
+			$upgr_files_numb++;
+			if ($temp_doc[$upgr_files_numb]) {
+				$doc=@temp_doc[$upgr_files_numb];
+				chomp ($doc);
+				start_upgrade();
+			} else {
+				info_window (text_linker($cl[149], "\n".$home_upg."\/".$all_files_name."\n".text_linker($cl[210])));
+				$upgrade_win->destroy;
+				undef $upgrade_win;
+				chdir $home_upg;
+				foreach (@tool_upg_files) {
+					`tar -xzf "$home_upg/$_"`;
+				}
+				if (-e "$home_upg/info") {
+					`rm $home_upg/info`;
+				}
+				#``
+				return 0;
+			}
+		} else {
+			$upgrade_progressbar3->set_fraction($hossz/$size);
+			$upr_st_text=int(($hossz/$size)*100);
+			$upgrade_progressbar3->set_text ($upr_st_text." %");
+			return 1;
+		}
+	}
+}
+
+sub stop_upgr {
+	if (!$stopped && !$leave) { # more than one run over is possibly here
+		voice_click();
+		$stopped=1;
+	}
+	if ($_[0] eq "w") {
+			$upgrade_win->destroy;
+			undef $upgrade_win;
+			if ($wget_pid) {
+				`kill -KILL $wget_pid`;
+			}
+	}
+	if ($upgr_timeout) {
+		Glib::Source->remove ($upgr_timeout);
+	}
+	if ($wget_pid) {
+		`kill -KILL $wget_pid`;
+	}
+	if ($upgrade_win) {
+		if ($upgrade_win_label1) {
+			$upgrade_win_label1->set_text (text_linker($cl[43]));
+		}
+	$upgrade_win_connbutt->set_sensitive(0);
+	#
+	$upgrade_win_connbutt1 =  Gtk2::Button->new_from_stock ('gtk-close');
+	$upgrade_win_fixed1->put($upgrade_win_connbutt1,54, 110 );
+	$upgrade_win_connbutt1->show;
+	$upgrade_win_connbutt1->set_size_request(192, 32 );
+	$upgrade_win_connbutt1->can_focus(1 );
+	$upgrade_win_connbutt1->signal_connect('clicked', sub {voice_click(); $upgrade_win->destroy; undef $upgrade_win});
+	}
+return 0;
+}
+
+sub donate {
+	undef $doc;
+	undef @team_meb2;
+	undef @who_what;
+	undef %who;
+	undef $t_count;
+	undef @cuccos;
+	undef %r_who;
+	undef $who_keys;
+	undef $cb_item;
+	undef $wget_get;
+	undef $pids;
+	`rm -f $home/.gprsec/donate_get`;
+	if ($sel_lang eq "magyar") {
+		$d_lang="hu";
+	} else {
+		$d_lang="en";
+	}
+	if ($donate_win) {
+		$donate_win->deiconify;
+		return;
+	} else {
+		$donpid=run_task ("wget -T 30 -q -O \"$home/.gprsec/donate_get\" \"http://www.gprsec.hu/donate.php?lang=$d_lang\"");
+
+			undef $watch_donate_time;
+			$watch_donatefile=Glib::Timeout->add(100, \&watch_donate);
+		
+			sub watch_donate {
+				$watch_donate_time++;
+				$pids=`ps ax | grep $donpid | grep wget`;
+				
+				if ($watch_donate_time>100 && !$wget_get) {
+					Glib::Source->remove ($watch_donatefile);
+					$dialogqd->destroy;
+					error_window(text_linker($cl[142]));;
+					return 0;
+				} elsif ($wget_get && $pids=~/http\:\/\/www\.gprsec\.hu\/donate\.php/) {
+					$labelq->set_text( text_linker ($cl[223]."\n\n".text_linker($cl[146])));
+				} elsif ($wget_get && $pids!=~/http\:\/\/www\.gprsec\.hu\/donate\.php/) {
+ 					Glib::Source->remove ($watch_donatefile);
+					donate_win_constr ();
+					$dialogqd->destroy;
+					return 0;
+ 				} elsif ($pids=~/http\:\/\/www\.gprsec\.hu\/donate\.php/) {
+ 					$labelq->set_text( text_linker ($cl[223]."\n\n".text_linker($cl[147])));
+ 					$wget_get=1;
+					return 1;
+ 				}
+				return 1;
+			}
+			
+		$message = shift;
+		$dialogqd = Gtk2::Dialog->new (text_linker($cl[141]), $mainwin_other,
+		'modal',
+		'gtk-cancel' => 'cancel'
+		);
+	
+		$labelq = Gtk2::Label->new ( text_linker ($cl[223]."\n\n".text_linker($cl[144])));
+		$dialogqd->vbox->add ($labelq);
+		$dialogqd->show_all;
+		if ('cancel' eq $dialogqd->run) {
+			if ($donate_win) {
+				$donate_win->destroy;
+				undef $donate_win;
+			}
+			Glib::Source->remove ($watch_donatefile);
+			$dialogqd->destroy;
+			return;
+		} 
+}
+
+sub donate_win_constr {
+	my @cuccos;
+		 $doc= `cat $home/.gprsec/donate_get`;
+		 `rm -f $home/.gprsec/donate_get`;
+
+		if ($doc eq "" || $doc=~ /error/ || ($donate eq "0" && $donate ne "1")) {
+			error_window (text_linker($cl[142]));
+			return;
+		}
+		$doc=~ s/&gt;/ /g;
+		$doc=~ s/&lt;/ /g;
+		
+		# Construct a Gtk2Window 'donate
+		$donate_win = new Gtk2::Window->new;;
+		$donate_win->set_title(text_linker($cl[177]));
+		$donate_win->set_position('center' );
+		$donate_win->set_modal(0 );
+		$donate_win->set_resizable (1);
+		$donate_win->set_size_request(650, 400 );
+		$donate_win->show();
+		$donate_win->signal_connect('destroy', sub {voice_click(); undef $donate_win});
+		$setupwin_tooltips2= new Gtk2::Tooltips;
+		$setupwin_tooltips2->enable();
+		#
+		# Construct a Gtk2Fixed 'fixed1'
+		$donate_win_fixed1 = Gtk2::Fixed->new;
+		$donate_win->add($donate_win_fixed1);
+		$donate_win_fixed1->show;
+		$donate_win_fixed1->set_size_request(650, 400 );
+		#
+		# Construct a Gtk2Button 'cancel_butt'
+		$donate_win_cancel_butt = Gtk2::Button->new_from_stock('gtk-cancel');
+		$donate_win_cancel_butt ->can_focus(1 );
+		$donate_win_cancel_butt ->set_size_request(120, 32 );
+		$donate_win_fixed1->put ($donate_win_cancel_butt ,500, 355);
+		$donate_win_cancel_butt ->show;
+		$donate_win_cancel_butt ->signal_connect('clicked', sub {$donate_win->destroy; undef $donate_win});
+		#
+		# Construct a Gtk2Button 'send_butt'
+		$donate_win_cancel_butt = Gtk2::Button->new_from_stock(text_linker($cl[183]));
+		$donate_win_cancel_butt ->can_focus(1 );
+		$donate_win_cancel_butt ->set_size_request(220, 32 );
+		$donate_win_fixed1->put ($donate_win_cancel_butt ,60, 355);
+		$donate_win_cancel_butt ->show;
+		$donate_win_cancel_butt ->signal_connect('clicked', sub {don_sel_s()});
+		$setupwin_tooltips2->set_tip($donate_win_cancel_butt , text_linker($cl[186]));
+		#
+		# Construct a Gtk2Label 'setupwin_label34'
+		$donate_win_label1 = new Gtk2::Label(text_linker($cl[178])); # If you like this program and you would like to help our work, please donate to us.
+		$donate_win_label1->set_property('justify'=>'center', 'wrap'=>1);
+		$donate_win_fixed1->put($donate_win_label1, 50, 5);
+		$donate_win_label1->show;
+		$donate_win_label1->set_size_request(600, 50 );
+		$donate_win_label1->set_alignment(0.5, 0.5 );
+		# 
+		$donate_win_frame1=Gtk2::Frame->new (text_linker($cl[179]));#What we would like to get
+		$donate_win_fixed1->put($donate_win_frame1, 5, 50) ;
+		$donate_win_frame1->set_shadow_type ('etched-in');
+		$donate_win_frame1->set_border_width (3);
+		$donate_win_frame1->set_size_request(325, 300 );
+		$donate_win_frame1->show;
+		#
+		# Construct a Gtk2Fixed 'fixed1'
+		$donate_win_frame1_fixed1 = Gtk2::Fixed->new;
+		$donate_win_frame1->add($donate_win_frame1_fixed1);
+		$donate_win_frame1_fixed1->show_all();
+		$donate_win_frame1_fixed1->set_size_request(325, 300 );
+		#
+		$donate_win_label11 = new Gtk2::Label(text_linker($cl[181])); # Yes, I offer the following thing(s):
+		$donate_win_label11->set_justify('center' );
+		$donate_win_frame1_fixed1->put($donate_win_label11, 15, 0);
+		$donate_win_label11->show;
+		$donate_win_label11->set_size_request(200, 20 );
+
+		@team_meb=split /\n\!/, $doc;
+		@team_meb2=split /\n/, $team_meb[0];
+		
+		$start_h=10;
+
+		$user_ip=shift @team_meb2;
+		foreach (@team_meb2) {
+			@who_what=split /$currency_sign/, $_;
+			$who{$who_what[0]}=@who_what[1];
+		}
+		foreach $keys (reverse sort keys %who) {
+				undef $t_count;
+				@stuffs=split /\,/ ,$who{$keys};
+				push (@cuccos, $keys);
+				foreach (@stuffs) {
+					$r_who{$keys}[$t_count]=$_;
+					push (@cuccos, $r_who{$keys}[$t_count]);
+					$t_count++;
+				}
+		}
+		
+		foreach (@cuccos) {
+			$who_keys++;
+			$don_y=$start_h+$who_keys*20;
+			if (/\@/) {
+				$foreg="#8e1b3b";
+				$userq=$_;
+			} else {
+				$foreg='blue';
+				$t_count++;
+				}
+			if ($foreg eq "#8e1b3b") {
+				$d_pos=5;
+				$donate_win_label1[$who_keys] = new Gtk2::Label($_);# name
+				$donate_win_label1[$who_keys]->set_justify('center' );
+				$donate_win_frame1_fixed1->put($donate_win_label1[$who_keys], 15+$d_pos,10+$don_y-20);
+				$donate_win_label1[$who_keys]->show;
+				$donate_win_label1[$who_keys]->set_size_request(300, 20 );
+			} else {
+				$stuff=$userq."\:".$_;
+				$d_pos=15;
+				$cb_item++;
+				$temp_wqw{$cb_item}=$stuff;
+				# Construct a Gtk2CheckButton '$donate_win_checkbutton1'
+				$donate_win_checkbutton1[$cb_item]= new Gtk2::CheckButton($_);# stuff
+				$donate_win_checkbutton1[$cb_item]->set_mode(1 );
+				$donate_win_checkbutton1[$cb_item]->set_active(0);
+				$donate_win_frame1_fixed1->put($donate_win_checkbutton1[$cb_item], 25+$d_pos,10+$don_y-20);
+				$donate_win_checkbutton1[$cb_item]->show;
+				$donate_win_checkbutton1[$cb_item]->set_size_request(300, 24 );
+				$donate_win_checkbutton1[$cb_item]->can_focus(1 );
+				$donate_win_checkbutton1[$cb_item]->signal_connect( 'pressed', sub {voice_click()} );
+			}
+
+		}
+		$mag=13*20+$t_count*20;
+		$donate_win_frame1_fixed1->set_size_request(325, $mag); 
+		$who_keys+=1;
+		$don_y=$start_h+$who_keys*20;
+		
+		$donate_win_label1[$who_keys] = new Gtk2::Label(text_linker($cl[154])); 
+		$donate_win_label1[$who_keys]->set_justify('left' );
+		$donate_win_frame1_fixed1->put($donate_win_label1[$who_keys], 20+$d_pos,180);
+		$donate_win_label1[$who_keys]->show;
+		$donate_win_label1[$who_keys]->set_size_request(200, 20 );
+
+		$who_keys+=1;
+		$don_y=$start_h+$who_keys*20;
+
+		$donate_win_entryA1 = Gtk2::Entry->new;
+		$donate_win_frame1_fixed1->put($donate_win_entryA1, $d_pos,200);
+		$donate_win_entryA1->show;
+		$donate_win_entryA1->set_size_request(264, 24 );
+		$donate_win_entryA1->set_text("$off_sz_name");
+		$donate_win_entryA1->set_visibility(1 );
+		$donate_win_entryA1->set_editable(1 );
+
+		$who_keys+=2;
+		$don_y=$start_h+$who_keys*20;
+		
+		$donate_win_label1[$who_keys] = new Gtk2::Label(text_linker($cl[155])); 
+		$donate_win_label1[$who_keys]->set_justify('left' );
+		$donate_win_frame1_fixed1->put($donate_win_label1[$who_keys], 20+$d_pos,230);
+		$donate_win_label1[$who_keys]->show;
+		$donate_win_label1[$who_keys]->set_size_request(200, 20 );
+
+		$who_keys+=1;
+		$don_y=$start_h+$who_keys*20;
+		
+		$donate_win_entryA2 = Gtk2::Entry->new;
+		$donate_win_frame1_fixed1->put($donate_win_entryA2, $d_pos,250);
+		$donate_win_entryA2->show;
+		$donate_win_entryA2->set_size_request(264, 24 );
+		$donate_win_entryA2->set_text("$off_sz_em_entr");
+		$donate_win_entryA2->set_visibility(1 );
+		$donate_win_entryA2->set_editable(1 );
+
+		$who_keys+=2;
+		$don_y=$start_h+$who_keys*20;
+		#
+		#right side
+		$donate_win_frame2=Gtk2::Frame->new (text_linker($cl[180]));#Our sponsors:
+		$donate_win_fixed1->put($donate_win_frame2, 325, 50) ;
+		$donate_win_frame2->set_shadow_type ('etched-in');
+		$donate_win_frame2->set_border_width (3);
+		$donate_win_frame2->set_size_request(325, 300 );
+		$donate_win_frame2->show;
+		#
+		$team_meb[1]=~s /\n/\n\n/g;
+		$team_meb[1]=~s /\,/\t\-/g;
+		$team_meb[1]=~s /$currency_sign/\n\t\- /g;
+		
+		# Construct a Gtk2ScrolledWindow 'scrolledwindow1'
+		$donate_win_scrolledwindow1 = new Gtk2::ScrolledWindow( undef, undef);
+		$donate_win_scrolledwindow1->set_policy('never', 'always' );
+		$donate_win_fixed1->put($donate_win_scrolledwindow1, 330, 72  );
+		$donate_win_scrolledwindow1->show;
+		$donate_win_scrolledwindow1->set_size_request(312, 270);
+		#
+		# Construct a TextView 'text1'
+		$mainwin_cmap = Gtk2::Gdk::Colormap->get_system();
+		$mainwin_color->{ 'red' } = 0xFFFF;
+		$mainwin_color->{ 'green' } = 0;
+		$mainwin_color->{ 'blue' } = 0;
+		
+		$donate_win_TextView1 = Gtk2::TextView->new ();
+		$donate_win_TextView1->set_editable(0 );
+		$donate_win_TextView1->set_border_window_size ('right', 3);
+		$donate_win_TextView1_text=$team_meb[1];
+		$buffer = $donate_win_TextView1->get_buffer;
+		$buffer->set_text($donate_win_TextView1_text);
+		$donate_win_scrolledwindow1->add($donate_win_TextView1 );
+		$donate_win_TextView1->set_justification ('center');
+		$donate_win_TextView1->show;
+		$donate_win_TextView1->can_focus(1 );
+		$donate_win_TextView1->set_left_margin (3);
+	}
+}
+
+sub don_sel_s {
+	undef $zz;
+	for ($zz=1; $zz<=$cb_item; $zz++) {
+		$get_cb_info=$donate_win_checkbutton1[$zz]->get_active();
+		if ($get_cb_info) {
+			$wqw{$zz}=$temp_wqw{$zz};
+		}
+	}
+
+	undef @stuff_t;
+	undef $zz;
+	foreach $values (values %wqw) {
+		if ($values) {
+			@sp_stuff=split /\:/, $values;
+			@csak_nev=split /\</, $sp_stuff[0];
+			push (@stuff_t, "$csak_nev[0],$sp_stuff[1]<br>");
+		}
+	$zz++;
+	}
+	$d_email=$donate_win_entryA2->get_text();
+	$d_nev=$donate_win_entryA1->get_text();
+
+	$db_stuff=@stuff_t;
+	if (!$d_email || !$d_nev || $db_stuff=="0") {
+		error_window(text_linker($cl[184]));#You didn't give us all needed data!
+		return;
+	}
+	
+	foreach (@stuff_t) {
+	
+		my $item_n_name=$_;
+		$item_n_name=~ s/(\s+\S+\@\S+\.\w+\s+\,)/$1/e;
+		my $item_del=$1;
+		$item_n_name=~ s/$item_del/$currency_sign/e;
+		$item_n_name=~ s/<br>//;
+		
+		my $d_nev= encode ("iso-8859-1", $d_nev);
+		my $d_email= encode ("iso-8859-1", $d_email);
+		$item_n_name= encode ("iso-8859-1", $item_n_name);
+		
+		run_task ("wget -T 30 -q -O \"$home/.gprsec/info_get\" \"http://www.gprsec.hu/donate.php?sponsor=$d_nev&mail=$d_email&item=$item_n_name\"");
+	}
+	
+		$donate_win->destroy;
+		undef $donate_win;
+		undef @stuff_t;
+		undef @donate_win_checkbutton1;
+		undef %wqw;
+		undef $cb_item;
+}
+
+sub connect_sub {
+
+	# if  pppd not authorized for user then return;
+	if ((!-u "/usr/sbin/pppd") || (!-x "/usr/sbin/pppd")) {
+		error_window(text_linker($cl[67]));
+		reset_main_butt();
+		return;
+	}
+
+	$arg= shift @_;
+	if ($arg ne "reconnect") {
+		undef $reconn_count;
+	}
+	
+	undef $weekly_warn;
+	undef $monthly_warn;
+	undef $inc_mtime;
+	$let_to_kill=1;
+	undef $zy;
+	$mainwin_connect_butt->set_sensitive(0);
+	$mainwin_setup_butt->set_sensitive(0);
+	$mainwin_exit_butt->set_sensitive(0);
+	undef $checked;
+	undef $info_send;
+	undef @lines;
+	port_scan();
+	$err_port=vanport();
+	if ( $err_port eq "error")  {
+		reset_main_butt ();
+		error_window(text_linker($cl[137]));
+		return;
+	}
+
+
+	if (!-e "/etc/ppp/options") {
+		if ($who_r eq "root") {
+			`echo >/etc/ppp/options`;
+		} else {
+			error_window(text_linker($cl[187]));
+			reset_main_butt ();
+			return;
+		}
+	}
+
+
+	if (!-e "$home/.gprsec/run") {
+		error_window (text_linker($cl[18])); #Can't find the configuration file!\nCheck your setting!
+		reset_main_butt ();
+		return;
+	}
+	if (!-e "$home/.gprsec/EasyConn.config") {
+		error_window (text_linker($cl[66])); #Read the important information! (Under "Other" menu.)
+		reset_main_butt ();
+		return;
+	}
+	# removing old conn.log file
+	if (-e "$home/.gprsec/conn.log") {
+		`rm $home/.gprsec/conn.log`;
+	}
+	if (-e "$home/.gprsec/error") {
+		`rm $home/.gprsec/error`;
+	}
+	#removing old get tel inf file
+	if (-e "$home/.gprsec/info_get") {
+		`rm $home/.gprsec/info_get`;
+	}
+	#removing old get apn info file
+	if (-e "$home/.gprsec/apn_ch") {
+		`rm $home/.gprsec/apn_ch`;
+	}
+
+
+	# run of pppd script
+	# pipe for the read2.pl file accross the pppd script
+	if ($sysname eq "Linux") {
+		$run="/usr/sbin/pppd file $home/.gprsec/run & 2>$home/.gprsec/error";
+	}
+
+	run_task ("$run");
+
+	$time=time();
+	$buffer_mainwin_entryA4->set_text(text_linker($cl[198]));
+	$watch_conn_build_var=Glib::Timeout->add($time_interval, \&watch_conn_build);
+
+	# Must to watch the start of chat program, because the early kill of pppd (without chat)
+	# may kill the X!!!!! After the chat started once, we can let to kill the pppd.
+	$chat_watch_var=Glib::Timeout->add(100, \&chat_watch);
+	sub chat_watch {
+	if (-e "$home/.gprsec/stderr") {
+		$stderror=`cat $home/.gprsec/stderr`; # it reads standard errors
+		if ($stderror=~ /pppd\:\ This\ system\ lacks\ kernel\ support\ for\ PPP/) {
+			error_window(text_linker($cl[230])); # Kernel doesn't support PPP
+			disconnect();
+			reset_main_butt();
+			$mainwin_exit_butt->set_sensitive(1);
+			return 0;
+		}
+	}
+		@m_mypids = ec_get_pids('/usr/sbin/chat -e -f '.$home.'/.gprsec/chat -v');
+		$zy++;
+		if ($zy>30) {
+				error_window(text_linker($cl[24])); # Perhaps you did not switch on your mobile,\ndid you?
+				disconnect();
+				reset_main_butt();
+				$mainwin_exit_butt->set_sensitive(1);
+				return 0;
+		}
+		if (@m_mypids) {
+			set_main_butt();
+			$mainwin_exit_butt->set_sensitive(1);
+			undef $let_to_kill; # the pppd kill is enabled
+			return 0;
+		} else {
+			return 1;
+		}
+	}
+
+}
+
+sub watch_conn_build {
+	undef $last_val;
+	if (!-e "$home/.gprsec/conn.log") {
+		error_window(text_linker($cl[21]));
+		Glib::Source->remove($chat_watch_var);
+		disconnect();
+		return 0;
+	}
+		$red_lineok=`wc -c $home/.gprsec/conn.log`;
+		$red_lineok=~tr /[0-9]//cd; #/
+		if ($red_lineok>0) {
+			if (($red_lineok/$watch_conn_modifier)<1) {
+					$mainwin_progressbar1->set_fraction($red_lineok/$watch_conn_modifier);
+					$upr_st_text=int(($red_lineok/$watch_conn_modifier)*100);
+					$buffer_mainwin_entryA4->set_text(text_linker($cl[199], $upr_st_text));
+					$mainwin_progressbar1->set_text ($upr_st_text." %");
+			}
+		}
+	$last_val=$red_lineok;
+
+
+	# watching of pppd's echoes
+	if (-e "$home/.gprsec/conn.log") {
+		$connlog=`cat $home/.gprsec/conn.log`; # it reads all echoes of pppd
+		$a=`tail -n 1 $home/.gprsec/conn.log`; # it reads last line of pppd's echo
+	}
+	if (-e "$home/.gprsec/error") {
+		$conn_error=`cat $home/.gprsec/error`; # it reads the echoes of pppd
+		if ($conn_error) {
+			disconnect();
+			error_window(text_linker($cl[196], $conn_error)); #The connection process detected an error: "***"
+			return 0;
+		}
+	}
+	if ($a=~ /ERROR/) {
+		disconnect();
+		error_window(text_linker($cl[21])); #Error in connection
+		return 0;
+	}
+	if ($_ eq $a && $a=~ /expect \(OK\)/) {
+		$percent->after(100);
+		$_=`tail -n 1 $home/.gprsec/conn.log`;
+		if ($a=~ /expect \(OK\)/) {
+			disconnect();
+			error_window(ancolas($cl[23])); #The connection interrupted...
+			return 0;
+		}
+	}
+	if ($a=~ /\^|\@/ && $a eq $old) {
+		disconnect();
+		error_window(text_linker($cl[24])); # Perhaps you did not switch on your mobile,\ndid you?
+		return 0;
+	}
+	if ($a=~ /(\^|\@){30}/ && $timenow-10 > $time) {
+		disconnect();
+		error_window(text_linker($cl[24])); # Perhaps you did not switch on your mobile,\ndid you?
+		return 0;
+	}
+	if ($connlog=~ /id=0x1\d+\ <addrs 0\.0\.0\.0 0\.0\.0\.0\>\]/) {
+	# 1\d+ means more than h10 ehcos from server without remote IP
+	# it possibility means the bad apn, username or password
+		disconnect();
+		error_window(text_linker($cl[203])); # After you've selected a new theme you should restart
+		return 0;
+	}
+
+	if ($connlog=~ m/No network protocols running/) {
+		disconnect();
+		error_window(text_linker($cl[40])); #Connection interrupted.\nThe GPRS network is overloaded.
+		return 0;
+	}
+	if ($connlog=~ /LCP terminated by peer/ || $connlog=~ /Hangup \(SIGHUP\)/) {
+		disconnect();
+		error_window(text_linker($cl[27])); #Connection interrupted.\nNo network answer!
+		return 0;
+	}
+	if ($connlog=~ /Connect script failed/) {
+		disconnect();
+		error_window(text_linker($cl[41])); #Connection interrupted due to\nconfiguration error
+		return 0;
+	}
+	if (($connlog=~ /Connection terminated./ && $connlog=~ !/LCP terminated by peer/) || $connlog=~ /Terminating on signal 15/) {
+		disconnect();
+		error_window(text_linker($cl[42])); #Connection interrupted by user.\nFlat battery.\nData cable failure.
+		return 0;
+	}
+ 	if ($connlog=~ /not replacing existing default/) {
+ 		$hova=$connlog;
+ 		$hova=~ s/to\ (\S+)\ \[/$1/e;
+ 		$droute=$1;
+ 		disconnect();
+ 		info_window (text_linker($cl[197], "$droute")); #Warning! Can't change the default route, it's still "***"!
+ 		return 0;
+ 	}
+	if ($connlog=~ /is locked by pid/) {
+	$connlog=~ s/is locked by pid (\d+)/$1/e;
+		$vegehossz="-".$1."-";
+		frozen_message();
+		return 0;
+	}
+	$timenow=time();
+	if ($timenow-20 > $time) {
+			disconnect();
+			error_window(text_linker($cl[23].$cl[195])); #The connection is interrupted due to dialing\ntime limit. Please reset your handset.
+			return 0;
+	}
+	if ($connlog=~ m/No network protocols running/) {
+		disconnect();
+		error_window(text_linker($cl[40])); #Connection interrupted.\nThe GPRS network is overloaded.
+		return 0;
+	}
+	if ($connlog=~ /LCP terminated by peer/) {
+		disconnect();
+		error_window(text_linker($cl[27])); #Connection interrupted.\nNo network answer!
+		return 0;
+	}
+	if ($connlog=~ /Connect script failed/) {
+		disconnect();
+		error_window(text_linker($cl[41])); #Konfigurï¿½iï¿½ hiba miatt a kapcsolï¿½ï¿½\nfolymata megszakadt.\nEllenï¿½izd a beï¿½lï¿½ï¿½aidat!
+		return 0;
+	}
+	if ($connlog=~ /Connection terminated./ && $connlog=~ !/LCP terminated by peer/) {
+		disconnect();
+		error_window(text_linker($cl[42])); #Felhasznï¿½ï¿½ megszakï¿½ï¿½.\nEsetleg a telefon lemerlt.\nVagy kicsszott az adatkï¿½el.
+		return 0;
+	}
+	if (/Failed to open/ && /Permission denied/) {
+		disconnect();
+		error_window(text_linker($cl[41])); #Connection interrupted due to\nconfiguration
+		return 0;
+	}
+
+$old=`tail -n 1 $home/.gprsec/conn.log`;
+
+	connected_check();
+	if ($online) { # setting of all for the report of data transmittion
+		undef $download_this_conn_kbyte;
+		undef $upload_this_conn_kbyte;
+		undef $last_recived_bytes;
+		undef $last_trasmitted_bytes;
+		undef $recived_bytes;
+		undef $trasmitted_bytes;
+		undef $mtime;
+		$watch_conn_build_state=Glib::Timeout->add(1000, \&watch_conn_state);
+		run_task("$brow 2>/dev/null");
+	}
+	return 1;
+
+}
+
+sub connected_check {
+
+	# checking the successfull connection under Linux
+	if ($sysname eq "Linux") {
+		$a=`tail -n 1 $home/.gprsec/conn.log`; # sampling under running of watching algorythm
+		###########
+		$_=$connlog;
+		###########
+
+		if ($connlog=~ /Script \/etc\/ppp\/ip-up finished/ || ($connlog=~ /local\ +IP\ +address\ +/ && $connlog=~ /remote\ +IP\ +address\ +/)) {
+
+
+		$mainwin_progressbar1-> set_fraction(1);
+
+			@mind=split /\n/,$connlog;
+			foreach (@mind) {
+				if (/local\ +IP\ +address\ +/) {
+					@local=split/local\ +IP address\ +/, $_;
+				}
+				if (/remote\ +IP\ +address\ +/) {
+					@remote=split/remote\ +IP\ +address\ +/, $_;
+				}
+				if (/primary\ +DNS\ +address /) {
+					@primary=split/primary\ +DNS address\ +/, $_;
+					$d1=1;
+				}
+				if (/secondary\ +DNS\ +address\ +/) {
+					@secondary=split/secondary\ +DNS\ +address\ +/, $_;
+					$d2=1;
+				}
+ 			}
+			if ((!$d1 && !$d2) || !$din_eng) {
+				$resolv_file=`cat '/etc/resolv.conf'`;
+				@resolv=split/\n/, $resolv_file;
+				foreach (@resolv) {
+					if (/nameserver/) {
+						push (@dns, $_);
+					}
+				}
+				@primary=split/ /, $dns[0];
+				@secondary=split/ /, $dns[1];
+			}
+			if ($secondary[1]) {
+				$ipanddnstext=text_linker($cl[26], $local[1], $remote[1], $primary[1], $secondary[1]);
+			} else {
+				$ipanddnstext=text_linker($cl[26], $local[1], $remote[1], $primary[1], 'none');
+			}
+			$buffer_mainwin_entryA4->set_text($ipanddnstext); #Successful connection.\nYour local IP address: ***\nYour remote IP adress: ***\nPrimary DNS server: ***\nSecondary DNS server: ***
+			$mainwin_entryA4->set_justification ('center');
+			if ($cw_ic==1){
+				$mainwin->iconify;
+			}
+			# makes the cycle for watching the disconnection
+			# makes a cycle for the data transmission's read and processing
+			if (!$no_dev or $no_dev eq "0") {
+						$indtime=time; # start time for logging
+						dbmopen (%NAP, "$home/.gprsec/7d", 0666);
+						%DAYS=%NAP;
+						dbmclose (%NAP);
+			}
+
+			$test_phone_time=time;
+
+			voice_connected();
+
+			$online=1;
+			
+			$mainwin_progressbar1->set_text (text_linker($cl[25]));
+			
+			Glib::Source->remove ($watch_conn_build_var);
+
+		}
+	}
+}
+
+sub watch_conn_state {
+# watching connection state
+	if (!$online) {return 0};
+	if ($sysname eq "Linux") {
+		$a=`cat '$home/.gprsec/conn.log'`;
+		$_=$a;
+		if (/Serial link disconnected/ || /LCP terminated by peer/ || /Connection terminated/) {
+			disconnect();
+			sleep 1;
+			if (!$reconn_db) {
+				error_window(text_linker($cl[43])); #Connection interrupted.
+				$mainwin->deiconify;
+				Glib::Source->remove ($watch_conn_state_var);
+				return 0;
+			} else {
+				reconn ();
+			}
+		}
+	}
+
+sub reconn {
+	 if ($reconn_count<=$reconn_db) {
+	 $reconn_count++;
+		start_reconn();
+
+	} else {
+		warning_window(text_linker($cl[92]));
+		return 0;
+	}
+}
+
+	$now=time;
+
+	# 5 sec after the successfull connection the program checks the telephone as tested
+	if ($now-$test_phone_time>5 && !$checked) {
+			#getting information from the server about the tested or the non-tested phone
+			$clean_tel_name=$phonetype;
+			$clean_tel_name =~ tr/\*//d;
+
+			run_task ("wget -T 30 -q -O \"$home/.gprsec/info_get\" \"http://www.gprsec.hu/test.php?phone=$clean_tel_name\"");
+
+		$checked=1;
+	}
+
+	if (-e "$home/.gprsec/info_get" && $now-$test_phone_time>60 && !$info_send) {
+		if ($no_tel=~ /$phonetype/) {
+			$info_send=1;
+		} else {
+			$getinfo=`cat $home/.gprsec/info_get`;
+			if ($getinfo eq "0\n") {
+				`rm $home/.gprsec/info_get`;
+				$info_send=1;
+				findnotested();
+			}
+		}
+	}
+
+	if ($newly && $now-$test_phone_time>20) {
+	# if you don't want to send us the informations above to our statistics
+	# please comment the following lines
+	# Otherwise thank you for co-operation!
+	# serverupdate: apn, dns
+
+	$ascii_sel_szolg=$sel_szolg;
+	$ascii_sel_szolg=~ s/\n/\@10\@/g;
+	$ascii_sel_szolg=~ s/\#/\@83\@/g;
+	$ascii_sel_szolg=~ s/\*/\@90\@/g;
+	$ascii_sel_szolg=~ s/\&/\@38\@/g;
+	$ascii_sel_szolg=~ s/\ /\@32\@/g;
+
+	$apnid=$szolg_apn{$sel_szolg}[0];
+
+	$apn_send_text="http://www.gprsec.hu/get_apn.php?provider_id=$apnid&provider_name=$ascii_sel_szolg&apn=$def_apn&username=$user&primary_dns=$primary[1]&secondary_dns=$secondary[1]";
+	run_task ("wget -T 30 -q -O \"/dev/null\" \"$apn_send_text\"");
+
+	undef $newly;
+	new_config_save();
+	}
+
+	# serverupdate: conn. stats, new phone's chat script
+	if (!$apn_checked && $now-$test_phone_time>30) {
+		$ascii_sel_szolg=$sel_szolg;
+		$ascii_sel_szolg=~ s/\n/\@10\@/g;
+		$ascii_sel_szolg=~ s/\#/\@83\@/g;
+		$ascii_sel_szolg=~ s/\*/\@90\@/g;
+		$ascii_sel_szolg=~ s/\&/\@38\@/g;
+		$ascii_sel_szolg=~ s/\ /\@32\@/g;
+
+		$apn_ch_text="http://www.gprsec.hu/connect_stat.php?op=inc&phone=$phonetype&phone_id=$phoneids{$phonetype}&provider=$ascii_sel_szolg&provider_id=$apnid";
+		
+		run_task("wget -T 30 -q -O \"$home/.gprsec/apn_ch\" \"$apn_ch_text\"");
+
+		$apn_checked=1;
+	}
+ 	if (-e "$home/.gprsec/apn_ch") { # getting chat script
+		@apn_ch_file_lines=`cat "$home/.gprsec/apn_ch"`;
+		$apn_1st_line=shift @apn_ch_file_lines;
+		if ($apn_1st_line=~ /1/ ) {
+ 			open (FILE, "<$home/.gprsec/chat");
+ 			while ($red_line=<FILE>) {
+ 				$red_line=~ s/\n/\@10\@/g;
+ 				$red_line=~ s/\#/\@83\@/g;
+ 				$red_line=~ s/\*/\@90\@/g;
+ 				$red_line=~ s/\&/\@38\@/g;
+ 				$red_line=~ s/\ /\@32\@/g;
+ 				$chat_sc.=$red_line;
+ 			}
+			$send_chat_script_text="http://www.gprsec.hu/get_script.php?name=$phonetype&data=$chat_sc";
+			run_task ("wget -T 30 -q -O \"/dev/null\" \"$send_chat_script_text\"");
+ 			`rm $home/.gprsec/apn_ch`;
+		}
+ 	}
+
+	# connection time
+	$mtime++;
+	$ora=int($mtime/3600);
+	$perc=int(($mtime-($ora*3600))/60);
+	$mperc=$mtime-($ora*3600)-($perc*60);
+
+	if ((length $mperc)==1) {$mperc="0".$mperc}
+	if ((length $perc)==1) {$perc="0".$perc}
+	if ((length $ora)==0) {$ora="00".$ora_v}
+	if ((length $ora)==1) {$ora="0".$ora}
+
+	$statis_label[20]->destroy;
+	undef $statis_label[20];
+	show_statis_label ($statis_label[20], "$ora:$perc:$mperc", 330, 96); #var
+
+	# getting transmittion data out
+	$last_recived_bytes=$recived_bytes;
+	$last_trasmitted_bytes=$trasmitted_bytes;
+
+	open(FILE, "<$home/.gprsec/conn.log");
+		while ($red_line=<FILE>) {
+			push (@lines, $red_line)
+		}
+
+	close FILE;
+	foreach (@lines) {
+		if (/Using interface/) {
+			$i_port=$_;
+			$i_port=~ s/Using\s+interface\s+(\S+)/$1/ge;
+			$i_port=$1;
+			if ($i_port) {last}
+		}
+			undef $i_port;
+	}
+
+	$netstat= `netstat $interf_tag$i_port -e`;
+
+	@nts=split /$i_port/, $netstat;
+
+
+	$netstat=$nts[1];
+
+
+	$netstat=~ s/RX packets\:(\d+)/$1/e;
+	$recived_packets=$1;
+	$netstat=~ s/TX packets\:(\d+)/$1/e;
+	$transmitted_packets=$1;
+	$netstat=~ s/RX bytes\:(\d+)/$1/e;
+	$recived_bytes=$1;
+	$netstat=~ s/TX bytes\:(\d+)/$1/e;
+	$trasmitted_bytes=$1;
+
+	$download_speed_byte=$recived_bytes-$last_recived_bytes;
+	$upload_speed_byte=$trasmitted_bytes-$last_trasmitted_bytes;
+
+	$download_speed_kbyte=int(($download_speed_byte/1024)*10)/10;
+	$upload_speed_kbyte=int(($upload_speed_byte/1024)*10)/10;
+
+	$iclabel=$download_speed_kbyte+$upload_speed_kbyte;
+
+	if (length $iclabel<2) {
+		if ($iclabel<1) {
+			$iclabel="0,0";
+		}
+		if ($iclabel>1) {
+			$iclabel.=",0";
+		}
+	}
+
+	$icon_label->set_text($iclabel);
+	$statis_label[12]->destroy;
+	undef $statis_label[12];
+	$statis_label[14]->destroy;
+	undef $statis_label[14];
+
+	$download_this_conn_kbyte+=$download_speed_kbyte;
+	$upload_this_conn_kbyte+=$upload_speed_kbyte;
+
+	$var_and_pref=prefixum_from_kbyte($download_this_conn_kbyte);
+	show_statis_label ($statis_label[12], $var_and_pref, 330, 111); #downloaded bytes in this conn
+	$var_and_pref=prefixum_from_kbyte($upload_this_conn_kbyte);
+	show_statis_label ($statis_label[14], $var_and_pref, 130, 111); #uploaded bytes in this conn
+
+	# the avarage spped of active data transmission
+	if ($download_speed_kbyte>0.1 || $upload_speed_kbyte>0.1) { # need more than 0.1 kB/s spped for the begin
+		$seb_stat++;
+		$atl_seb_o+=$download_speed_kbyte+$upload_speed_kbyte;
+		$atl_seb=$atl_seb_o/$seb_stat;
+		$atl_seb=int($atl_seb*10)/10;
+
+		$statis_label[16]->destroy;
+		undef $statis_label[16];
+		show_statis_label ($statis_label[16], "$atl_seb kB/s", 330, 126); #var
+	}
+
+	$statis_label[22]->destroy;
+	undef $statis_label[22];
+	$statis_label[24]->destroy;
+	undef $statis_label[24];
+	show_statis_label ($statis_label[22], $download_speed_kbyte." kBs", 330, 141); # download var
+	show_statis_label ($statis_label[24], $upload_speed_kbyte." kBs", 330, 156); # upload var
+
+	# all statistics data
+	$kapcs_idok++;
+	$time_o=int($kapcs_idok/3600);
+	$time_p=int(($kapcs_idok-($time_o*3600))/60);
+	$time_mp=$kapcs_idok-($time_o*3600)-($time_p*60);
+
+	if ((length $time_mp)==1) {$time_mp="0".$time_mp}
+	if ((length $time_p)==1) {$time_p="0".$time_p}
+	if ((length $time_o)==1) {$time_o="0".$time_o}
+	if ((length $time_o)==0) {$time_o="00".$time_o}
+
+	$statis_label[18]->destroy;
+	undef $statis_label[18];
+	show_statis_label ($statis_label[18], "$time_o:$time_p:$time_mp", 330, 61); #var
+
+	$ob_l_v+=$download_speed_byte;
+	$ob_f_v+=$upload_speed_byte;
+
+	$var_and_pref=prefixum_from_byte($ob_l_v);
+	$statis_label[4]->destroy;
+	undef $statis_label[4];
+	show_statis_label ($statis_label[4], $var_and_pref, 330, 16); #var
+
+	$var_and_pref=prefixum_from_byte($ob_f_v);
+	$statis_label[6]->destroy;
+	undef $statis_label[6];
+	show_statis_label ($statis_label[6], $var_and_pref, 330, 31); #var
+
+	$statis_label[8]->destroy;
+	undef $statis_label[8];
+	$total_transmittion_all=$ob_l_v+$ob_f_v;
+	$var_and_pref=prefixum_from_byte($total_transmittion_all);
+	show_statis_label ($statis_label[8], $var_and_pref, 330, 46); #var
+
+	$total_transmittion_all;
+
+	$ddk=$monthlylimit_v*1024*1024*1024*0.9;
+
+	if ($monthlylimit_v && $monthlylimit_v*1024*1024*1024*0.9<$total_transmittion_all && !$monthly_warn && !$dialog) {
+		status_window("statistics");
+		$mainwin->deiconify;
+		$hdn=chr(37);
+		$cl[117]=~ s/\%/$hdn/g;
+		$warntext=text_linker($cl[117]);
+		$warntext=~ s/(0e)/\%/;
+		warning_window($warntext);
+		$monthly_warn=1;
+	}
+	
+	$mainap=time;
+	$mainap=int($mainap/86400);
+	$DAYS{$mainap}+=$download_speed_byte+$upload_speed_byte;
+	
+		undef $all7day;
+
+		foreach $key (keys %DAYS) {
+ 			if ($key<=$mainap-7) {
+ 				delete $DAYS{$key};
+ 			}
+		}
+		foreach $key (keys %DAYS) {
+			$all7day+=$DAYS{$key};
+		}
+		
+	$statis_label[10]->destroy;
+	undef $statis_label[10];
+	$var_and_pref=prefixum_from_byte($all7day);
+	show_statis_label ($statis_label[10], $var_and_pref, 330, 76); #var last 7 days
+	
+	$hhat=$weeklylimit_v*1024*1024*0.9;
+	
+	if ($weeklylimit_v && $weeklylimit_v*1024*1024*0.9<$all7day && !$weekly_warn && !$dialog && $arg ne "reconnect") {
+		status_window("statistics");
+		$mainwin->deiconify;
+		warning_window(text_linker($cl[118]));
+		$weekly_warn=1;
+	}
+
+	#saving momently transmittion data into a variable
+		$inc_mtime++;
+		$up_mtime=(($inc_mtime/60)-int($inc_mtime/60))*60;
+		$up_mtime=int($up_mtime*1.01);
+		if ($up_mtime==0) {$up_mtime=60}
+	
+	$up_download_speed_kbyte=$download_speed_kbyte+$upload_speed_kbyte;
+	
+	if ($up_download_speed_kbyte>0) {
+		unshift (@slide_dm, $up_download_speed_kbyte);
+		if ($slide_dm[61]) {
+			pop @slide_dm;
+		}
+
+		if (@down_x_coord_points) {
+			undef $fos;
+			foreach (@down_x_coord_points) {
+				if ($down_x_coord_points[$fos]) {
+					$down_x_coord_points[$fos]->destroy;
+					undef $down_x_coord_points[$fos];
+				}
+			$fos++;
+			}
+		}
+		
+		if ($root1_canvas_text[1]) {
+			$root1_canvas_text[1]->destroy;
+			undef $root1_canvas_text[1];
+		}
+		
+	$def_y_nick=20;
+	undef $slide_max;
+	foreach (@slide_dm) {
+		if ($slide_max<$_) {
+			$slide_max=$_;
+		}
+	}
+
+	$def_y_nick=(20*6)/$slide_max;
+	$yheihgt=120/$def_y_nick;
+		
+		undef $down_x_coord;
+		undef $y_point_last;
+		undef $x_point_last;
+		undef $x;
+		foreach $down_y_coord_points_key (@slide_dm) {
+			$y_point=$down_y_coord_points_key;
+			$y_point=~ tr/\,/\./;
+			$y_point*=$def_y_nick;
+			if (!$y_point_last) {$y_point_last=$y_point}
+			$down_x_coord_points[$x]=Gnome2::Canvas::Item->new ($root1, 'Gnome2::Canvas::Line',
+			points => [$x1+300-$x_point_last, $y1+145-$y_point_last, $x1+300-$down_x_coord,  $y1+145-$y_point],
+			fill_color => "red",
+			width_pixels=>2
+			);
+			$down_x_coord_points[$x]->show;
+			$x_point_last=$down_x_coord;
+			$y_point_last=$y_point;
+			$down_x_coord+=5;
+			$x++;
+		}
+		$root1_canvas_text[1]= Gnome2::Canvas::Item->new ($root1, 'Gnome2::Canvas::Text',
+			x => -105,
+			y => -15,
+		 	fill_color => "$default_fg",
+			anchor => 'GTK_ANCHOR_NW',
+			text =>"$yheihgt kB/s");
+	}
+
+	# watching of transmittion reset's date
+ 	($mp, $perc, $ora, $nap, $mounth, $ev)=localtime();
+ 	$mounth++;
+ 	$ev+=1900;
+	$diff_time=$now-$reg_time; # days from the last data erase
+	$diff_time=int($diff_time/86400);
+		
+	if (($mounth!=$del_mounth && ($havit_v<=$nap || ($havit_v>28 && $diff_time>28))) && $havit_v) {
+		foreach (qw/osszb_fel osszb_le/) {
+			if (-e "$home/.gprsec/$_") {
+				`rm '$home/.gprsec/$_'`;
+			}
+		}
+
+		($mp, $perc, $ora, $nap, $mounth, $ev)=localtime();
+		$mounth++;
+		$ev+=1900;
+		$start_time=" $ev/$mounth/$nap $ora:$perc";
+		$reg_time=time;
+		$del_mounth=$mounth;
+		
+		new_config_save();
+		info_window(text_linker($cl[222]));
+		
+	}
+	
+	#$havit_v>28 && $diff_time>28 && 
+	# saving tranmitton data by 1 minute or exit
+	if (($mtime/60)==int($mtime/60)) {
+		tranmittion_save();
+	}
+return 1;
+}
+
+sub tranmittion_save{
+# it saves the data transmittion data and check the server echoes about some interactive comunications
+	if ($online) {
+		# all time
+		open (FILE, ">$home/.gprsec/ossz_ido");
+		chmod 0666, ">$home/.gprsec/ossz_ido";
+		print FILE "$kapcs_idok";
+		close FILE;
+		# all data down
+		open (FILE, ">$home/.gprsec/osszb_le");
+		chmod 0666, ">$home/.gprsec/osszb_le";
+		print FILE $ob_l_v;
+		close FILE;
+		# all data up
+		open (FILE, ">$home/.gprsec/osszb_fel");
+		chmod 0666, ">$home/.gprsec/osszb_fel";
+		print FILE $ob_f_v;
+		close FILE;
+ 		dbmopen (%NAP, "$home/.gprsec/7d", 0666);
+		%NAP=%DAYS;
+ 		dbmclose (%NAP);
+		
+		open (FILE, ">$home/.gprsec/trans");
+			foreach (@slide_dm) {
+				print FILE "$_\n";
+			}
+
+	}
+}
+
+sub frozen_message {
+	$message = shift;
+	$dialogq = Gtk2::Dialog->new (text_linker($cl[11]), $mainwin,
+	'modal',
+	'gtk-ok' => 'ok',
+	'gtk-cancel' => 'cancel'
+	);
+	
+	$labelq = Gtk2::Label->new ( text_linker ($cl[22]," $vegehossz ", "\n\n".text_linker($cl[176])));
+	$dialogq->vbox->add ($labelq);
+	$dialogq->show_all;
+	$frozdial_run=$dialogq->run;
+	if ('ok' eq $frozdial_run) {
+		kill_frozen ();
+	}
+	disconnect();
+	$dialogq->destroy;
+}
+
+sub kill_frozen {
+	$temp_pppd_pid=`ps ax | grep "pp\pd" | grep "run"\$`;
+	@pppd_pid=split /\n/, $temp_pppd_pid;
+	if (@pppd_pid) {
+		foreach (@pppd_pid) {
+			$_=~ s/(\d+)/$1/e;
+			if ($1 eq $vegehossz) {
+				`kill -TERM "$vegehossz"`;
+			}
+		}
+	}
+}
+
+sub set_main_butt {
+	$mainwin_discon_butt->set_sensitive(1);
+	$mainwin_connect_butt->set_sensitive(0);
+	$mainwin_setup_butt->set_sensitive(0);	
+}
+
+sub reset_main_butt {
+	$mainwin_discon_butt->set_sensitive(0);
+	$mainwin_connect_butt->set_sensitive(1);
+	$mainwin_setup_butt->set_sensitive(1);
+	$mainwin_exit_butt->set_sensitive(1);
+}
+
+sub disconnect {
+	$mainwin_exit_butt->set_sensitive(1);
+	$icon_label->set_text('EC');
+	if ($watch_conn_state_var) {
+		Glib::Source->remove ($watch_conn_state_var);
+	}
+	if ($chat_watch_var) {
+		Glib::Source->remove($chat_watch_var);
+	}
+	tranmittion_save(); #saving transmittion data
+	undef $online;
+	reset_main_butt();
+	undef $kc;
+	ec_prgs_kill();
+	$text=text_linker($cl[200]);
+	$buffer_mainwin_entryA4->set_text($text);
+	$mainwin_entryA4->set_justification ('center');
+	if ($watch_conn_build_var) {
+		Glib::Source->remove ($watch_conn_build_var);
+	}
+	$mainwin_progressbar1-> set_fraction(0);
+	$let_to_kill=1; # the pppd kill is forbidden
+	$mainwin_progressbar1->set_text ("");
+	}
+
+sub ec_signal_handler { 
+	my $signal = shift; 
+} 
+
+sub ec_kill_all_pids { 
+# send the signal $signal to a given list of pids. 
+# it's intended to send a kill signal... 
+	local($signal, @m_pidstokill) = @_;
+	foreach (@m_pidstokill) { 
+		$m_cmdpid = $_; 
+		$m_errcode = kill $signal, $m_cmdpid; 
+	} 
+} 
+
+sub ec_get_pids(@_) { 
+# get the pid from a given command string. 
+	my ($mycommand) = @_; 
+	my @mypids; 
+	@pt2 = `ps ax -o pid,command`; # for performance, in a loop, we don't use our ec_exec();
+	chomp @pt2; 
+	foreach $process (@pt2) { 
+		my ($pid,@cmd) = split(/ /, &trim($process)); 
+		if (join(' ', @cmd) eq $mycommand) { 
+			if ($pid != $$) { #i don't want to kill my self...
+				@mypids = (@mypids, $pid); 
+			} 
+		} 
+	} 
+	return @mypids; 
+} 
+
+sub trim() { 
+	my ($string) = @_; 
+	for ($string) { 
+		s/^\s+//; 
+		s/\s+$//; 
+	} 
+	return $string; 
+}
+
+sub ec_prgs_kill {
+if ($let_to_kill) {sleep 1}
+# if the pppd kill is forbidden then return.
+# (the connection alghorythm didn't enabled the kill of pppd, because there's wasn't running
+# chat program in the last connection - it means the pppd's run is not finished. In this case,
+# and if the program is started via X, the pppd's kill will kill the X too!)
+
+# signal propagation? no problem... 
+	$SIG{TERM} = \&ec_signal_handler; 
+	$SIG{HUP} = \&ec_signal_handler; 
+
+	# get the pid of "chat" and kill it. 
+	@m_mypids = ec_get_pids('/usr/sbin/chat -e -f '.$home.'/.gprsec/chat -v'); 
+	ec_kill_all_pids('KILL', @m_mypids); 
+	if (@m_mypids) {
+		return;
+	}
+	
+# get the pid of "pppd", and kill it if $kill_counter<1 
+ 	my @kill_signal = ('HUP','TERM','TERM','TERM','KILL'); 
+ 	for my $kill_count (0..4) { 
+ 		my @m_mypids = ec_get_pids('/usr/sbin/pppd file '.$home.'/.gprsec/run'); 
+ 		if (!@m_mypids) { @m_mypids = ec_get_pids('\[pppd\]'); } 
+ 		if (@m_mypids) { 
+ 			ec_kill_all_pids($kill_signal[$kill_count], @m_mypids); 
+ 			sleep 1; # this if the most important function...
+ 		} 
+ 	} 
+	
+	$SIG{TERM} = undef;
+	$SIG{HUP} = undef; 
+
+}
+
+sub new_config_save{
+	$tempfilename=">$global_home/.gprsec/EasyConn.config";
+	open (FILE, $tempfilename);
+	chmod 0666, $tempfilename;
+	$reg_time=time;
+	
+	($mp, $perc, $ora, $nap, $mounth, $ev)=localtime();
+	$mounth++;
+	
+	if (!$start_time) {
+		$ev+=1900;
+		$start_time=" $ev/$mounth/$nap $ora:$perc";
+	}
+	
+	if (!$del_mounth) {
+		$del_mounth=$mounth;
+	}
+	
+	my $configfile="";
+	$configfile.=$phonetype."#\t\t\t"."phone type\n";
+	$configfile.=$sel_port."#\t\t\t"."selected port\n";
+	$configfile.=$co_pan."#\t\t\t"."connect window to panel?\n";
+	$configfile.=$brow."#\t\t\t"."start this browser\n";
+	$configfile.=$br_on."#\t\t\t"."enable starting of a browser\n";
+	$configfile.=$autocsat."#\t\t\t"."enable automatic connection\n";
+	$configfile.=$sel_lang."#\t\t\t"."language\n";
+	$configfile.=$cw_ic."#\t\t\t"."main window to panel?\n";
+	$configfile.=$sel_szolg."#\t\t\t"."selected provider\n";
+	$configfile.=$user."#\t\t\t"."username\n";
+	$configfile.=$passw."#\t\t\t"."password\n";
+	$configfile.=$reconn_on."#\t\t\t"."reconnect after the disconnect in xx sec.\n";
+	$configfile.=$time_interval."#\t\t\t"."time interval. of the watching buliding connection\n";
+	$configfile.=$reg_time."#\t\t\t"."date of starting of data's save\n";
+	$configfile.=$din_eng."#\t\t\t"."enable dynamic DNSs\n";
+	$configfile.=$cid."#\t\t\t"."own CID number\n";
+	$configfile.=$dns1."#\t\t\t"."own DNS1\n";
+	$configfile.=$dns2."#\t\t\t"."own DNS2\n";
+	$configfile.=$no_beep."#\t\t\t"."disable warning beep\n";
+	$configfile.=$bg_rec."#\t\t\t"."reconnect in the backround\n";
+	$configfile.=$reconn_db."#\t\t\t"."number of enabled reconnections\n";
+	$configfile.=$no_cgq."#\t\t\t"."disable CGQ commands\n";
+	$configfile.=$other_numb."#\t\t\t"."own calling number\n";
+	$configfile.=$havit_v."#\t\t\t"."date of erase of monthly limit's data\n";
+	$configfile.=$monthlylimit_v."#\t\t\t"."monthly limit\n";
+	$configfile.=$weeklylimit_v."#\t\t\t"."weekly limit\n";
+	$configfile.=$del_mounth."#\t\t\t"."month of last erase\n";
+	$configfile.=$no_auth."#\t\t\t"."Do not require the peer to authenticate itself\n";
+	$configfile.=$debug."#\t\t\t"."debug mode on\n";
+	$configfile.=$bsd_comp."#\t\t\t"."enable BSD compression\n";
+	$configfile.=$connspeed."#\t\t\t"."connection speed\n";
+	$configfile.=$no_dev."#\t\t\t"."disable read/write data during connection\n";
+	$configfile.=$no_tel."#\t\t\t"."disabe the sending of info of new tested phone\n";
+	$configfile.=$def_apn."#\t\t\t"."own APN\n";
+	$configfile.=$compact."#\t\t\t"."compact mode\n";
+	$configfile.=$newly."#\t\t\t"."newly set data\n";
+	$configfile.=$szolg_apn{$sel_szolg}[0]."#\t\t\t"."APN ID\n";
+	$configfile.=$theme."#\t\t\t"."selected theme\n";
+
+	
+	
+	$htmlcolor =~ s/\#/\+/;
+	$configfile.=$htmlcolor."#\t\t\t"."normal color\n";
+	$htmlcolor =~ s/\+/\#/;
+	
+	$fg_color =~ s/\#/\+/;
+	$configfile.=$fg_color."#\t\t\t"."foreground color\n";
+	$fg_color=~ s/\+/\#/; 
+	
+	$configfile.=$selected_font."#\t\t\t"."selected font\n";
+	$configfile.=$start_time."#\t\t\t"."begin of data transmittion\n";
+	$configfile.=$m_expert."#\t\t\t"."expert port scan\n";
+	print FILE $configfile;
+	close FILE;
+}
+
+sub voice_click {
+	if (!$no_beep) {
+		Gnome2::Sound->connection_get;
+		Gnome2::Sound->init ($hostname=$nodename);
+		Gnome2::Sound->play ("/usr/share/gprsec/sounds/clicked.wav"); #"
+		sound_drv_check();
+	}
+}
+
+sub voice_exit {
+	if (!$no_beep) {
+		Gnome2::Sound->connection_get;
+		Gnome2::Sound->init ($hostname=$nodename);
+		Gnome2::Sound->play ("/usr/share/gprsec/sounds/shutdown1.wav"); #"
+		sound_drv_check();
+	}
+}
+
+sub voice_info {
+	if (!$no_beep) {
+		Gnome2::Sound->connection_get;
+		Gnome2::Sound->init ($hostname=$nodename);
+		Gnome2::Sound->play ("/usr/share/gprsec/sounds/info.wav"); #"
+		sound_drv_check();
+	}
+}
+
+sub voice_warning {
+	if (!$no_beep) {
+		Gnome2::Sound->connection_get;
+		Gnome2::Sound->init ($hostname=$nodename);
+		Gnome2::Sound->play ("/usr/share/gprsec/sounds/warning.wav"); #"
+		sound_drv_check();
+	}
+}
+
+sub voice_error {
+	if (!$no_beep) {
+		Gnome2::Sound->connection_get;
+		Gnome2::Sound->init ($hostname=$nodename);
+		Gnome2::Sound->play ("/usr/share/gprsec/sounds/error.wav"); #"
+		sound_drv_check();
+	}
+}
+
+sub voice_connected {
+	if (!$no_beep) {
+		Gnome2::Sound->connection_get;
+		Gnome2::Sound->init ($hostname="localhost");
+		Gnome2::Sound->play ("/usr/share/sounds/KDE_Beep_Connect.wav");
+		sound_drv_check();
+	}
+}
+
+sub combo_voice_halfer { #somehow the combo entry's signal-subrutine runs twice
+	$half=abs($half-1);    #it's very bad using sound, must to half it
+	if ($half) {
+		voice_click();
+	}
+}
+
+sub sound_drv_check {
+	if (-e "$home/.gprsec/stderr") {
+		open (FILE, "<$home/.gprsec/stderr");
+		while ($red_line=<FILE>) {
+			if ($red_line=~ /audio_alsa\:\ no\ cards\ found/) {
+				$no_beep=1;
+				new_config_save();
+				warning_window("Couldn't connect to alsa driver. While you don't resolv this trouble GPRSEC can't use sound effects.");
+				last;
+			}
+		}
+	}
+}
+
+sub slpash_text {
+	if ($mainargv ne "-nosplash") {
+		$splash_win{label}->set_text("@_");
+		while (Gtk2->events_pending) {
+			Gtk2->main_iteration
+		}
+	}
+}
+
+sub show_statis_label {
+	if (!$htmlcolor) {
+		$_[0]= Gnome2::Canvas::Item->new ($root, 'Gnome2::Canvas::Text',
+		x => -145+$_[2],
+		y => -35+$_[3],
+		 fill_color => "$default_fg",
+		anchor => 'GTK_ANCHOR_NW',
+		text => text_linker($_[1]));
+	} else {
+		$_[0]= Gnome2::Canvas::Item->new ($root, 'Gnome2::Canvas::Text',
+		x => -145+$_[2],
+		y => -35+$_[3],
+		fill_color => "$htmlcolor",
+		anchor => 'GTK_ANCHOR_NW',
+		text => text_linker($_[1]));
+	}
+}
+
+sub color_dec_hex {
+	undef $color_new_hex;
+	@hex_change=@_;
+	foreach (@hex_change) {
+		$temp=$_;
+		$temp*=255;
+		$first=$temp/16;
+		$first_int=int ($first);
+		$first_diff=$first-$first_int;
+		$second_int=int ($first_diff*16);
+		$first_char=char_dec_hex($first_int);
+		$second_char=char_dec_hex($second_int);
+		$color_new_hex.=$first_char.$second_char;
+	}
+	return $color_new_hex;
+}
+
+sub char_dec_hex {
+		$x=shift @_;
+		undef $cc;
+		foreach $ez (0..9,A,B,C,D,E,F) {
+			if ($cc eq $x) {
+				return ($ez);
+			}
+			$cc++;
+		}
+}
+
+sub prefixum_from_byte {
+	$get_bytes=shift @_;
+	if ($get_bytes<1024) {
+		$ret_val=$get_bytes;
+		$ret_pref=" B";
+	}	
+	if ($get_bytes>1024 && $get_bytes<(1024*1024)) {
+		$ret_val=int((10*$get_bytes)/(1024))/10;
+		$ret_pref=" kB";
+	}
+	if ($get_bytes>1024*1024 && $get_bytes<(1024*1024*1024)) {
+		$ret_val=int((10*$get_bytes)/(1024*1024))/10;
+		$ret_pref=" MB";
+	}
+	if ($ob_l_v>(1024*1024*1024)) {
+		$ret_val=int((10*$get_bytes)/(1024*1024*1024))/10;
+		$ret_pref=" GB";
+	}
+	return ("$ret_val$ret_pref");
+}
+
+sub prefixum_from_kbyte {
+	$get_bytes=shift @_;
+	if ($get_bytes<1024) {
+		$ret_val=$get_bytes;
+		$ret_pref=" kB";
+	}	
+	if ($get_bytes>1024 && $get_bytes<(1024*1024)) {
+		$ret_val=int((10*$get_bytes)/(1024))/10;
+		$ret_pref=" mB";
+	}
+	if ($get_bytes>1024*1024 && $get_bytes<(1024*1024*1024)) {
+		$ret_val=int((10*$get_bytes)/(1024*1024))/10;
+		$ret_pref=" GB";
+	}
+	return ("$ret_val$ret_pref");
+}
+
+sub findnotested{
+	$dialog1 = Gtk2::Dialog->new (text_linker($cl[213]), $main_app_window,
+		'destroy-with-parent', 
+		'gtk-ok' => 'accept',
+		'gtk-cancel'=>'cancel'
+	);
+	# Construct a Gtk2Fixed 'fixed1'
+	$findnotested_fixed1 = Gtk2::Fixed->new;
+	$findnotested_fixed1 ->set_size_request(370, 320);
+	$findnotested_fixed1 ->show;
+	$dialog1->vbox->add ($findnotested_fixed1);
+	
+	$findnotested_label1 = Gtk2::Label->new (text_linker($cl[153]));
+	$findnotested_label1->set_property('justify'=>'left', 'wrap'=>1);
+	$findnotested_fixed1->put($findnotested_label1, 10,10 );
+	$findnotested_label1->show;
+	
+	$findnotested_label2= Gtk2::Label->new (text_linker($cl[154])); #name
+	$findnotested_label2->set_property('justify'=>'left', 'wrap'=>1);
+	$findnotested_fixed1->put($findnotested_label2, 10,90 );
+	$findnotested_label2->show;
+	
+   	$findnotested_entryA1 = Gtk2::Entry->new;
+	$findnotested_fixed1->put($findnotested_entryA1, 10,110 );
+	$findnotested_entryA1->set_size_request(150, 24 );
+	$findnotested_entryA1->can_focus(0 );
+	$findnotested_entryA1->set_max_length(50 );
+	$findnotested_entryA1->set_visibility(1 );
+	$findnotested_entryA1->set_editable(1 );
+	$findnotested_entryA1->can_focus(1 );
+	$findnotested_entryA1->show;
+#
+#  
+	$findnotested_label3= Gtk2::Label->new (text_linker($cl[155])); # e-mail
+	$findnotested_label3->set_property('justify'=>'left', 'wrap'=>1);
+	$findnotested_fixed1->put($findnotested_label3, 10,140 );
+	$findnotested_label3->show;
+
+   	$findnotested_entryA2 = Gtk2::Entry->new;
+	$findnotested_fixed1->put($findnotested_entryA2, 10,160 );
+	$findnotested_entryA2->set_size_request(150, 24 );
+	$findnotested_entryA2->can_focus(0 );
+	$findnotested_entryA2->set_max_length(50 );
+	$findnotested_entryA2->set_visibility(1 );
+	$findnotested_entryA2->set_editable(1 );
+	$findnotested_entryA2->can_focus(1 );
+	$findnotested_entryA2->show;
+#
+#
+	$findnotested_label4= Gtk2::Label->new (text_linker($cl[156])); #disitrib
+	$findnotested_label4->set_property('justify'=>'left', 'wrap'=>1);
+	$findnotested_fixed1->put($findnotested_label4, 10,190 );
+	$findnotested_label4->show;
+	
+   	$findnotested_entryA3 = Gtk2::Entry->new;
+	$findnotested_fixed1->put($findnotested_entryA3, 10,210 );
+	$findnotested_entryA3->set_size_request(150, 24 );
+	$findnotested_entryA3->can_focus(0 );
+	$findnotested_entryA3->set_max_length(50 );
+	$findnotested_entryA3->set_visibility(1 );
+	$findnotested_entryA3->set_editable(1 );
+	$findnotested_entryA3->can_focus(1 );
+	$findnotested_entryA3->show;
+	
+	$findnotested_label5= Gtk2::Label->new (text_linker($cl[157])); #other
+	$findnotested_label5->set_property('justify'=>'left', 'wrap'=>1);
+	$findnotested_fixed1->put($findnotested_label5, 10,240 );
+	$findnotested_label5->show;
+	
+   	$findnotested_entryA4 = Gtk2::Entry->new;
+	$findnotested_fixed1->put($findnotested_entryA4, 10,260 );
+	$findnotested_entryA4->set_size_request(300, 24 );
+	$findnotested_entryA4->can_focus(0 );
+	$findnotested_entryA4->set_max_length(300 );
+	$findnotested_entryA4->set_visibility(1 );
+	$findnotested_entryA4->set_editable(1 );
+	$findnotested_entryA4->can_focus(1 );
+	$findnotested_entryA4->show;
+
+	$findnotested_checkbutton2 = new Gtk2::CheckButton(text_linker($cl[158])); #thx no more
+	$findnotested_checkbutton2->set_mode(1 );
+	$findnotested_checkbutton2->set_active("");
+	$findnotested_fixed1->put($findnotested_checkbutton2,10, 290 );
+	$findnotested_checkbutton2->show;
+	$findnotested_checkbutton2->set_size_request(350, 24 );
+	$findnotested_checkbutton2->can_focus(1 );
+	
+	
+	$dialog1->show_all;
+	
+	$choice=$dialog1->run;
+	$dialog1->signal_connect (response => sub {dialog_check()});
+}
+
+sub dialog_check {
+	undef $error_text;
+	$no_find=$findnotested_checkbutton2->get_active();
+	if($no_find eq '1') {
+		$no_tel.=";$phonetype";
+		new_config_save();
+	}
+	
+	if ($choice eq 'cancel') {
+		$dialog1->destroy;
+		undef $dialog1
+	} else {
+		$sender_name=$findnotested_entryA1->get_text();
+		$sender_e_mail=$findnotested_entryA2->get_text();
+		$sender_distrib=$findnotested_entryA3->get_text();
+		$sender_other=$findnotested_entryA4->get_text();
+		
+		if (!$sender_name) {
+			$error_text.=text_linker($cl[160])."\n";
+		}
+		
+		if (!$sender_e_mail) {
+			$error_text.=text_linker($cl[161])."\n";
+		}
+		
+		if (!$sender_distrib) {
+			$error_text.=text_linker($cl[162])."\n";
+		}
+		
+		if (!$sender_name || !$sender_e_mail || !$sender_distrib) {
+			error_window($error_text);
+		}
+		
+		$sender_distrib.="($sysname, $nodename, $release, $version, $machine)";
+		$sender_other.=" - GPRS EC Version $VERSION";
+
+		$sender_name=~tr /\:\#//d; #/
+		$sender_e_mail=~tr /\:\#//d; #/
+		$sender_distrib=~tr /\:\#//d; #/
+		$sender_other=~tr /\:\#//d; #/
+		$find_port=$sel_port;
+		$find_port=~tr /\:\#//d; #/
+
+		$send_text="http://www.gprsec.hu/test.php?name=$sender_name&mail=$sender_e_mail&phone=$phonetype&port=$sel_port&kernel=$sender_distrib&note=$sender_other";
+		
+		$transcoded_send_text= encode ("iso-8859-1", $send_text);
+		# sending tester's information
+		run_task ("wget -T 30 -q -O \"/dev/null\" \"$transcoded_send_text\"");
+		$dialog1->destroy;
+		undef $dialog1
+		}
+}
+
+sub run_task {
+	$mytask=shift @_;
+	$SIG{TERM} = sub {wait};
+	socketpair (PARENT, CHILD, PF_UNIX, SOCKET_STREAM, 0);
+	if ($pid=fork()) {
+		close PARENT;
+		select CHILD;
+		$|=1;
+		select STDOUT;
+	} elsif (defined $pid) {
+		open (STDIN, ">&PARENT");
+		open (STDOUT, ">&PARENT");
+		close PARENT;
+		select STDOUT;
+		$|=1;
+		exec ("$mytask");
+		exit;
+	}
+	return ($pid);
+}
+
+sub decToHex { #return a 8bit hex value
+	# this sub got from somewhere (net)
+	use integer;
+	my @dec = @_;
+	my $s1 = $hex[($dec[0]/16)%16];
+	my $s0 = $hex[$dec[0]%16];
+	return "$s1$s0";
+	no integer;
+}
+
+sub font_select {
+	$message = shift;
+	$dialogq_sf = Gtk2::Dialog->new (text_linker($cl[220]), $setupwin,
+	'modal',
+	'gtk-ok' => 'ok',
+	'gtk-cancel' => 'cancel'
+	);
+
+	$sel_font = Gtk2::FontSelection->new;
+	$sel_font->show_all;
+	$dialogq_sf->vbox->add ($sel_font);
+	$dialogq_sf->show_all;
+	if ('ok' eq $dialogq_sf->run) {
+		$selected_font= $sel_font->get_font_name;
+		new_config_save();
+	}
+$dialogq_sf ->destroy;
+}
+
+sub select_color {
+	$col_widget = Gtk2::ColorSelection->new;
+	my ( $drawingarea ) = @_;
+	my $colordialog = "";
+	unless ( $dialog_shown ) {
+		# Create color selection dialog
+		$colordialog = new Gtk2::ColorSelectionDialog( text_linker($cl[221]));
+		$dialog_shown = $true;
+		# Get the ColorSelection widget
+		$colorsel = $colordialog->colorsel;
+		$colordialog->ok_button->signal_connect( "clicked",  \&close_dialog_ok, $colordialog );
+		$colordialog->cancel_button->signal_connect( "clicked", \&close_dialog, $colordialog );
+
+		# Connect to the "color_changed" signal, set the client-data
+		# to the colorsel widget
+		$colorsel->signal_connect( "color_changed", \&color_changed_cb );
+		# Show the dialog
+		$colordialog->show();
+	}
+}
+
+sub select_color2 {
+	$col_widget = Gtk2::ColorSelection->new;
+	my ( $drawingarea ) = @_;
+	my $colordialog = "";
+	unless ( $dialog_shown ) {
+		# Create color selection dialog
+		$colordialog = new Gtk2::ColorSelectionDialog( text_linker($cl[221]));
+		$dialog_shown = $true;
+		# Get the ColorSelection widget
+		$colorsel = $colordialog->colorsel;
+		$colordialog->ok_button->signal_connect( "clicked",  \&close_dialog_ok2, $colordialog );
+		$colordialog->cancel_button->signal_connect( "clicked", \&close_dialog, $colordialog );
+		# Connect to the "color_changed" signal, set the client-data
+		# to the colorsel widget
+		$colorsel->signal_connect( "color_changed", \&color_changed_cb );
+		# Show the dialog
+		$colordialog->show();
+	}
+}
+
+sub color_changed_cb {
+	my ( $colorsel ) = @_;
+	my $color;
+	my $red;
+	my $green;
+	my $blue;
+
+	$color = $colorsel->get_current_color;
+
+	$red=$color->red;
+	$green=$color->green;
+	$blue=$color->blue;
+
+	$red1=$red;
+	$green1=$green;
+	$blue1=$blue;
+	
+	$red1 /= 256;
+	$green1 /= 256;
+	$blue1 /= 256;
+	
+	# Convert to HTML format
+	$red /= 256;
+	$green /= 256;
+	$blue /= 256;
+
+	$red1=decToHex($red1);
+	$green1=decToHex($green1);
+	$blue1= decToHex($blue1);
+	
+	$changed_color="#".$red1.$green1.$blue1;
+}
+	
+sub close_dialog {
+	voice_click(); 
+	my ( $button, $colordialog)= @_;
+	$colordialog->hide();
+ 	$dialog_shown = $false;
+	
+ }
+
+sub close_dialog_ok {
+	voice_click(); 
+	my ( $button, $colordialog)= @_;
+	$colordialog->hide();
+ 	$dialog_shown = $false;
+		$htmlcolor=$changed_color;
+ }
+
+sub close_dialog_ok2 {
+	voice_click(); 
+	my ( $button, $colordialog)= @_;
+	$colordialog->hide();
+ 	$dialog_shown = $false;
+		$fg_color=$changed_color;
+ }
+
+sub on_combo2_changed{
+	$sel_szolg=$sw_provider_combo->entry->get_text();
+	$apn_sel=$szolg_apn{$sel_szolg}[2]; 
+	$user=$szolg_apn{$sel_szolg}[3];
+	$passw=$szolg_apn{$sel_szolg}[4];
+	$sw_APN_entry->set_text($apn_sel);
+	$sw_username_entry->set_text($user);
+	$sw_password_entry->set_text($passw);
+	$din_eng=$sw_dyndns_checkbutton->get_active();
+	if ($din_eng==0 && $who_r eq "root") {
+		$sw_dns1_entry->set_text("");
+		$sw_dns2_entry->set_text("");
+ 		$sw_dns1_entry->set_sensitive(0);
+ 		$sw_dns2_entry->set_sensitive(0);
+		$sw_dyndns_checkbutton->set_active(1);
+		info_window(text_linker($cl[212]));
+
+	}
+}
+
+sub dns12 {
+	$din_eng=$sw_dyndns_checkbutton->get_active();
+	if ($who_r ne "root" && $din_eng==1) { #user & static DNS
+		read_dns();
+		if (!$temp_dns1) {
+			warning_window(text_linker($cl[206])); # no static dns in resolv.conf, dynamic must to be used
+			$sw_dyndns_checkbutton->set_active(1);
+			return;
+		}
+		$sw_dns1_entry->set_text($temp_dns1);
+		$sw_dns2_entry->set_text($temp_dns2);
+		return;
+	}
+	if ($din_eng==1) { # root & static DNS
+		engdns ();
+		return;
+	}
+	if ($din_eng==0) { # dynamic DNS for user and root
+		nulldns ();
+		return;
+	}
+}
+
+sub read_dns {
+	undef $temp_dns1;
+	undef $temp_dns2;
+	open (FILE, "</etc/resolv.conf");
+	while ($red_line=<FILE>) {
+		if ($red_line=~ /^nameserver\s+\d+\.\d+\.\d+\.\d+/) {
+			$red_line=~ s/(\d+\.\d+\.\d+\.\d+)/$1/e;
+			push (@temp_res_dns, $1);
+		}
+	}
+	if (@temp_res_dns) {
+		$temp_dns1=shift @temp_res_dns;
+		$temp_dns2=shift @temp_res_dns;
+	}
+}
+
+sub engdns {
+	$sw_dns1_entry->set_sensitive(1);
+	$sw_dns2_entry->set_sensitive(1);
+	$dns1=$szolg_apn{$sel_szolg}[5];
+	$dns2=$szolg_apn{$sel_szolg}[6];
+	
+	read_dns();
+	
+	if ($temp_dns1 && $dns1) {
+		$sw_dns_info_dial = Gtk2::Dialog->new (text_linker($cl[207]), $setupwin,
+		'modal',
+		'gtk-yes'     => 'yes',
+		'gtk-no' => 'no',
+		'gtk-cancel' => 'cancel'
+		);
+	
+		$sw_dns_info_label = Gtk2::Label->new (text_linker($cl[205],$temp_dns1,$temp_dns2,$dns1,$dns2));
+		$sw_dns_info_dial->vbox->add ($sw_dns_info_label);
+		$sw_dns_info_dial->show_all;
+		
+		$drun=$sw_dns_info_dial->run;
+		
+		if ('yes' eq $drun) { #overwrite old DNSs and set them static
+			undef $new_resolv;
+			undef @dns_array;
+			undef $x;
+			push @dns_array, $dns1;
+			push @dns_array, $dns2;
+
+			$sw_dyndns_checkbutton->set_active(0);
+			$sw_dns_info_dial->destroy;
+		 	$sw_dns1_entry->set_text("$dns1");
+		 	$sw_dns2_entry->set_text("$dns2");
+			# set of the static DNS(s)
+			open (FILE, "</etc/resolv.conf");
+			while ($red_line=<FILE>) {
+				if ($red_line=~ /^nameserver\s+\d+\.\d+\.\d+\.\d+/) {
+					$red_line=~ s/\d+\.\d+\.\d+\.\d+/$dns_array[$x]/e;
+					$x++;
+				}
+				$new_resolv.=$red_line;
+			}
+			if ($x==1 && $dns2) {
+				$new_resolv.="nameserver $dns2\n";
+			}
+			close FILE;
+			open (FILE, ">/etc/resolv.conf");
+			print FILE $new_resolv;
+		} 
+
+		if ('no' eq $drun) { #leave old DNSs and set it static
+			$sw_dns1_entry->set_text($temp_dns1);
+			$sw_dns2_entry->set_text($temp_dns2);
+			$sw_dyndns_checkbutton->set_active(0);
+			$sw_dns_info_dial->destroy;
+		}
+		
+		if ('cancel' eq $drun) {
+			$sw_dyndns_checkbutton->set_active(1);
+			$sw_dns1_entry->set_sensitive(0);
+			$sw_dns2_entry->set_sensitive(0);
+			$sw_dns_info_dial->destroy;
+		}
+		return;
+	
+	}
+	if (!$temp_dns1 && $dns1) {#there's no set static, but there're DNSs in APN file
+		$sw_dns1_entry->set_text("$dns1");
+		$sw_dns2_entry->set_text("$dns2");
+		$sw_dyndns_checkbutton->set_active(0);
+	}
+	
+	if ($temp_dns1 && !$dns1) {#there IS set static, but there are NO DNSs in APN file
+		$sw_dns1_entry->set_text("$temp_dns1");
+		$sw_dns2_entry->set_text("$temp_dns2");
+		$sw_dyndns_checkbutton->set_active(1);
+	}
+	
+	if (!$temp_dns1 && !$dns1) {#there's no set static, but there're DNSs in APN file
+		info_window(text_linker($cl[211]));
+		$sw_dns1_entry->set_sensitive(0);
+		$sw_dns2_entry->set_sensitive(0);
+	}
+}
+
+sub nulldns {
+	undef $dns1;
+	undef $dns2;
+	$sw_dns1_entry->set_sensitive(1);
+	$sw_dns2_entry->set_sensitive(1);
+	$sw_dns1_entry->set_text("$dns1");
+	$sw_dns2_entry->set_text("$dns2");
+	if ($who_r eq "root" && $din_eng==1) {
+		engdns ();
+	}
+	if ($din_eng==0) {
+		$sw_dns1_entry->set_sensitive(0);
+		$sw_dns2_entry->set_sensitive(0);
+	}
+}
+
+sub splash {
+
+	$splash_win = Gtk2::Window->new();
+	$splash_win->set_default_icon_from_file ("$gprs_shared_path/gprsec/images/icons/gprsec.png");
+	$splash_win->set_title("Loading GPRS Easy Connect...");
+	$splash_win->set_position('center' );
+	$splash_win->set_resizable (0);
+	$splash_win->set_modal(0 );
+	$splash_win->set_default_size(330, 280);
+	$splash_win->set_size_request(330-1, 280-1 );
+	$splash_win->realize;
+		
+	$splash_win{fixed}= Gtk2::Fixed->new;
+	$splash_win->add($splash_win{fixed});
+	$splash_win{fixed}->set_size_request(437-1, 360-1 );
+		
+	$splash_win{style} = $splash_win->get_style()->bg( 'normal' );
+	($splash_win{pixmap},$splash_win{mask} ) = Gtk2::Gdk::Pixmap->create_from_xpm( $splash_win->window, $splash_win{style} ,"$gprs_shared_path/gprsec/images/splash.xpm");
+	$splash_win{pixmap12}= Gtk2::Image->new;
+	$splash_win{pixmap12}->set_from_pixmap ($splash_win{pixmap}, $splash_win{mask});
+	$splash_win{fixed}->put($splash_win{pixmap12}, 0, 0);
+	$splash_win{pixmap12}->set_alignment(0.5, 0.5 );
+	
+	$splash_win{label} = new Gtk2::Label("Loading GPRS Easy Connect"); 
+	$splash_win{label}->set_property('justify'=>'center', 'wrap'=>1);
+	$splash_win{fixed}->put($splash_win{label} , 0, 255 );
+	$splash_win{label}->set_size_request(330, 30);
+	$splash_win{label}->set_alignment(0.5, 0.5 );
+	
+		while (Gtk2->events_pending) {
+		Gtk2->main_iteration
+		}
+	return $splash;
+
+} # end of splash
+
+sub get_netstat_syntax {
+	# unfortunetly, the netstat command's syntax is changing, must to read the "interface"'s syntax... :(
+	`netstat -h 2>$home/.gprsec/nets`;
+	$netstat_syntax=`cat $home/.gprsec/nets`;
+
+	if ($netstat_syntax=~ /\-\-interfaces\=/) {
+		$interf_tag="--interfaces=";
+	} else {
+		$interf_tag="--interfaces ";
+	}
+	
+	`rm -f $home/.gprsec/nets`;
+}
+
+sub os_check {
+my $lowername = "\L$sysname\E";
+	if ($lowername eq "linux") {
+		$gprs_shared_path="/usr/share";
+		$gprs_bin_path="/usr/bin";
+	} elsif ($lowername =~ /^(?:free|net|open)bsd|bsdos$/) {
+		$gprs_shared_path="/usr/local/share";
+		$gprs_bin_path="/usr/local/bin";
+	} else {
+		die "gprsec: FATAL ERROR: OS $sysname not supported.\n";
+	}
+}
+
+sub load_Glib {
+	if (eval "use Glib $REQUIRED_GLIB_PERL_VERSION; 1") {
+# 		printf "gprsec: perl-Glib is available\n";
+# 		printf "gprsec: GPRSEC: using perl-Glib \= ".Glib->VERSION."\n";
+	} else {
+		die "error: perl-Glib is not available, can't run!\n";
+	}
+}
+
+sub load_Gtk2 {
+	if (eval "use Gtk2 $REQUIRED_GTK2_PERL_VERSION -init; 1") {
+# 		printf "gprsec: perl-Gtk2 is available\n";
+# 		printf "gprsec: GPRSEC: using perl-Gtk2 \= ".Gtk2->VERSION."\n";
+		my $gtk2_vstring = (Gtk2->check_version((split /\./, $REQUIRED_GTK2_VERSION)));
+		if ($gtk2_vstring) {
+			printf "error: Gtk2: we need at least version $REQUIRED_GTK2_VERSION\n";
+			die "fatal: Gtk2 is available, but version is too old!\n";
+		}
+	} else {
+		die "fatal: perl-Gtk2 is not available, can't run!\n";
+	}
+}
+
+sub APN_version {
+	my $line_count;
+	if (-e "$home/.gprsec/upgrade/apn") {
+		open (FILE, "<$home/.gprsec/upgrade/apn");
+		while ($red_line=<FILE>) {
+			$line_count++;
+			if ($line_count==5) {
+				last;
+			}
+		}
+		$upg_ver_APN=$red_line;
+		$upg_ver_APN=~tr /\ \#\.//d;
+		chomp $upg_ver_APN;
+		undef $line_count;
+	}
+	if (-e "$gprs_shared_path/gprsec/tools/apn") {
+		open (FILE, "<$gprs_shared_path/gprsec/tools/apn");
+		while ($red_line=<FILE>) {
+			$line_count++;
+			if ($line_count==5) {
+				last;
+			}
+		}
+		$orig_ver_APN=$red_line;
+		$orig_ver_APN=~tr /\ \#\.//d;
+		chomp $orig_ver_APN;
+		undef $line_count;
+	}
+}
+
+sub SCRIPT_version {
+	if (-e "$home/.gprsec/upgrade/gprs-chat-scripts") {
+		open (FILE, "<$home/.gprsec/upgrade/gprs-chat-scripts");
+		while ($red_line=<FILE>) {
+			$line_count++;
+			if ($line_count==5) {
+				last;
+			}
+		}
+		$upg_ver_SCRIPT=$red_line;
+		$upg_ver_SCRIPT=~tr /\ \#\.//d;
+		undef $line_count;
+		chomp $upg_ver_SCRIPT;
+	}
+	if (-e "$gprs_shared_path/gprsec/tools/gprs-chat-scripts") {
+		open (FILE, "<$gprs_shared_path/gprsec/tools/gprs-chat-scripts");
+		while ($red_line=<FILE>) {
+			$line_count++;
+			if ($line_count==5) {
+				last;
+			}
+		}
+		$orig_ver_SCRIPT=$red_line;
+		$orig_ver_SCRIPT=~tr /\ \#\.//d;
+		undef $line_count;
+		chomp $orig_ver_SCRIPT;
+	}
+}
+
+sub start_reconn {
+	$recon_sec=$reconn_on;
+	$mainwin->deiconify;
+	status_window("status");
+	$mainwin_connect_butt->set_sensitive(0);
+	$icon_label->set_text('EC');
+	$start_reconn_dial_timeout=Glib::Timeout->add(1000, \&rec_discount);
+}
+
+sub rec_discount {
+	$recon_sec--;
+	$buffer_mainwin_entryA4->set_text(text_linker($cl[43]."\n".$cl[56]).": $recon_sec sec");
+	if ($recon_sec==0) {
+		Glib::Source->remove ($start_reconn_dial_timeout);
+		connect_sub("reconnect");
+		return 0;
+	}
+	return 1;
+}
+
+sub gtk_button_images_on {
+	$setting_butt{@_[0]}=@_[0]->get_settings;
+	$setting_butt{@_[0]}-> set ('gtk-button-images', 1);
+}
+
+sub file_select {
+$filechooser = Gtk2::FileChooserDialog->new(text_linker($cl[225]),$setupwin,
+'open',
+'gtk-open' => 'ok',
+'gtk-cancel' => 'cancel');
+	if(!$selected_files_folder) {
+		$filechooser->set_current_folder_uri("/");
+	} else {
+		$filechooser->set_current_folder_uri($selected_files_folder);
+	}
+	$filechooser->show_all;
+	if ('ok' eq $filechooser->run) {
+		$selected_file= $filechooser->get_filename;
+		$selected_files_folder= $filechooser->get_current_folder;
+		selected_browser($selected_file);
+	}
+$filechooser ->destroy;
+}
+
+sub selected_browser {
+	$filechooser ->destroy;
+	$brow=$_[0];
+	if (!-x "$brow") {
+		voice_warning();
+		$dialog = Gtk2::MessageDialog->new(undef, 'modal', 'warning','ok', text_linker($cl[226], $who_r));
+		$dialog->signal_connect('response', sub { voice_click();$dialog->destroy; undef $dialog; file_select()});
+		$dialog->show_all;
+	} else {
+		$sw_browser_entry->set_text($brow);
+	}
+}
+
+sub port_select {
+	undef $port_error_mess;
+	$portchooser = Gtk2::FileChooserDialog->new(text_linker($cl[227]),$setupwin,
+	'open',
+	'gtk-open' => 'ok',
+	'gtk-cancel' => 'cancel');
+	$portchooser->set_current_folder_uri("/dev/");
+	$portchooser->show_all;
+	if ('ok' eq $portchooser->run) {
+		$selected_port= $portchooser->get_filename;
+		selected_port($selected_port);
+	}
+	$portchooser ->destroy;
+}
+
+sub selected_port {
+	$portchooser ->destroy;
+	$selected_port=$_[0];
+	if (!-c "$selected_port") {
+		$port_error_mess.=text_linker($cl[228]);
+	}
+	if (!-r "$selected_port") {
+		$port_error_mess.="\n".text_linker($cl[229]);
+	}
+	if ($port_error_mess) {
+		voice_warning();
+		$dialog3 = Gtk2::MessageDialog->new(undef, 'modal', 'warning','ok', $port_error_mess, $who_r);
+		$dialog3->signal_connect('response', sub { voice_click();$dialog3->destroy; undef $dialog3; port_select()});
+		$dialog3->show_all;
+	} else {
+		$ports{"My Port ($selected_port)"}=$selected_port;
+		$sel_port=$ports{"My Port ($selected_port)"};
+		$sw_ports_entry->set_text("My Port ($selected_port)");
+	}
+}
+
+sub manufecturer_fill_up {
+undef %manuf_teltype;
+	foreach $keys (keys %teltype) {
+		if ($keys=~ /$manufacturer/) {
+			($a,$ftype)=split / /,$keys, 2;
+			$manuf_teltype{$ftype}=$ftype;
+		}
+	}
+	$sw_handset_combo->set_popdown_strings(sort keys %manuf_teltype);
+}
+
+sub on_handset_manuf_combo_changed {
+	$manufacturer=$sw_handset_manuf_combo->entry->get_text();
+	manufecturer_fill_up();
+}
+__DATA__
